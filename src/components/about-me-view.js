@@ -25,8 +25,9 @@ class AboutMeView extends PageViewElement {
     return html`
       <section>
         <h2>Welcome to Haegele's Development Show Cases</h2>
-        <p>My name is Christian Hägele, I'm a professional Web Developer.</p>
+        <p>My name is Christian Hägele, I'm a professional web developer.</p>
         <p>On this page I collect interesting uses cases for web technologies.</p>
+        
       </section>
       <section>
         <h2>About Myself</h2>
@@ -35,6 +36,8 @@ class AboutMeView extends PageViewElement {
       <section>
       <h2>Contact</h2>
       <p>For recruitment requests or questions regarding the show cases, please feel free to <a href="mailto:christian@haegele.dev">contact me</a> at any time.</p>
+              <p><img src="/images/manifest/title.jpg"/></p>
+
 </section>
      
     `;

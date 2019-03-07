@@ -36,7 +36,7 @@ describe('routing tests', function() {
 
     await testNavigation(page, 'view2', 'View Two');
     await testNavigation(page, 'view3', 'View Three');
-    await testNavigation(page, 'view1', 'About Myself');
+    await testNavigation(page, 'welcome', 'About Myself');
   });
 
   it('the page selector switches pages in a different way', async function() {
@@ -61,7 +61,7 @@ describe('routing tests', function() {
 
     await testNavigationInADifferentWay(page, 'view2', 'View Two');
     await testNavigationInADifferentWay(page, 'view3', 'View Three');
-    await testNavigationInADifferentWay(page, 'view1', 'About Myself');
+    await testNavigationInADifferentWay(page, 'welcome', 'About Myself');
   });
 });
 
