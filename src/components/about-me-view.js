@@ -31,7 +31,8 @@ class AboutMeView extends PageViewElement {
       </section>
       <section>
         <h2>About Myself</h2>
-        <p>I am a T-Shaped Java Developer with strong technical background, experience in agile development methodology and, requirements engineering, supplemented by industry knowledge in banks and insurance. Since 2009 I am in the field of IT Consultant Financial Services and a wide variety of project experience. Core Bank Migration with Offshore Development, Software renewal of insurance software, software extensions of Standard software as well as individual development.</p>
+        <p>I am a T-Shaped Java Developer with strong technical background, experience in agile development methodology, requirements engineering, supplemented by industry knowledge in banks and insurance. Since 2009 I work as an IT Consultant  in the financial services industry. 
+        In those years, I saw a wide variety of different projects: Core bank migration, software renewal, extensions of standard software as well as individual development. The software was sometimes developed onshore, sometimes nearshore or offshore.</p>
       </section>
       <section>
       <h2>Contact</h2>
