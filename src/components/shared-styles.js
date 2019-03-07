@@ -55,4 +55,9 @@ export const SharedStyles = css`
     font-size: 30px;
     line-height: 64px;
   }
+  
+  img {
+  max-width: 100%;
+  height: auto;
+}
 `;

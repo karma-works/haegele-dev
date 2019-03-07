@@ -33,7 +33,7 @@ import { SharedStyles } from './shared-styles.js';
 import { ButtonSharedStyles } from './button-shared-styles.js';
 import { addToCartIcon } from './my-icons.js';
 
-class MyView3 extends connect(store)(PageViewElement) {
+class Mypolymerredux extends connect(store)(PageViewElement) {
   static get properties() {
     return {
       // This is the data from the store.
@@ -119,4 +119,4 @@ class MyView3 extends connect(store)(PageViewElement) {
   }
 }
 
-window.customElements.define('my-view3', MyView3);
+window.customElements.define('my-polymerredux', Mypolymerredux);

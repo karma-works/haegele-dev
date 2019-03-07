@@ -34,11 +34,11 @@ const loadPage = (page) => (dispatch) => {
         // navigating to welcome after about-me-view.js is loaded.
       });
       break;
-    case 'view2':
-      import('../components/my-view2.js');
+    case 'mapbox':
+      import('../components/map-box-view.js');
       break;
-    case 'view3':
-      import('../components/my-view3.js');
+    case 'polymerredux':
+      import('../components/my-polymerredux.js');
       break;
     default:
       page = 'view404';

@@ -204,8 +204,8 @@ class MyApp extends connect(store)(LitElement) {
         <!-- This gets hidden on a small screen-->
         <nav class="toolbar-list">
           <a ?selected="${this._page === 'welcome'}" href="/welcome">About Myself</a>
-          <a ?selected="${this._page === 'view2'}" href="/view2">Redux Example</a>
-          <a ?selected="${this._page === 'view3'}" href="/view3">Shopping Card Redux Example</a>
+          <a ?selected="${this._page === 'mapbox'}" href="/mapbox">Map Box</a>
+          <a ?selected="${this._page === 'polymerredux'}" href="/polymerredux">Polymer Redux</a>
         </nav>
       </app-header>
 
@@ -215,16 +215,16 @@ class MyApp extends connect(store)(LitElement) {
           @opened-changed="${this._drawerOpenedChanged}">
         <nav class="drawer-list">
           <a ?selected="${this._page === 'welcome'}" href="/welcome">About Myself</a>
-          <a ?selected="${this._page === 'view2'}" href="/view2">Redux Example</a>
-          <a ?selected="${this._page === 'view3'}" href="/view3">Shopping Card Redux Example</a>
+          <a ?selected="${this._page === 'mapbox'}" href="/mapbox">Map Box</a>
+          <a ?selected="${this._page === 'polymerredux'}" href="/polymerredux">Polymer Redux</a>
         </nav>
       </app-drawer>
 
       <!-- Main content -->
       <main role="main" class="main-content">
         <about-me-view class="page" ?active="${this._page === 'welcome'}"></about-me-view>
-        <my-view2 class="page" ?active="${this._page === 'view2'}"></my-view2>
-        <my-view3 class="page" ?active="${this._page === 'view3'}"></my-view3>
+        <map-box-view class="page" ?active="${this._page === 'mapbox'}"></map-box-view>
+        <my-polymerredux class="page" ?active="${this._page === 'polymerredux'}"></my-polymerredux>
         <my-view404 class="page" ?active="${this._page === 'view404'}"></my-view404>
       </main>
 

@@ -31,14 +31,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <about-me-view active></about-me-view>
       </template>
     </test-fixture>
-    <test-fixture id="view2">
+    <test-fixture id="mapbox">
       <template>
-        <my-view2 active></my-view2>
+        <map-box-view active></map-box-view>
       </template>
     </test-fixture>
-    <test-fixture id="view3">
+    <test-fixture id="polymerredux">
       <template>
-        <my-view3 active></my-view3>
+        <my-polymerredux active></my-polymerredux>
       </template>
     </test-fixture>
     <test-fixture id="view404">
@@ -52,8 +52,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       import 'axe-core/axe.min.js';
       import {axeReport} from 'pwa-helpers/axe-report.js';
       import '../../src/components/about-me-view.js';
-      import '../../src/components/my-view2.js';
-      import '../../src/components/my-view3.js';
+      import '../../src/components/map-box-view.js';
+      import '../../src/components/my-polymerredux.js';
       import '../../src/components/my-view404.js';
 
       suite('views a11y tests', function() {
@@ -62,13 +62,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return axeReport(el);
         });
 
-        test('my-view2', function() {
-          const el = fixture('view2');
+        test('map-box-view', function() {
+          const el = fixture('mapbox');
           return axeReport(el);
         });
 
-        test('my-view3', function() {
-          const el = fixture('view3');
+        test('my-polymerredux', function() {
+          const el = fixture('polymerredux');
           return axeReport(el);
         });
 

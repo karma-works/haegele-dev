@@ -58,11 +58,11 @@ describe('👀 page screenshots are correct', function() {
     it('/welcome', async function() {
       return takeAndCompareScreenshot(page, 'welcome', 'wide');
     });
-    it('/view2', async function() {
-      return takeAndCompareScreenshot(page, 'view2', 'wide');
+    it('/mapbox', async function() {
+      return takeAndCompareScreenshot(page, 'mapbox', 'wide');
     });
-    it('/view3', async function() {
-      return takeAndCompareScreenshot(page, 'view3', 'wide');
+    it('/polymerredux', async function() {
+      return takeAndCompareScreenshot(page, 'polymerredux', 'wide');
     });
     it('/404', async function() {
       return takeAndCompareScreenshot(page, 'batmanNotAView', 'wide');
@@ -80,11 +80,11 @@ describe('👀 page screenshots are correct', function() {
     it('/welcome', async function() {
       return takeAndCompareScreenshot(page, 'welcome', 'narrow');
     });
-    it('/view2', async function() {
-      return takeAndCompareScreenshot(page, 'view2', 'narrow');
+    it('/mapbox', async function() {
+      return takeAndCompareScreenshot(page, 'mapbox', 'narrow');
     });
-    it('/view3', async function() {
-      return takeAndCompareScreenshot(page, 'view3', 'narrow');
+    it('/polymerredux', async function() {
+      return takeAndCompareScreenshot(page, 'polymerredux', 'narrow');
     });
     it('/404', async function() {
       return takeAndCompareScreenshot(page, 'batmanNotAView', 'narrow');
