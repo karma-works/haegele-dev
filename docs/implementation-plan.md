@@ -519,10 +519,16 @@ scripts/
 
 ## Phase 5: Polish & Performance
 
-**Duration:** 1-2 days
-
 ### 5.1 Performance Optimization
 
+**Tasks:**
+- Optimize bundle size
+- Implement code splitting
+- Add lazy loading for images
+- Optimize canvas rendering
+- Add service worker for caching
+
+**Verification:**
 - [ ] Lighthouse score > 90 for all metrics
 - [ ] First Contentful Paint < 1s
 - [ ] Largest Contentful Paint < 2s
@@ -531,6 +537,14 @@ scripts/
 
 ### 5.2 Accessibility
 
+**Tasks:**
+- Ensure WCAG AA contrast ratios
+- Complete keyboard navigation
+- Test with screen readers
+- Implement `prefers-reduced-motion` throughout
+- Add visible focus states
+
+**Verification:**
 - [ ] WCAG AA contrast ratios
 - [ ] Keyboard navigation complete
 - [ ] Screen reader tested
@@ -577,8 +591,6 @@ test('wave wavelength scales with viewport width', ...)
 
 ## Phase 6: Deployment
 
-**Duration:** 0.5 days
-
 **Tasks:**
 1. Configure production build
 2. Set up CI/CD pipeline (GitHub Actions)
@@ -599,18 +611,20 @@ test('wave wavelength scales with viewport width', ...)
 | Phase | Unit Tests | E2E Tests |
 |-------|------------|-----------|
 | 0: Scaffold | 0 | 1 (smoke) |
-| 1: Core Tech | 11 | 13 |
+| 1.1: Pulse Background | 6 | 6 |
+| 1.2: Web Piano | 5 | 8 |
+| 1.3: Strava Hover | 1 | 3 |
 | 2: Layout | 3 | 5 |
 | 3: Content | 2 | 10 |
 | 4: Strava | 1 | 2 |
 | 5: Polish | 0 | 9 |
-| **Total** | **17** | **40** |
+| **Total** | **18** | **44** |
 
 ### Phase 1 Test Breakdown
 
-**Pulse Background (6 unit, 5 e2e):**
-- Unit: lerp, sineWave, useWaveScaling (ratio), useWaveScaling (mobile), useWaveEngine (pluck), useWaveEngine (state)
-- E2E: renders, reduced-motion, mobile proportional, amplitude scaling, 60fps
+**Pulse Background (6 unit, 6 e2e):**
+- Unit: sineWave, lerp, useWaveScaling (ratio), useWaveScaling (mobile), useWaveEngine (pluck), useWaveEngine (state)
+- E2E: renders, reduced-motion, mobile proportional, amplitude scaling, piano integration, strava integration
 
 **Web Piano (5 unit, 8 e2e):**
 - Unit: keyMap, keyRanges, useResponsiveKeys (C2 start), useResponsiveKeys (breakpoints), usePianoEngine
@@ -667,16 +681,53 @@ bun run test:e2e:ui         # Playwright UI mode
 
 ---
 
-## Timeline
+## Commands
 
-| Phase | Duration | Start | End |
-|-------|----------|-------|-----|
-| 0: Scaffold | 1 day | Day 1 | Day 1 |
-| 1: Core Tech | 4 days | Day 2 | Day 5 |
-| 2: Layout | 2 days | Day 6 | Day 7 |
-| 3: Content | 3 days | Day 8 | Day 10 |
-| 4: Strava | 1 day | Day 11 | Day 11 |
-| 5: Polish | 2 days | Day 12 | Day 13 |
-| 6: Deploy | 0.5 day | Day 14 | Day 14 |
+```bash
+bun install                 # Install dependencies
+bun run dev                 # Start dev server
+bun run build               # Production build
+bun run typecheck           # TypeScript check
+bun run lint                # ESLint
+bun test                    # Run unit tests
+bun run test:e2e            # Run Playwright tests
+bun run test:e2e:ui         # Playwright UI mode
+```
 
-**Total: ~2 weeks**
+---
+
+## Biggest Risks & Challenges
+
+### Technical Risks
+
+| Risk | Severity | Description | Mitigation Strategy |
+|------|----------|-------------|---------------------|
+| **Web Audio API Complexity** | High | Browser differences in audio context handling, autoplay policies, and latency can cause inconsistent piano behavior across browsers | Target Chrome 120+ and Firefox 120+ only; implement robust audio context resume on user gesture; test extensively on both browsers |
+| **Canvas Performance on Mobile** | High | 60fps sine wave rendering may cause jank on low-end mobile devices, especially with multiple effects active | Reduce point density on mobile; use `will-change` sparingly; implement frame skipping when needed; offer reduced-motion mode |
+| **Responsive Wave Proportions** | Medium | Maintaining visual wave balance (amplitude:wavelength ratio) across all viewport sizes is mathematically complex | Use CSS `clamp()` with viewport-relative units; extensive automated testing at all breakpoints |
+| **Tone.js Bundle Size** | Medium | Tone.js is a large library (~200KB) that could impact initial load performance | Lazy-load Tone.js only when user interacts with piano; consider lighter alternatives if needed |
+| **Memory Leaks** | Medium | Audio nodes, event listeners, and animation frames can cause memory leaks if not properly cleaned up | Implement strict cleanup in `useEffect` returns; use AbortController for event listeners; test with Chrome DevTools memory profiler |
+
+### Integration Risks
+
+| Risk | Severity | Description | Mitigation Strategy |
+|------|----------|-------------|---------------------|
+| **Strava API Rate Limits** | Low | Strava has strict rate limits (100 requests/15 min) that could block data fetching | Fetch only at build time; cache results locally; implement fallback to static data |
+| **Strava Token Expiry** | Medium | OAuth tokens expire and require manual refresh | Implement automated token refresh utility; store refresh tokens securely; document refresh process |
+| **Cross-Component State** | Medium | Piano, wave, and Strava components need to communicate (pluck effects, heartbeat mode) without tight coupling | Use event bus pattern; implement clean subscription/unsubscription; avoid prop drilling |
+
+### User Experience Risks
+
+| Risk | Severity | Description | Mitigation Strategy |
+|------|----------|-------------|---------------------|
+| **Mobile Piano Playability** | High | Touch targets on mobile must be large enough to play comfortably while fitting limited screen space | Minimum 44px touch targets; white keys only on very small screens; always start from C2 for consistency |
+| **Reduced Motion Support** | Medium | Users with vestibular disorders need reduced-motion support without breaking functionality | Respect `prefers-reduced-motion` globally; provide static fallbacks; test with accessibility tools |
+| **First-Time Audio Context** | Medium | Browsers block audio until user interaction, which can confuse users | Clear visual indication that piano needs a click/tap to activate; graceful degradation |
+
+### Project Risks
+
+| Risk | Severity | Description | Mitigation Strategy |
+|------|----------|-------------|---------------------|
+| **Scope Creep** | Medium | Multiple complex features (piano, wave, Strava, responsive) could lead to endless refinement | Strict adherence to verification criteria; timebox each phase; defer nice-to-haves |
+| **Testing Complexity** | Medium | E2E tests for audio and canvas are inherently flaky and hard to debug | Use visual regression testing; mock Web Audio API for unit tests; parallelize test runs |
+| **Browser Compatibility** | Low | Excluding Safari may limit audience but reduces testing surface | Document browser support clearly; show graceful fallback message for unsupported browsers |
