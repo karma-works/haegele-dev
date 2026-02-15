@@ -4,6 +4,11 @@
 
 This plan implements the content-plan.md using modern web technologies. Each phase has verifiable outputs through automated testing.
 
+**Architecture:**
+- **Pure SPA** - Client-side only, no React Server Components (RSC)
+- All rendering happens in the browser via Vite + React
+- No server-side hydration or streaming
+
 **Stack:**
 - Runtime: Bun (not npm)
 - Language: TypeScript (strict mode)
@@ -11,6 +16,14 @@ This plan implements the content-plan.md using modern web technologies. Each pha
 - Styling: Modern CSS (CSS Modules, CSS Variables, Container Queries)
 - Target: Chrome 120+, Firefox 120+ (ignore Safari/older browsers)
 - Testing: Vitest (unit), Playwright (E2E)
+
+**Feature Priority (Core vs Optional):**
+| Feature | Priority | Notes |
+|---------|----------|-------|
+| Pulse Background Wave | **Core** | Primary visual differentiator |
+| Piano | Optional Phase 2 | Lazy-loaded, can defer |
+| Strava Integration | Optional Phase 2 | Graceful degradation built-in |
+| Contact Form | Future TODO | No backend defined yet |
 
 ---
 
@@ -285,7 +298,7 @@ interface PianoEngine {
 interface ResponsiveKeys {
   keys: PianoKeyConfig[];
   octaveCount: number;
-  startNote: string; // Always C2
+  startNote: string; // C2 for desktop/tablet, C3 for mobile
 }
 ```
 
