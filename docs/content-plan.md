@@ -365,10 +365,69 @@ An ambitious attempt to create a fully open-source SimCity 2000 city viewer by r
 4. Screen reader friendly structure
 5. Focus states on all interactive elements
 
-### Responsive Breakpoints
-- Mobile: < 768px (simplified animations)
-- Tablet: 768px - 1024px
-- Desktop: > 1024px (full effects)
+### Responsive Design Principles
+
+The entire site must be responsive with graceful degradation across all viewport sizes:
+
+#### Responsive Breakpoints
+
+| Breakpoint | Width | Adaptations |
+|------------|-------|-------------|
+| Desktop Large | > 1440px | Full effects, maximum key count |
+| Desktop | 1024px - 1440px | Full effects, 25 piano keys |
+| Tablet | 768px - 1024px | Partial effects, reduced keys |
+| Mobile | 375px - 768px | Simplified animations, minimal keys |
+| Very Small | < 375px | Essential features only, C2 start |
+
+#### Responsive Piano Behavior
+
+The piano keyboard adapts gracefully to screen size by **reducing octaves and keys**, not just shrinking:
+
+| Breakpoint | Keys | Range | Octaves | Notes |
+|------------|------|-------|---------|-------|
+| Desktop (>1024px) | 25 keys | C2-C4 | 2 octaves | Full chromatic |
+| Tablet (768-1024px) | 17 keys | C2-C3 | 1 octave | Full chromatic |
+| Mobile (480-768px) | 8 keys | C2-C3 | 1 octave | White keys only |
+| Very Small (<480px) | 8 keys | C2-C3 | 1 octave | White keys only, minimal width |
+
+**Key Rules:**
+- **Always start from C2** regardless of screen size
+- Reduce octave count before shrinking key width
+- Maintain playable key dimensions (minimum 30px width on mobile)
+- Black keys may be hidden on very small screens for touch targets
+
+#### Responsive Pulse Wave
+
+The pulse background maintains **proportional visual appearance** across all screen sizes:
+
+| Property | Scaling Formula | Ratio Maintained |
+|----------|-----------------|------------------|
+| Amplitude | `clamp(8px, 3vh, 40px)` | ~1:8 with wavelength |
+| Wavelength | `clamp(80px, 25vw, 300px)` | ~3:4 with viewport |
+| Stroke Width | `clamp(1px, 0.15vw, 3px)` | ~1:20 with amplitude |
+| Glow Radius | `clamp(5px, 1vw, 20px)` | ~1:2 with amplitude |
+
+**Critical Rule:** Amplitude and wavelength MUST scale together. Never shrink only the wavelength while keeping amplitude constant—this creates a distorted, visually unbalanced wave.
+
+#### Responsive Section Adaptations
+
+| Section | Mobile Adaptation |
+|---------|-------------------|
+| Navigation | Hamburger menu, no polyglot cycling |
+| Hero | Simplified stats, smaller terminal |
+| About | Single column, reduced parallax |
+| Skills | Single column grid, simpler hover effects |
+| Projects | Single column, reduced 3D effects |
+| Hobbies | Stacked cards, simpler widgets |
+| Contact | Simplified form, fewer floating elements |
+| Footer | Compact layout, reduced piano keys |
+
+#### Touch Considerations
+
+- All interactive elements minimum 44px touch target
+- Disable hover-dependent effects on touch devices
+- Use `pointer: coarse` media query for touch-specific styles
+- Swipe gestures for carousel/slider navigation
 
 ---
 

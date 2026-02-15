@@ -35,7 +35,7 @@ Directly below the terminal window is a handwritten-style script in a glowing pi
 Two symmetrical, glowing cards provide a data-driven look at the creator's life.
 
 * **Performance Metrics (Left Box):** Encased in a pink neon glow, titled "STRAVA STATS." It features a "STRAVX" map visualization, representing running or cycling routes. see #strava-integrations.md
-* **Language Levels (Right Box):** Encased in a teal neon glow. It lists technical and spoken languages (Javascript, Deutsch, Español) with corresponding percentage bars and stylized progress indicators.
+* **Language Levels (Right Box):** Encased in a teal neon glow. It lists technical and spoken languages (Java, Typescript , Deutsch, Español) with corresponding percentage bars and stylized progress indicators.
 
 ### 5. Interactive Piano Footer
 
