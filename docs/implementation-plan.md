@@ -681,21 +681,6 @@ bun run test:e2e:ui         # Playwright UI mode
 
 ---
 
-## Commands
-
-```bash
-bun install                 # Install dependencies
-bun run dev                 # Start dev server
-bun run build               # Production build
-bun run typecheck           # TypeScript check
-bun run lint                # ESLint
-bun test                    # Run unit tests
-bun run test:e2e            # Run Playwright tests
-bun run test:e2e:ui         # Playwright UI mode
-```
-
----
-
 ## Biggest Risks & Challenges
 
 ### Technical Risks
