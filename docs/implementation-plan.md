@@ -154,11 +154,11 @@ const useReducedMotion = () => {
 
 ---
 
-## Phase 1: Core Technical Challenges
+## Phase 1: Core Visual Differentiator
 
-This phase tackles the most complex technical features first.
+This phase focuses on the **pulse wave background** as the primary visual differentiator. Piano and Strava are moved to Phase 1.5 (optional).
 
-### 1.1 Pulse Background Engine
+### 1.1 Pulse Background Engine (CORE)
 
 **Description:** Canvas-based sinusoidal wave that responds to multiple inputs with proportional responsive scaling.
 
@@ -236,17 +236,17 @@ tests/unit/
 #### 1.1.4 Integration Hooks
 
 **Tasks:**
-- Piano integration (pluck effect)
-- Strava hover integration (heartbeat mode ~80 BPM)
+- Connect to EffectsController context (replaces event bus)
+- Wave responds to EffectsController signals
 - Mouse proximity effect
 
 **State Management Pattern:**
-- **Refs**: Store Engine instances (WaveEngine, PianoEngine) to avoid re-renders
-- **State**: Only for high-level toggles (isMuted, activeSection)
+- **Refs**: Store Engine instances (WaveEngine) in EffectsController to avoid re-renders
+- **State**: Only for high-level toggles (isMuted, activeSection) in EffectsController
 
 **Verification:**
-- [ ] E2E test: Piano key press triggers wave pluck
-- [ ] E2E test: Strava hover triggers heartbeat mode
+- [ ] Unit test: Wave responds to `wavePluck()` from EffectsController
+- [ ] Unit test: Wave responds to `waveSetHeartbeat()` from EffectsController
 
 **API:**
 ```typescript
@@ -265,50 +265,103 @@ interface WaveScaling {
   glowRadius: number;
 }
 
-// Integration hook pattern
-interface WaveIntegration {
-  engineRef: React.MutableRefObject<WaveEngine | null>;
-  isMuted: boolean;        // State - high-level toggle
-  activeSection: string;   // State - high-level toggle
-}
+// Integration via EffectsController
+// See Phase 0.1 for full EffectsController API
 ```
 
-### 1.2 Web Piano Engine
+---
+
+## Phase 1.5: Optional Enhancements (Piano + Strava)
+
+**These features are optional and can be deferred to Phase 2 or later.**
+
+### 1.5.1 Web Piano Engine (OPTIONAL)
 
 **Description:** Polyphonic audio synthesis using Tone.js with visual sync and responsive octave reduction.
 
-#### 1.2.1 Audio Synthesis Core
+**Bundle Size Mitigation:**
+Tone.js is ~200KB. To avoid impacting initial load:
+- **Lazy-load Tone.js** on first piano interaction
+- **Dynamic import**: `const { PolySynth } = await import('tone')`
+- **Separate chunk**: Vite automatically code-splits dynamic imports
+- **Loading state**: Show "Click to activate" placeholder until loaded
+
+#### 1.5.1.1 Audio Synthesis Core (Lazy-Loaded)
 
 **Tasks:**
-- Set up Tone.js PolySynth with triangle oscillator
+- Create `loadPianoEngine()` async factory that dynamically imports Tone.js
+- Set up Tone.js PolySynth with triangle oscillator (only after load)
 - Configure ADSR envelope (Attack: 0.005s, Decay: 1.2s, Sustain: 0.1, Release: 1.0s)
 - Implement note frequency calculation
 - Handle audio context resume on user gesture
+
+**Lazy Loading Pattern:**
+```typescript
+// src/components/Piano/loadPianoEngine.ts
+let pianoEnginePromise: Promise<PianoEngine> | null = null;
+
+export async function loadPianoEngine(): Promise<PianoEngine> {
+  if (!pianoEnginePromise) {
+    pianoEnginePromise = (async () => {
+      const { PolySynth, start } = await import('tone');
+      await start(); // Resume audio context
+      return createPianoEngine(PolySynth);
+    })();
+  }
+  return pianoEnginePromise;
+}
+
+// Usage in component
+const handleFirstInteraction = async () => {
+  const engine = await loadPianoEngine();
+  setEngineLoaded(true);
+};
+```
 
 **Files:**
 ```
 src/
 ├── components/Piano/
+│   ├── loadPianoEngine.ts    // Dynamic import wrapper
 │   ├── usePianoEngine.ts
 │   └── types.ts
-├── utils/
-│   └── eventBus.ts
 tests/unit/
 └── usePianoEngine.test.ts
 ```
 
 **Verification:**
-- [ ] Unit test: `usePianoEngine` creates valid note frequencies
-- [ ] E2E test: Clicking piano key produces sound (Web Audio context active)
-- [ ] E2E test: Polyphony - multiple simultaneous notes don't clip
+- [ ] Unit test: `loadPianoEngine` returns valid engine
+- [ ] Unit test: Note frequencies calculated correctly
+- [ ] E2E test: Piano engine is invoked on first click (mock Web Audio)
+- [ ] E2E test: Tone.js is NOT in initial bundle (check network requests)
 
-#### 1.2.2 Keyboard Input Mapping
+**E2E Audio Testing (Mocked):**
+```typescript
+// Don't test real audio - mock Web Audio API
+beforeEach(() => {
+  // Monkey-patch Web Audio for testing
+  window.AudioContext = vi.fn().mockImplementation(() => ({
+    createOscillator: vi.fn(),
+    createGain: vi.fn(),
+    // ... minimal mock
+  }));
+});
+
+test('piano click invokes sound engine', async () => {
+  const playSpy = vi.fn();
+  render(<Piano onPlay={playSpy} />);
+  await user.click(screen.getByRole('button', { name: /C3/ }));
+  expect(playSpy).toHaveBeenCalledWith('C3');
+});
+```
+
+#### 1.5.1.2 Keyboard Input Mapping
 
 **Tasks:**
 - Map computer keyboard (A-L keys) to notes
 - Handle modifier keys for sharps/flats
 - Implement touch velocity simulation
-- Create event bus for visual sync
+- Connect to EffectsController for visual sync (replaces event bus)
 
 **Files:**
 ```
@@ -323,7 +376,7 @@ tests/unit/
 - [ ] Unit test: `keyMap` maps keyboard keys to correct notes
 - [ ] E2E test: Keyboard shortcut triggers correct note
 
-#### 1.2.3 Responsive Key Ranges
+#### 1.5.1.3 Responsive Key Ranges
 
 **Tasks:**
 - Define key ranges for each breakpoint
@@ -350,7 +403,7 @@ tests/unit/
 - [ ] E2E test: Tablet viewport shows keys starting from C2
 - [ ] E2E test: Desktop viewport shows keys starting from C2
 
-#### 1.2.4 Piano UI Component
+#### 1.5.1.4 Piano UI Component
 
 **Tasks:**
 - Create PianoKey component with visual states
@@ -385,15 +438,22 @@ interface ResponsiveKeys {
 }
 ```
 
-### 1.3 Strava Hover Integration
+### 1.5.2 Strava Integration (OPTIONAL)
 
-**Description:** Card hover triggers heartbeat waveform mode.
+**Description:** Card hover triggers heartbeat waveform mode via EffectsController.
 
 **Features:**
 - Mouse enter/leave detection
 - 300ms lerp transition to/from heartbeat
 - Heartbeat at ~80 BPM (1.3Hz)
 - PQR spike simulation in waveform
+- Connects to EffectsController.waveSetHeartbeat()
+
+**Graceful Degradation:**
+If Strava data is unavailable, the Running hobbies card shows:
+- Fallback message: "Running stats temporarily unavailable"
+- Still shows static running icon (no live data)
+- Heartbeat hover effect still works (doesn't depend on API)
 
 **Files:**
 ```
@@ -411,10 +471,11 @@ tests/e2e/
 ```
 
 **Verification:**
-- [ ] Unit test: `useHeartbeatTrigger` toggles state correctly
+- [ ] Unit test: `useHeartbeatTrigger` calls EffectsController.waveSetHeartbeat()
 - [ ] E2E test: Hover over Strava card triggers heartbeat mode
 - [ ] E2E test: Wave transitions smoothly (no flicker)
 - [ ] E2E test: Mouse leave restores sine wave within 500ms
+- [ ] E2E test: Card shows fallback message when data unavailable
 
 ---
 
@@ -584,9 +645,16 @@ tests/unit/
 - Add success particle burst
 - Handle mobile form layout
 
+**Future TODO - Backend Not Defined:**
+The contact form currently has no backend. Options to consider:
+- Email service (Resend, SendGrid)
+- Form service (Formspree, Netlify Forms)
+- Serverless function (Vercel, Cloudflare Workers)
+- For MVP: Fake success state with console.log
+
 **Verification:**
 - [ ] E2E test: Form validates email
-- [ ] E2E test: Submit shows success state
+- [ ] E2E test: Submit shows success state (mocked)
 
 ### 3.6 Footer
 
@@ -602,14 +670,59 @@ tests/unit/
 
 ---
 
-## Phase 4: Strava API Integration
+## Phase 4: Strava API Integration (OPTIONAL)
+
+**Graceful Degradation Design:**
+
+This phase is designed to fail gracefully without breaking the build or site:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Build-Time Fetch Flow                                       │
+├─────────────────────────────────────────────────────────────┤
+│ 1. Try fetch from Strava API                                │
+│    ↓ SUCCESS: Save to cache + build continues               │
+│    ↓ FAIL: Check for existing cache                         │
+│              ↓ HAS CACHE: Use cached data + build continues │
+│              ↓ NO CACHE: Build with empty data + show       │
+│                         fallback UI at runtime              │
+└─────────────────────────────────────────────────────────────┘
+```
 
 **Tasks:**
 - Implement OAuth flow (manual, one-time)
 - Create token refresh utility
-- Build build-time data fetch script
+- Build build-time data fetch script with fallback
 - Create activity display component
-- Add hover heartbeat integration
+- Add hover heartbeat integration via EffectsController
+
+**Cache Strategy (Last Successful Cache):**
+```typescript
+// scripts/fetch-strava-data.ts
+interface StravaCache {
+  data: StravaActivity[];
+  fetchedAt: string;  // ISO timestamp
+  expiresAt: string;  // ISO timestamp (24h later)
+}
+
+async function fetchWithFallback(): Promise<StravaCache | null> {
+  try {
+    const data = await fetchFromStrava();
+    const cache = { data, fetchedAt: new Date().toISOString(), expiresAt: ... };
+    await writeFile('src/data/strava-cache.json', JSON.stringify(cache));
+    return cache;
+  } catch (error) {
+    console.warn('Strava fetch failed, checking cache...');
+    const existingCache = await readCache();
+    if (existingCache && !isExpired(existingCache)) {
+      console.log('Using cached Strava data from', existingCache.fetchedAt);
+      return existingCache;
+    }
+    console.warn('No valid cache, Strava data unavailable');
+    return null; // Runtime will show fallback UI
+  }
+}
+```
 
 **Files:**
 ```
@@ -618,6 +731,8 @@ src/
 │   ├── client.ts
 │   ├── types.ts
 │   └── cache.ts
+├── data/
+│   └── strava-cache.json      # Generated at build time
 ├── components/StravaWidget/
 │   ├── StravaWidget.tsx
 │   ├── StravaWidget.module.css
@@ -626,10 +741,23 @@ scripts/
 └── fetch-strava-data.ts
 ```
 
+**Runtime Behavior:**
+```typescript
+// StravaWidget.tsx
+const stravaData = await import('../data/strava-cache.json');
+
+if (!stravaData?.data?.length) {
+  return <StravaFallback message="Running stats temporarily unavailable" />;
+}
+```
+
 **Verification:**
 - [ ] Unit test: Strava client types are correct
+- [ ] Unit test: Cache fallback logic works
 - [ ] E2E test: Widget displays cached data
-- [ ] E2E test: Hover triggers heartbeat mode
+- [ ] E2E test: Widget shows fallback when no data
+- [ ] E2E test: Hover triggers heartbeat mode via EffectsController
+- [ ] Build test: Build succeeds even when Strava API is down
 
 ---
 
@@ -639,17 +767,35 @@ scripts/
 
 **Tasks:**
 - Optimize bundle size
-- Implement code splitting
+- Implement code splitting (Tone.js lazy-loaded separately)
 - Add lazy loading for images
 - Optimize canvas rendering
-- Add service worker for caching
+- Add service worker for caching (optional)
+
+**Performance Targets (Monitoring, Not Test Gates):**
+
+These are **targets to monitor**, not red/green CI test gates. CI will report metrics but not fail builds:
+
+| Metric | Target | CI Behavior |
+|--------|--------|-------------|
+| Lighthouse Performance | > 90 | Report, don't fail |
+| First Contentful Paint | < 1s | Report, don't fail |
+| Largest Contentful Paint | < 2s | Report, don't fail |
+| Cumulative Layout Shift | < 0.1 | Report, don't fail |
+| Total Blocking Time | < 200ms | Report, don't fail |
+| Frame Rate (Wave) | ~60fps | Report, don't fail |
+
+**Bundle Size Targets:**
+| Chunk | Target Size | Notes |
+|-------|-------------|-------|
+| Main bundle | < 100KB | Initial load |
+| Tone.js chunk | ~200KB | Lazy-loaded on piano interaction |
+| Total (with piano) | < 350KB | After all lazy loads |
 
 **Verification:**
-- [ ] Lighthouse score > 90 for all metrics
-- [ ] First Contentful Paint < 1s
-- [ ] Largest Contentful Paint < 2s
-- [ ] Cumulative Layout Shift < 0.1
-- [ ] Total Blocking Time < 200ms
+- [ ] Performance metrics reported in CI
+- [ ] Bundle size warnings if main > 100KB
+- [ ] Manual Lighthouse audit > 90 (not CI gate)
 
 ### 5.2 Accessibility
 
@@ -657,14 +803,21 @@ scripts/
 - Ensure WCAG AA contrast ratios
 - Complete keyboard navigation
 - Test with screen readers
-- Implement `prefers-reduced-motion` throughout
+- **ReduceMotionProvider** (see Phase 0.2) - global reduced-motion state
 - Add visible focus states
+
+**Reduced Motion Implementation:**
+See Phase 0.2 for full ReduceMotionProvider details. Key points:
+- Respects `prefers-reduced-motion` media query
+- Non-critical animations disabled (magnetic hovers, particles, parallax, 3D tilts)
+- Critical animations simplified (page transitions, form feedback)
+- Testable via `data-reduced-motion` attribute
 
 **Verification:**
 - [ ] WCAG AA contrast ratios
 - [ ] Keyboard navigation complete
 - [ ] Screen reader tested
-- [ ] `prefers-reduced-motion` respected
+- [ ] ReduceMotionProvider tested (see Phase 0.2)
 - [ ] Focus states visible
 
 ### 5.3 Responsive Testing
