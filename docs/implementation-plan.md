@@ -144,6 +144,10 @@ tests/unit/
 - Strava hover integration (heartbeat mode ~80 BPM)
 - Mouse proximity effect
 
+**State Management Pattern:**
+- **Refs**: Store Engine instances (WaveEngine, PianoEngine) to avoid re-renders
+- **State**: Only for high-level toggles (isMuted, activeSection)
+
 **Verification:**
 - [ ] E2E test: Piano key press triggers wave pluck
 - [ ] E2E test: Strava hover triggers heartbeat mode
@@ -163,6 +167,13 @@ interface WaveScaling {
   wavelength: number;
   strokeWidth: number;
   glowRadius: number;
+}
+
+// Integration hook pattern
+interface WaveIntegration {
+  engineRef: React.MutableRefObject<WaveEngine | null>;
+  isMuted: boolean;        // State - high-level toggle
+  activeSection: string;   // State - high-level toggle
 }
 ```
 
@@ -221,7 +232,8 @@ tests/unit/
 **Tasks:**
 - Define key ranges for each breakpoint
 - Implement viewport detection for key count
-- Ensure all viewports start from C2
+- **Desktop/Tablet**: Start from C2 (normal piano keyboard range)
+- **Mobile only**: Start from C3 for better mobile UX
 - Handle dynamic key count changes on resize
 
 **Files:**
@@ -237,10 +249,10 @@ tests/unit/
 
 **Verification:**
 - [ ] Unit test: `keyRanges` returns correct keys for each breakpoint
-- [ ] Unit test: `useResponsiveKeys` returns C2 as start for all viewports
-- [ ] E2E test: Mobile viewport shows fewer keys (8 vs 25)
-- [ ] E2E test: Tablet viewport shows reduced keys (17)
-- [ ] E2E test: All viewports start from C2
+- [ ] Unit test: `useResponsiveKeys` returns C2 for desktop/tablet, C3 for mobile
+- [ ] E2E test: Mobile viewport shows fewer keys starting from C3
+- [ ] E2E test: Tablet viewport shows keys starting from C2
+- [ ] E2E test: Desktop viewport shows keys starting from C2
 
 #### 1.2.4 Piano UI Component
 
@@ -439,11 +451,19 @@ tests/unit/
 - Create clip-path reveal animation
 - Add glassmorphic backgrounds
 - Handle single-column mobile layout
+- **Mobile**: Disable 3D tilt to prevent touch interference with link clicks
+- Use `touch-action` and pointer media queries to distinguish touch vs hover
+
+**Mobile Touch Handling:**
+- Disable 3D tilt on `pointer: coarse` devices
+- Prevent `touchstart` from triggering hover effects that block clicks
+- Ensure links remain fully clickable on mobile
 
 **Verification:**
 - [ ] E2E test: Project cards render
-- [ ] E2E test: 3D tilt effect on hover
-- [ ] E2E test: Links are clickable
+- [ ] E2E test: 3D tilt effect on hover (desktop)
+- [ ] E2E test: Links are clickable on mobile (no tilt interference)
+- [ ] E2E test: Touch targets meet minimum size
 
 ### 3.4 Hobbies Section (Trifecta)
 
@@ -562,7 +582,7 @@ scripts/
 
 **Responsive Assertions:**
 - Piano: Key count matches viewport breakpoint
-- Piano: All viewports start from C2
+- Piano: Desktop/tablet start from C2, mobile starts from C3
 - Wave: Amplitude:wavelength ratio consistent (~1:8)
 - Wave: No visual stretching on any viewport
 
@@ -577,7 +597,7 @@ tests/e2e/
 **Responsive Test Cases:**
 ```typescript
 // piano responsive tests
-test('mobile shows 8 white keys starting from C2', ...)
+test('mobile shows 8 white keys starting from C3', ...)
 test('tablet shows 17 keys starting from C2', ...)
 test('desktop shows 25 keys starting from C2', ...)
 

@@ -385,13 +385,14 @@ The piano keyboard adapts gracefully to screen size by **reducing octaves and ke
 
 | Breakpoint | Keys | Range | Octaves | Notes |
 |------------|------|-------|---------|-------|
-| Desktop (>1024px) | 25 keys | C2-C4 | 2 octaves | Full chromatic |
+| Desktop (>1024px) | 25 keys | C2-C4 | 2 octaves | Full chromatic (normal piano range) |
 | Tablet (768-1024px) | 17 keys | C2-C3 | 1 octave | Full chromatic |
-| Mobile (480-768px) | 8 keys | C2-C3 | 1 octave | White keys only |
-| Very Small (<480px) | 8 keys | C2-C3 | 1 octave | White keys only, minimal width |
+| Mobile (480-768px) | 8 keys | C3-C4 | 1 octave | White keys only, C3 start for mobile UX |
+| Very Small (<480px) | 8 keys | C3-C4 | 1 octave | White keys only, C3 start for mobile UX |
 
 **Key Rules:**
-- **Always start from C2** regardless of screen size
+- **Desktop/Tablet**: Start from C2 (normal piano keyboard range)
+- **Mobile only**: Start from C3 for better mobile UX
 - Reduce octave count before shrinking key width
 - Maintain playable key dimensions (minimum 30px width on mobile)
 - Black keys may be hidden on very small screens for touch targets
