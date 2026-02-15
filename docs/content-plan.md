@@ -4,6 +4,13 @@
 
 Personal developer portfolio showcasing full-stack expertise with a focus on AI technologies. The site combines technical depth with personal character through carefully crafted sections and spectacular visual effects.
 
+
+## Base Design
+
+Let's make a personal website. the design and navigation should be like https://brittanychiang.com/. the page is for a software developer. Personal developer portfolio showcasing full-stack expertise with a focus on AI technologies, github projects, hobbies: running, playing the piano, languages: German, English, French, Spanish, Chinese (Mandarin)
+
+The design is playful, joyful. It uses modern web design and javascript/css tricks. Form follows function. UI elements are customized for the specific purposs, using icons, custom shapes etc. 
+
 **Core Identity:**
 - Full Stack Developer
 - AI Enthusiast (Agentic Coding, RAG, Skills/LLM Tooling)
@@ -14,8 +21,20 @@ Personal developer portfolio showcasing full-stack expertise with a focus on AI 
 
 ## Site Structure
 
-### 1. Hero Section
-**Visual:** CSS Blossoming Flowers animation (dark theme)
+### 0. Navigation ("Polyglot" Navigation)
+**Visual:** Minimalist glassmorphic navigation bar
+**Behavior:**
+- On hover, links cycle through names in different languages:
+  - Home → Haus → Maison → Casa → Home
+  - Work → Arbeit → Travail → Lavoro → Work
+  - Hobbies → Hobbys → Loisirs → Hobby → Hobbies
+**Effect Integration:**
+- Glassmorphic background
+- Smooth language transition animation
+- Glow effect on active/hover state
+
+### 1. Hero Section ("Performance Metrics" Hero)
+**Visual:** Terminal-style typed greeting with sinusoidal wave background animation (dark theme)
 **Content:**
 - Name: Christian Hägele
 - Title: Full Stack Developer & AI Explorer
@@ -23,9 +42,10 @@ Personal developer portfolio showcasing full-stack expertise with a focus on AI 
 - CTA: "Explore my work" / "Get in touch"
 
 **Effect Integration:**
-- Full-screen flower animation on load
-- Text fades in after flowers bloom (staggered 0.5s delay)
-- Floating light particles (from flower effect) create magical atmosphere
+- Terminal-style typing animation for greeting
+- Sinusoidal wave background (mimics sound wave/heartbeat)
+- Text fades in with staggered delay
+- Glassmorphic overlay elements
 - Smooth scroll indicator at bottom
 
 ---
@@ -35,16 +55,16 @@ Personal developer portfolio showcasing full-stack expertise with a focus on AI 
 **Content:**
 
 #### Who I Am
-> I'm a full-stack developer passionate about the intersection of code and intelligence. My journey spans from traditional web development to the cutting edge of AI—where I now spend most of my time building agents, implementing RAG systems, and creating skill frameworks for LLMs.
+> I'm a full-stack developer passionate about the intersection of code and intelligence. My journey spans from traditional web development to the cutting edge of AI—where I now spend most of my time building agents, implementing LLM tools, and creating skill frameworks for LLMs.
 
 #### Beyond the Screen
-When I'm not training models or debugging agents, you'll find me:
+When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 - 🏃 **Jogging** - Early morning runs to clear my mind
-- 🎹 **Playing Piano** - Classical and jazz to balance the logic
-- 🌍 **Learning Languages** - Currently exploring [language] (always learning)
+- 🎹 **Playing Piano** - Classical to balance the logic
+- 🌍 **Learning Languages** - Currently exploring [Chinese] (always learning)
 
 #### Philosophy
-> Technology should feel magical. Whether it's a flower blooming in CSS or an AI agent reasoning through a complex problem, the best experiences combine technical excellence with human wonder.
+> Technology should feel magical. The best experiences combine technical excellence with human wonder.
 
 **Effect Integration:**
 - Scroll-triggered fade-in
@@ -58,22 +78,22 @@ When I'm not training models or debugging agents, you'll find me:
 **Content:**
 
 #### AI & Machine Learning
-- **Agentic Coding** - Autonomous systems, multi-agent orchestration, tool use
+- **Agentic Coding** - multi-agent orchestration, tool use
 - **RAG Systems** - Retrieval-augmented generation, vector databases, embeddings
 - **Skills Framework** - LLM tool integration, function calling, skill libraries
 - **LLM Engineering** - Prompt engineering, fine-tuning, model evaluation
 
 #### Full Stack Development
-- **Frontend** - React, TypeScript, Next.js, CSS architecture
-- **Backend** - Node.js, Python, API design, microservices
-- **Databases** - PostgreSQL, vector stores (Pinecone, Weaviate), Redis
-- **DevOps** - Docker, CI/CD, cloud platforms (AWS/GCP)
+- **Frontend** - React, TypeScript
+- **Backend** - Java, Go, API design, microservices
+- **Databases** - MSSQL, vector stores (DuckDB), graph stores 
+- **DevOps** - Docker, CI/CD (Azure Pipelines), cloud platforms (Azure)
 
 #### Tools & Technologies
-- LangChain, LlamaIndex, OpenAI API
+- OpenAI API, GraphQL
 - Vector databases, embeddings (OpenAI, HuggingFace)
-- TypeScript, Python, Go
-- React, Next.js, Tailwind CSS
+- Java, TypeScript, Go
+- React
 
 **Effect Integration:**
 - Magnetic hover effect on skill cards
@@ -83,42 +103,70 @@ When I'm not training models or debugging agents, you'll find me:
 
 ---
 
-### 4. Projects Section
-**Visual:** Project cards with hover reveal
+### 4. Projects Section ("Continuous Integration" Portfolio)
+**Visual:** Git log-style project cards with commit icons and hover reveal
 **Content:**
 
 #### Featured Project 1: AI Agent Framework
-**Title:** Agent Orchestration System
-**Description:** A modular framework for building and orchestrating AI agents with tool use, memory management, and multi-agent collaboration.
-**Tech:** Python, LangChain, FastAPI, PostgreSQL
-**Links:** GitHub | Live Demo
+**Title:** Agentic Tasks
+**Description:** A persistent task management system designed for AI agents 
+**Tech:** JavaScript, Typescript, SHell
+**Links:** [GitHub](https://github.com/karma-works/agentic-tasks)
 
-#### Featured Project 2: RAG Implementation
-**Title:** Knowledge Base Assistant
-**Description:** Document ingestion pipeline with semantic search, chunking strategies, and contextual response generation.
-**Tech:** TypeScript, Next.js, Pinecone, OpenAI
-**Links:** GitHub | Case Study
+#### Featured Project 2: Migrations with AI
+**Title:** Papercraft Web
+**Description:** A web-based tool to unwrap 3D models into printable papercraft patterns. This is a client/server application with a Rust backend and React frontend. 
+**Tech:** Rust, TypeScript, HTML
+**Links:** [GitHub](https://github.com/karma-works/papercraft-web)
 
 #### Featured Project 3: Skill Library
-**Title:** LLM Skills Toolkit
-**Description:** Collection of reusable skills for LLMs including web search, code execution, data analysis, and API integration.
-**Tech:** Python, Pydantic, Docker
-**Links:** GitHub | Documentation
+**Title:** Claudine Skills
+**Description:** Permissively-licensed reimplementations of proprietary Anthropic Claude skills 
+**Tech:** Python
+**Links:** [GitHub | Documentation](https://github.com/karma-works/claudine-skills)
 
 #### Web Experiments
 - CSS Animation Showcase (this website!)
 - Interactive visualizations
-- Open source contributions
 
 **Effect Integration:**
+- Git log-style layout with commit icons showing technologies
 - Cards have 3D tilt effect on hover
 - Image reveal with clip-path animation
 - Staggered grid animation on scroll
 - Project titles use highlight effect on hover
+- Glassmorphic card backgrounds
 
 ---
 
-### 5. Writing / Blog Section (Optional/Minimal)
+### 5. Hobbies Section (The "Trifecta")
+**Visual:** Three-column glassmorphic cards with interactive widgets
+**Content:**
+
+#### Running
+- Latest Strava stats (distance, pace, weekly total)
+- Minimalist heat map of favorite routes
+- Personal records with subtle animations
+
+#### Piano
+- Mini interactive keyboard (also in footer)
+- Current repertoire or learning pieces
+- Musical journey timeline
+
+#### Languages
+- "Language Level" grid with progress bars styled like code loading sequences
+- Languages: German (native), English (fluent), French (learning), Spanish (exploring)
+- Visual progress indicators
+
+**Effect Integration:**
+- Glassmorphic card backgrounds
+- Running: Animated stats counters, route map hover effects
+- Piano: Clickable keys with sound, theme color shifts
+- Languages: Progress bars animate on scroll into view
+
+---
+
+### 6. Writing / Blog Section (Optional/Minimal)
 **Visual:** Clean list with hover states
 **Content:**
 
@@ -148,8 +196,8 @@ When I'm not training models or debugging agents, you'll find me:
 
 **Primary Contact:**
 - Email: christian@haegele.dev
-- GitHub: github.com/[username]
-- LinkedIn: linkedin.com/in/[username]
+- GitHub: https://github.com/karma-works/
+- LinkedIn: https://www.linkedin.com/in/christian-haegele-3403aaa/
 
 **Quick Form (optional):**
 - Name
@@ -165,49 +213,87 @@ When I'm not training models or debugging agents, you'll find me:
 
 ---
 
-### 7. Footer
+### 8. Footer
 **Content:**
 - © 2025 Christian Hägele
 - Built with TypeScript, React & CSS magic
 - "Made with ♥ and lots of coffee"
+- Interactive SVG piano keyboard
 
 **Effect Integration:**
 - Minimal - just fade in
 - Links have underline animation on hover
+- Interactive piano keyboard: plays soft note on click, triggers UI theme changes (e.g., C-major shifts accent to yellow)
 
 ---
 
 ## Visual Theme & Effects Summary
 
+### Design Philosophy
+
+**Aesthetic:** Sophisticated, high-performance dark-mode terminal aesthetic blended with elegant, flowing transitions that mimic a musical score or a running path. "Late-night coding session" energy that remains polished for recruiters and collaborators.
+
 ### Color Palette
 
 **Primary:**
-- Background: #000 (black) to #0a0a0a (near black)
-- Accent: #a7ffee (cyan/mint from flowers)
-- Secondary: #54b8aa (teal)
-- Highlight: #ffe83e (yellow), #5be95c (green), #ff64b9 (pink)
+- Background: #0d1117 (Deep Charcoal/Near Black)
+- Accent: #00f5d4 (Electric Mint/Cyan)
+- Secondary: #00bbff (Cyber Blue)
+- Highlight: #f72585 (Neon Pink), #fee440 (Cyber Yellow), #72efdd (Soft Teal)
 
 **Text:**
-- Primary: #ffffff (white)
-- Secondary: rgba(255,255,255,0.7)
-- Muted: rgba(255,255,255,0.5)
+- Primary: #f0f6fc (Off-white/High Contrast)
+- Secondary: #8b949e (Cool Gray)
+- Muted: #484f58 (Deep Slate)
 
 ### Typography
 
 - **Headings:** Inter or System UI, bold weights
 - **Body:** Inter, regular weight
-- **Accents/Quotes:** "Mansalva" or handwriting font (from highlight effect)
+- **Accents/Quotes:** Caveat or La Belle Aurore - human, handwritten touch for language learning notes or running logs
+
+### Layout & Elements
+
+#### The "Polyglot" Navigation
+- Minimalist navigation bar
+- On hover, links (Home, Work, Hobbies) cycle through names in different languages spoken
+
+#### The "Performance Metrics" Hero
+- Terminal-style typed greeting
+- Subtle background animation of **sinusoidal wave** (mimics sound wave/piano and heartbeat/running)
+
+#### The "Continuous Integration" Portfolio
+- Projects displayed like a git log
+- Small commits/icons showing technologies used
+- Professional, data-driven senior dev vibe
+
+#### The Hobby "Trifecta" Section
+- **Running:** Dynamic widget with latest Strava stats or minimalist heat map of favorite routes
+- **Piano:** Interactive SVG keyboard in footer - plays soft note on click, triggers UI theme change (e.g., C-major shifts accent to yellow)
+- **Languages:** "Language Level" grid with progress bars styled like code loading sequences
+
+### UI Effects
+
+- **Glassmorphism:** Frosted glass effects for cards - maintain depth against black background
+- **Glow Effects:** On buttons to make cyan accent pop
+- **Transitions:** Elegant, flowing animations mimicking musical scores
+
+**Don'ts**
+- Never use rainbow effect in fonts!
 
 ### Effects Map
 
 | Section | Primary Effect | Secondary Effects |
 |---------|---------------|-------------------|
-| Hero | Full flower animation | Floating lights, text fade |
+| Navigation | Polyglot hover cycle | Minimalist glass effect, glow |
+| Hero | Terminal typed greeting + sinusoidal wave | Floating lights, text fade |
 | About | Scroll reveal | Highlighted text |
-| Skills | Magnetic hover | Staggered cards |
-| Projects | 3D card tilt | Clip-path reveal |
+| Skills | Magnetic hover | Glassmorphic cards |
+| Projects | Git log style + 3D card tilt | Clip-path reveal |
+| Hobbies | Interactive Trifecta widgets | Strava stats, piano keyboard, language progress |
 | Contact | Floating petals | Magnetic inputs |
-| Global | Smooth scroll | Page transitions |
+| Footer | Interactive piano keyboard | Theme color shifts on key press |
+| Global | Smooth scroll | Glassmorphism, glow effects |
 
 ---
 
