@@ -37,11 +37,16 @@ This plan implements the content-plan.md using modern web technologies. Each pha
 5. Set up testing infrastructure (Vitest + Playwright)
 6. Configure linting (ESLint + typescript-eslint)
 7. Create responsive utilities and breakpoints
+8. **Create EffectsController context** - Central coordinator for cross-feature effects
+9. **Implement ReduceMotionProvider** - Global reduced-motion state
 
 **File Structure:**
 ```
 src/
 ├── components/
+├── contexts/
+│   ├── EffectsContext.tsx    // Central effects controller
+│   └── ReduceMotionContext.tsx
 ├── hooks/
 ├── utils/
 │   └── responsive.ts
@@ -68,6 +73,84 @@ tests/
 - [ ] `bun run build` produces valid output
 - [ ] `bun test` runs (even with 0 tests)
 - [ ] Playwright browsers installed
+
+#### 0.1 EffectsController (Central Coordinator)
+
+**Purpose:** Replace ad-hoc event buses with a single, typed context for cross-feature coordination.
+
+**API:**
+```typescript
+interface EffectsController {
+  // Wave effects
+  wavePluck(intensity: number): void;
+  waveSetHeartbeat(active: boolean): void;
+  
+  // State (high-level toggles only)
+  isMuted: boolean;
+  setIsMuted(value: boolean): void;
+  activeSection: string;
+  setActiveSection(section: string): void;
+  
+  // Engine refs (stored in refs, not state)
+  waveEngineRef: React.MutableRefObject<WaveEngine | null>;
+  pianoEngineRef: React.MutableRefObject<PianoEngine | null>;
+}
+
+const EffectsContext = createContext<EffectsController | null>(null);
+const useEffects = () => useContext(EffectsContext);
+```
+
+**Verification:**
+- [ ] Unit test: `useEffects` throws when used outside provider
+- [ ] Unit test: `wavePluck` calls engine method
+
+#### 0.2 ReduceMotionProvider
+
+**Purpose:** Global reduced-motion state with CSS and JS integration.
+
+**Implementation:**
+```typescript
+interface ReduceMotionContextValue {
+  isReducedMotion: boolean;  // True if prefers-reduced-motion
+  disableNonCritical: boolean; // User can toggle this separately
+}
+
+// CSS integration
+:root {
+  --animation-duration-multiplier: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --animation-duration-multiplier: 0;
+  }
+}
+
+// JS hook
+const useReducedMotion = () => {
+  const { isReducedMotion, disableNonCritical } = useContext(ReduceMotionContext);
+  return { 
+    shouldAnimate: !isReducedMotion,
+    shouldAnimateNonCritical: !isReducedMotion && !disableNonCritical 
+  };
+};
+```
+
+**Non-Critical Animations (disabled in reduce-motion):**
+- Magnetic hover effects
+- Particle effects
+- Parallax backgrounds
+- 3D card tilts
+
+**Critical Animations (always enabled, simplified):**
+- Page transitions
+- Form validation feedback
+- Focus indicators
+
+**Verification:**
+- [ ] Unit test: `useReducedMotion` returns correct values
+- [ ] E2E test: `prefers-reduced-motion: reduce` disables non-critical animations
+- [ ] E2E test: ReduceMotionProvider can be tested via data attribute
 
 ---
 
