@@ -4,12 +4,11 @@
 
 Personal developer portfolio showcasing full-stack expertise with a focus on AI technologies. The site combines technical depth with personal character through carefully crafted sections and spectacular visual effects.
 
+---
 
 ## Base Design
 
-Let's make a personal website. the design and navigation should be like https://brittanychiang.com/. the page is for a software developer. Personal developer portfolio showcasing full-stack expertise with a focus on AI technologies, github projects, hobbies: running, playing the piano, languages: German, English, French, Spanish, Chinese (Mandarin)
-
-The design is playful, joyful. It uses modern web design and javascript/css tricks. Form follows function. UI elements are customized for the specific purposs, using icons, custom shapes etc. 
+**Inspiration:** Brittany Chiang's portfolio (brittanychiang.com)
 
 **Core Identity:**
 - Full Stack Developer
@@ -17,23 +16,31 @@ The design is playful, joyful. It uses modern web design and javascript/css tric
 - Human: Jogger, Pianist, Polyglot
 - Contact: christian@haegele.dev
 
+**Design Philosophy:**
+Aesthetic: Sophisticated, high-performance dark-mode terminal aesthetic blended with elegant, flowing transitions that mimic a musical score or a running path. "Late-night coding session" energy that remains polished for recruiters and collaborators.
+
+The design is playful, joyful. It uses modern web design and JavaScript/CSS tricks. Form follows function. UI elements are customized for the specific purpose, using icons, custom shapes etc.
+
 ---
 
 ## Site Structure
 
-### 0. Navigation ("Polyglot" Navigation)
+### 1. Navigation ("Polyglot" Navigation)
 **Visual:** Minimalist glassmorphic navigation bar
 **Behavior:**
 - On hover, links cycle through names in different languages:
   - Home → Haus → Maison → Casa → Home
   - Work → Arbeit → Travail → Lavoro → Work
   - Hobbies → Hobbys → Loisirs → Hobby → Hobbies
-**Effect Integration:**
+
+**Effects:**
 - Glassmorphic background
 - Smooth language transition animation
 - Glow effect on active/hover state
 
-### 1. Hero Section ("Performance Metrics" Hero)
+---
+
+### 2. Hero Section ("Performance Metrics" Hero)
 **Visual:** Terminal-style typed greeting with sinusoidal wave background animation (dark theme)
 **Content:**
 - Name: Christian Hägele
@@ -41,18 +48,24 @@ The design is playful, joyful. It uses modern web design and javascript/css tric
 - Subtitle: Building intelligent systems, one agent at a time
 - CTA: "Explore my work" / "Get in touch"
 
-**Effect Integration:**
+**Live Stats (optional):**
+- **Commits this year:** `[LIVE]` via GitHub API (fetches contribution count)
+- **Currently Learning:** Ticker that cycles through "Go", "Agentic Coding"
+
+**Effects:**
 - Terminal-style typing animation for greeting
 - Sinusoidal wave background (mimics sound wave/heartbeat), see #pulse-background.md
 - Text fades in with staggered delay
 - Glassmorphic overlay elements
 - Smooth scroll indicator at bottom
+- Live commit counter animates on load (counts up from 0)
+- Learning ticker has subtle marquee/cycle animation
 
-see #landing-view.md for more details.
+See #landing-view.md for more details.
 
 ---
 
-### 2. About Section
+### 3. About Section
 **Visual:** Split layout - content left, visual right
 **Content:**
 
@@ -61,21 +74,21 @@ see #landing-view.md for more details.
 
 #### Beyond the Screen
 When I'm not tweaking LLM integrations or debugging agents, you'll find me:
-- 🏃 **Jogging** - Early morning runs to clear my mind
-- 🎹 **Playing Piano** - Classical to balance the logic
-- 🌍 **Learning Languages** - Currently exploring [Chinese] (always learning)
+- **Jogging** - Early morning runs to clear my mind
+- **Playing Piano** - Classical to balance the logic
+- **Learning Languages** - Currently exploring Chinese (always learning)
 
 #### Philosophy
 > Technology should feel magical. The best experiences combine technical excellence with human wonder.
 
-**Effect Integration:**
+**Effects:**
 - Scroll-triggered fade-in
 - Highlighted text effect on key phrases ("AI", "agents", "magical")
 - Subtle parallax on background elements
 
 ---
 
-### 3. Expertise / Skills Section
+### 4. Expertise / Skills Section
 **Visual:** Interactive grid or cards with hover effects
 **Content:**
 
@@ -88,7 +101,7 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 #### Full Stack Development
 - **Frontend** - React, TypeScript
 - **Backend** - Java, Go, API design, microservices
-- **Databases** - MSSQL, vector stores (DuckDB), graph stores 
+- **Databases** - MSSQL, vector stores (DuckDB), graph stores
 - **DevOps** - Docker, CI/CD (Azure Pipelines), cloud platforms (Azure)
 
 #### Tools & Technologies
@@ -97,7 +110,7 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 - Java, TypeScript, Go
 - React
 
-**Effect Integration:**
+**Effects:**
 - Magnetic hover effect on skill cards
 - Icons animate on hover (subtle rotation/scale)
 - Staggered reveal on scroll
@@ -105,33 +118,50 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 
 ---
 
-### 4. Projects Section ("Continuous Integration" Portfolio)
+### 4.1 Tools I Actually Use
+**Visual:** Minimalist list with icons, styled like a `.config` file or CLI output
+**Content:**
+
+> The real stack. Not the "impress recruiters" stack.
+
+**Editor:** VS Code + opencode (AI-powered CLI coding agent)
+**Terminal:** Terminal.app
+**Browser:** Zen (Firefox-based, privacy-first)
+**Notes:** VS Code (markdown files, obviously)
+
+**Effects:**
+- Monospace font for that dotfile aesthetic
+- Icons glow on hover
+- Subtle typing animation effect (like `cat .toolsrc`)
+
+---
+
+### 5. Projects Section ("Continuous Integration" Portfolio)
 **Visual:** Git log-style project cards with commit icons and hover reveal
 **Content:**
 
-#### Featured Project 1: AI Agent Framework
-**Title:** Agentic Tasks
-**Description:** A persistent task management system designed for AI agents 
-**Tech:** JavaScript, Typescript, SHell
+#### Featured Projects
+
+**Project 1: Agentic Tasks**
+A persistent task management system designed for AI agents
+**Tech:** JavaScript, TypeScript, Shell
 **Links:** [GitHub](https://github.com/karma-works/agentic-tasks)
 
-#### Featured Project 2: Migrations with AI
-**Title:** Papercraft Web
-**Description:** A web-based tool to unwrap 3D models into printable papercraft patterns. This is a client/server application with a Rust backend and React frontend. 
+**Project 2: Papercraft Web**
+A web-based tool to unwrap 3D models into printable papercraft patterns. Client/server application with Rust backend and React frontend.
 **Tech:** Rust, TypeScript, HTML
 **Links:** [GitHub](https://github.com/karma-works/papercraft-web)
 
-#### Featured Project 3: Skill Library
-**Title:** Claudine Skills
-**Description:** Permissively-licensed reimplementations of proprietary Anthropic Claude skills 
+**Project 3: Claudine Skills**
+Permissively-licensed reimplementations of proprietary Anthropic Claude skills
 **Tech:** Python
-**Links:** [GitHub | Documentation](https://github.com/karma-works/claudine-skills)
+**Links:** [GitHub](https://github.com/karma-works/claudine-skills)
 
 #### Web Experiments
 - CSS Animation Showcase (this website!)
 - Interactive visualizations
 
-**Effect Integration:**
+**Effects:**
 - Git log-style layout with commit icons showing technologies
 - Cards have 3D tilt effect on hover
 - Image reveal with clip-path animation
@@ -141,7 +171,29 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 
 ---
 
-### 5. Hobbies Section (The "Trifecta")
+### 5.1 Graveyard of Ideas
+**Visual:** Dimmed, monochrome cards with faded aesthetic - the "abandoned projects" vibe
+**Content:**
+
+> Not every idea makes it. Here's where the ambitious ones rest—projects that taught me more in failure than success ever could.
+
+**Project: SC2K City Viewer**
+An ambitious attempt to create a fully open-source SimCity 2000 city viewer by replacing proprietary game assets with AI-generated tilemaps. The goal: a legal, functional city viewer requiring no original game files.
+**What Went Wrong:** AI struggled to generate a consistent sprite set—the buildings didn't look like they belonged in the same city. Computer vision extracted descriptions, but the generative step couldn't maintain visual coherence across 400+ assets.
+**What I Learned:** AI image generation excels at one-off creations but fails at systematic asset libraries requiring stylistic consistency. Sometimes the human touch isn't replaceable.
+**Tech:** TypeScript, Python, Vite
+**Screenshot:** ![SC2K City Viewer](./assets/sc2k-city-viewer-screenshot.png)
+**Links:** [GitHub](https://github.com/karma-works/sc2k-city-viewer)
+
+**Effects:**
+- Desaturated/faded card backgrounds (ghost-like)
+- Subtle "dust" particle effect on hover
+- Grayscale until hover, then hint of color returns
+- Elegiac typography (smaller, more muted)
+
+---
+
+### 6. Hobbies Section (The "Trifecta")
 **Visual:** Three-column glassmorphic cards with interactive widgets
 **Content:**
 
@@ -160,7 +212,7 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 - Languages: German (native), English (fluent), French (learning), Spanish (exploring)
 - Visual progress indicators
 
-**Effect Integration:**
+**Effects:**
 - Glassmorphic card backgrounds
 - Running: Animated stats counters, route map hover effects
 - Piano: Clickable keys with sound, theme color shifts
@@ -168,7 +220,26 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 
 ---
 
-### 6. Writing / Blog Section (Optional/Minimal)
+### 6.1 Desk Setup
+**Visual:** Illustrated/isometric desk diagram or photo with labeled callouts
+**Content:**
+
+> Where the magic happens. And by magic, I mean bugs.
+
+**Hardware:**
+- **Monitor:** 38" ultrawide (immersive coding, no window switching)
+- **Desk:** Standing desk (best code is written standing... occasionally)
+- **Keyboard:** Apple wired keyboard (tactile, reliable, no charging anxiety)
+- **Mouse:** Logitech MX Master (ergonomic, programmable buttons)
+
+**Effects:**
+- Hover on hardware items highlights them in the illustration
+- Subtle parallax on desk elements
+- Standing desk: optional "sitting/standing" toggle animation
+
+---
+
+### 7. Writing / Blog Section (Optional/Minimal)
 **Visual:** Clean list with hover states
 **Content:**
 
@@ -182,14 +253,14 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 3. **"The Art of CSS Animation"**
    How we built the flower effect (meta!)
 
-**Effect Integration:**
+**Effects:**
 - List items slide in from left on scroll
 - Hover: slight indent + highlight color
 - Reading time indicator with subtle animation
 
 ---
 
-### 6. Contact Section
+### 8. Contact Section
 **Visual:** Clean, centered with floating elements
 **Content:**
 
@@ -207,7 +278,7 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 - Message
 - Submit with satisfying interaction
 
-**Effect Integration:**
+**Effects:**
 - Floating flower petals (subtle, 3-4 elements)
 - Input fields have magnetic cursor attraction
 - Submit button with liquid hover effect
@@ -215,14 +286,14 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 
 ---
 
-### 8. Footer
+### 9. Footer
 **Content:**
 - © 2025 Christian Hägele
 - Built with TypeScript, React & CSS magic
 - "Made with ♥ and lots of coffee"
 - Interactive SVG piano keyboard
 
-**Effect Integration:**
+**Effects:**
 - Minimal - just fade in
 - Links have underline animation on hover
 - Interactive piano keyboard: plays soft note on click, triggers UI theme changes (e.g., C-major shifts accent to yellow)
@@ -230,10 +301,6 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 ---
 
 ## Visual Theme & Effects Summary
-
-### Design Philosophy
-
-**Aesthetic:** Sophisticated, high-performance dark-mode terminal aesthetic blended with elegant, flowing transitions that mimic a musical score or a running path. "Late-night coding session" energy that remains polished for recruiters and collaborators.
 
 ### Color Palette
 
@@ -254,26 +321,6 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 - **Body:** Inter, regular weight
 - **Accents/Quotes:** Caveat or La Belle Aurore - human, handwritten touch for language learning notes or running logs
 
-### Layout & Elements
-
-#### The "Polyglot" Navigation
-- Minimalist navigation bar
-- On hover, links (Home, Work, Hobbies) cycle through names in different languages spoken
-
-#### The "Performance Metrics" Hero
-- Terminal-style typed greeting
-- Subtle background animation of **sinusoidal wave** (mimics sound wave/piano and heartbeat/running)
-
-#### The "Continuous Integration" Portfolio
-- Projects displayed like a git log
-- Small commits/icons showing technologies used
-- Professional, data-driven senior dev vibe
-
-#### The Hobby "Trifecta" Section
-- **Running:** Dynamic widget with latest Strava stats or minimalist heat map of favorite routes
-- **Piano:** Interactive SVG keyboard in footer - plays soft note on click, triggers UI theme change (e.g., C-major shifts accent to yellow)
-- **Languages:** "Language Level" grid with progress bars styled like code loading sequences
-
 ### UI Effects
 
 - **Glassmorphism:** Frosted glass effects for cards - maintain depth against black background
@@ -287,12 +334,15 @@ When I'm not tweaking LLM integrations or debugging agents, you'll find me:
 
 | Section | Primary Effect | Secondary Effects |
 |---------|---------------|-------------------|
-| Navigation | Polyglot hover cycle | Minimalist glass effect, glow |
-| Hero | Terminal typed greeting + sinusoidal wave | Floating lights, text fade |
+| Navigation | Polyglot hover cycle | Glass effect, glow |
+| Hero | Terminal typed greeting + sinusoidal wave + live stats | Floating lights, text fade, commit counter, learning ticker |
 | About | Scroll reveal | Highlighted text |
 | Skills | Magnetic hover | Glassmorphic cards |
+| Tools I Use | Dotfile/CLI aesthetic | Icon glow, typing effect |
 | Projects | Git log style + 3D card tilt | Clip-path reveal |
-| Hobbies | Interactive Trifecta widgets | Strava stats, piano keyboard, language progress |
+| Graveyard | Ghostly desaturated cards | Dust particles, grayscale-to-hint |
+| Hobbies | Interactive Trifecta widgets | Strava stats, piano, language progress |
+| Desk Setup | Illustrated diagram with callouts | Parallax, hover highlights |
 | Contact | Floating petals | Magnetic inputs |
 | Footer | Interactive piano keyboard | Theme color shifts on key press |
 | Global | Smooth scroll | Glassmorphism, glow effects |
