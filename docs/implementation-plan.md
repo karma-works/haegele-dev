@@ -60,35 +60,19 @@ tests/
 
 ## Phase 1: Core Technical Challenges
 
-**Duration:** 3-4 days
-
 This phase tackles the most complex technical features first.
 
 ### 1.1 Pulse Background Engine
 
 **Description:** Canvas-based sinusoidal wave that responds to multiple inputs with proportional responsive scaling.
 
-**Features:**
-- Base sine wave animation (60fps)
-- Lerp-based state transitions
-- Piano integration (pluck effect)
-- Strava hover integration (heartbeat mode ~80 BPM)
-- Mouse proximity effect
-- Color transitions (mint → pink based on scroll)
-- `prefers-reduced-motion` support
-- **Proportional responsive scaling**
+#### 1.1.1 Core Wave Rendering
 
-**Responsive Wave Scaling:**
-The wave must maintain visual proportions (not just shrink length):
-
-| Property | Scaling Formula | Example (375px vs 1440px) |
-|----------|-----------------|---------------------------|
-| Amplitude | `clamp(8px, 3vh, 40px)` | 12px vs 40px |
-| Wavelength | `clamp(80px, 25vw, 300px)` | 94px vs 360px |
-| Stroke | `clamp(1px, 0.15vw, 3px)` | 1px vs 2px |
-| Glow | `clamp(5px, 1vw, 20px)` | 5px vs 15px |
-
-**Key Rule:** Amplitude and wavelength scale together to maintain wave shape ratio (~1:8).
+**Tasks:**
+- Set up Canvas element with proper sizing
+- Implement base sine wave animation (60fps)
+- Create wave point calculation with configurable parameters
+- Implement smooth render loop with requestAnimationFrame
 
 **Files:**
 ```
@@ -96,18 +80,73 @@ src/
 ├── components/PulseBackground/
 │   ├── PulseBackground.tsx
 │   ├── PulseBackground.module.css
-│   ├── useWaveEngine.ts
-│   ├── useWaveScaling.ts
 │   └── types.ts
 ├── utils/
 │   └── waveMath.ts
 tests/unit/
-├── waveMath.test.ts
-├── useWaveScaling.test.ts
-└── useWaveEngine.test.ts
-tests/e2e/
-└── pulse-background.spec.ts
+└── waveMath.test.ts
 ```
+
+**Verification:**
+- [ ] Unit test: `waveMath.sineWave()` generates correct points
+- [ ] Unit test: `waveMath.lerp()` returns correct interpolated values
+- [ ] E2E test: Canvas renders on page load
+
+#### 1.1.2 Proportional Responsive Scaling
+
+**Tasks:**
+- Implement viewport-aware amplitude scaling
+- Implement proportional wavelength scaling
+- Ensure amplitude:wavelength ratio maintained (~1:8)
+- Add stroke and glow proportional scaling
+
+**Files:**
+```
+src/
+├── components/PulseBackground/
+│   └── useWaveScaling.ts
+tests/unit/
+└── useWaveScaling.test.ts
+```
+
+**Verification:**
+- [ ] Unit test: `useWaveScaling` maintains amplitude:wavelength ratio across viewports
+- [ ] Unit test: `useWaveScaling` returns proportional values for mobile
+- [ ] E2E test: Mobile viewport shows proportional wave (not stretched)
+- [ ] E2E test: Wave amplitude scales with viewport height
+
+#### 1.1.3 Wave State & Transitions
+
+**Tasks:**
+- Implement lerp-based state transitions
+- Add color transitions (mint → pink based on scroll)
+- Add `prefers-reduced-motion` support
+- Create state machine for wave modes
+
+**Files:**
+```
+src/
+├── components/PulseBackground/
+│   └── useWaveEngine.ts
+tests/unit/
+└── useWaveEngine.test.ts
+```
+
+**Verification:**
+- [ ] Unit test: `useWaveEngine` responds to `pluck()` within 1 frame
+- [ ] E2E test: `prefers-reduced-motion` reduces animation speed
+- [ ] E2E test: Performance: Frame time < 16ms (60fps)
+
+#### 1.1.4 Integration Hooks
+
+**Tasks:**
+- Piano integration (pluck effect)
+- Strava hover integration (heartbeat mode ~80 BPM)
+- Mouse proximity effect
+
+**Verification:**
+- [ ] E2E test: Piano key press triggers wave pluck
+- [ ] E2E test: Strava hover triggers heartbeat mode
 
 **API:**
 ```typescript
@@ -127,37 +166,89 @@ interface WaveScaling {
 }
 ```
 
-**Verification:**
-- [ ] Unit test: `waveMath.lerp()` returns correct interpolated values
-- [ ] Unit test: `waveMath.sineWave()` generates correct points
-- [ ] Unit test: `useWaveScaling` maintains amplitude:wavelength ratio across viewports
-- [ ] Unit test: `useWaveScaling` returns proportional values for mobile
-- [ ] Unit test: `useWaveEngine` responds to `pluck()` within 1 frame
-- [ ] E2E test: Canvas renders on page load
-- [ ] E2E test: `prefers-reduced-motion` reduces animation speed
-- [ ] E2E test: Mobile viewport shows proportional wave (not stretched)
-- [ ] E2E test: Wave amplitude scales with viewport height
-- [ ] Performance: Frame time < 16ms (60fps) measured via Playwright
-
 ### 1.2 Web Piano Engine
 
-**Description:** Polyphonic audio synthesis using Tone.js with visual sync.
+**Description:** Polyphonic audio synthesis using Tone.js with visual sync and responsive octave reduction.
 
-**Features:**
-- Tone.js PolySynth with triangle oscillator
-- ADSR envelope (Attack: 0.005s, Decay: 1.2s, Sustain: 0.1, Release: 1.0s)
-- Computer keyboard mapping (A-L keys → C2-C4 on desktop)
-- Mouse/touch velocity simulation
-- Audio context resume on user gesture
-- Event bus for visual sync
-- **Responsive octave reduction** (not just shrinking)
+#### 1.2.1 Audio Synthesis Core
 
-**Responsive Piano Strategy:**
-| Viewport | Keys | Range | Notes |
-|----------|------|-------|-------|
-| >1024px | 25 | C2-C4 | Full chromatic |
-| 768-1024px | 17 | C2-C3 | Reduced chromatic |
-| <768px | 8 | C2-C3 | White keys only (C,D,E,F,G,A,B,C) |
+**Tasks:**
+- Set up Tone.js PolySynth with triangle oscillator
+- Configure ADSR envelope (Attack: 0.005s, Decay: 1.2s, Sustain: 0.1, Release: 1.0s)
+- Implement note frequency calculation
+- Handle audio context resume on user gesture
+
+**Files:**
+```
+src/
+├── components/Piano/
+│   ├── usePianoEngine.ts
+│   └── types.ts
+├── utils/
+│   └── eventBus.ts
+tests/unit/
+└── usePianoEngine.test.ts
+```
+
+**Verification:**
+- [ ] Unit test: `usePianoEngine` creates valid note frequencies
+- [ ] E2E test: Clicking piano key produces sound (Web Audio context active)
+- [ ] E2E test: Polyphony - multiple simultaneous notes don't clip
+
+#### 1.2.2 Keyboard Input Mapping
+
+**Tasks:**
+- Map computer keyboard (A-L keys) to notes
+- Handle modifier keys for sharps/flats
+- Implement touch velocity simulation
+- Create event bus for visual sync
+
+**Files:**
+```
+src/
+├── components/Piano/
+│   └── keyMap.ts
+tests/unit/
+└── keyMap.test.ts
+```
+
+**Verification:**
+- [ ] Unit test: `keyMap` maps keyboard keys to correct notes
+- [ ] E2E test: Keyboard shortcut triggers correct note
+
+#### 1.2.3 Responsive Key Ranges
+
+**Tasks:**
+- Define key ranges for each breakpoint
+- Implement viewport detection for key count
+- Ensure all viewports start from C2
+- Handle dynamic key count changes on resize
+
+**Files:**
+```
+src/
+├── components/Piano/
+│   ├── keyRanges.ts
+│   └── useResponsiveKeys.ts
+tests/unit/
+├── keyRanges.test.ts
+└── useResponsiveKeys.test.ts
+```
+
+**Verification:**
+- [ ] Unit test: `keyRanges` returns correct keys for each breakpoint
+- [ ] Unit test: `useResponsiveKeys` returns C2 as start for all viewports
+- [ ] E2E test: Mobile viewport shows fewer keys (8 vs 25)
+- [ ] E2E test: Tablet viewport shows reduced keys (17)
+- [ ] E2E test: All viewports start from C2
+
+#### 1.2.4 Piano UI Component
+
+**Tasks:**
+- Create PianoKey component with visual states
+- Build Piano container with responsive layout
+- Handle mouse/touch events
+- Integrate with audio engine
 
 **Files:**
 ```
@@ -165,19 +256,7 @@ src/
 ├── components/Piano/
 │   ├── Piano.tsx
 │   ├── PianoKey.tsx
-│   ├── Piano.module.css
-│   ├── usePianoEngine.ts
-│   ├── useResponsiveKeys.ts
-│   ├── keyMap.ts
-│   ├── keyRanges.ts
-│   └── types.ts
-├── utils/
-│   └── eventBus.ts
-tests/unit/
-├── keyMap.test.ts
-├── keyRanges.test.ts
-├── useResponsiveKeys.test.ts
-└── usePianoEngine.test.ts
+│   └── Piano.module.css
 tests/e2e/
 └── piano.spec.ts
 ```
@@ -197,17 +276,6 @@ interface ResponsiveKeys {
   startNote: string; // Always C2
 }
 ```
-
-**Verification:**
-- [ ] Unit test: `keyMap` maps keyboard keys to correct notes
-- [ ] Unit test: `keyRanges` returns correct keys for each breakpoint
-- [ ] Unit test: `useResponsiveKeys` returns C2 as start for all viewports
-- [ ] Unit test: `usePianoEngine` creates valid note frequencies
-- [ ] E2E test: Clicking piano key produces sound (Web Audio context active)
-- [ ] E2E test: Keyboard shortcut triggers correct note
-- [ ] E2E test: Polyphony - multiple simultaneous notes don't clip
-- [ ] E2E test: Mobile viewport shows fewer keys (8 vs 25)
-- [ ] E2E test: Tablet viewport shows reduced keys (17)
 
 ### 1.3 Strava Hover Integration
 
@@ -244,15 +312,15 @@ tests/e2e/
 
 ## Phase 2: Layout & Navigation
 
-**Duration:** 2 days
-
 ### 2.1 Polyglot Navigation
 
-**Features:**
-- Glassmorphic background
-- Language cycling on hover (Home → Haus → Maison → Casa → Home)
-- Glow effect on active/hover
-- Responsive hamburger menu
+#### 2.1.1 Desktop Navigation
+
+**Tasks:**
+- Create glassmorphic background component
+- Implement language cycling on hover
+- Add glow effect on active/hover state
+- Create accessible keyboard navigation
 
 **Files:**
 ```
@@ -261,28 +329,37 @@ src/
 │   ├── Navigation.tsx
 │   ├── NavLink.tsx
 │   ├── Navigation.module.css
-│   ├── translations.ts
-│   └── types.ts
+│   └── translations.ts
 tests/unit/
 └── translations.test.ts
-tests/e2e/
-└── navigation.spec.ts
 ```
 
 **Verification:**
 - [ ] Unit test: Translation cycles through all languages
 - [ ] E2E test: Hover cycles link text through languages
 - [ ] E2E test: Active link has visual indicator
+
+#### 2.1.2 Mobile Navigation
+
+**Tasks:**
+- Create hamburger menu component
+- Implement slide-out drawer
+- Handle touch gestures
+- Ensure touch targets >= 44px
+
+**Verification:**
 - [ ] E2E test: Mobile menu opens/closes
+- [ ] E2E test: Touch targets meet minimum size
 
 ### 2.2 Hero Section (Terminal)
 
-**Features:**
-- Terminal window styling (macOS traffic lights)
-- Typed greeting animation
-- Live stats (commits counter, learning ticker)
-- Glassmorphic overlay
-- Smooth scroll indicator
+#### 2.2.1 Terminal Component
+
+**Tasks:**
+- Build terminal window with macOS traffic lights
+- Create glassmorphic overlay
+- Implement typed greeting animation
+- Add smooth scroll indicator
 
 **Files:**
 ```
@@ -291,38 +368,51 @@ src/
 │   ├── Hero.tsx
 │   ├── Terminal.tsx
 │   ├── TypedText.tsx
-│   ├── LiveStats.tsx
 │   ├── Hero.module.css
 │   └── types.ts
 ├── hooks/
 │   └── useTypewriter.ts
 tests/unit/
-├── useTypewriter.test.ts
-└── LiveStats.test.tsx
-tests/e2e/
-└── hero.spec.ts
+└── useTypewriter.test.ts
 ```
 
 **Verification:**
 - [ ] Unit test: `useTypewriter` types and deletes correctly
-- [ ] Unit test: `LiveStats` formats numbers correctly
 - [ ] E2E test: Terminal appears on page load
 - [ ] E2E test: Typed animation plays
+
+#### 2.2.2 Live Stats Component
+
+**Tasks:**
+- Create animated commit counter
+- Implement learning ticker
+- Handle responsive layout for stats
+
+**Files:**
+```
+src/
+├── components/Hero/
+│   └── LiveStats.tsx
+tests/unit/
+└── LiveStats.test.tsx
+```
+
+**Verification:**
+- [ ] Unit test: `LiveStats` formats numbers correctly
 - [ ] E2E test: Stats counter animates from 0
 
 ---
 
 ## Phase 3: Content Sections
 
-**Duration:** 3 days
-
 ### 3.1 About Section
 
-**Features:**
-- Split layout
-- Scroll-triggered fade-in
-- Highlighted text effect
-- Parallax background
+**Tasks:**
+- Build split layout component
+- Implement scroll-triggered fade-in
+- Create highlighted text effect
+- Add parallax background
+- Handle mobile single-column layout
 
 **Verification:**
 - [ ] E2E test: Section visible after scroll
@@ -330,11 +420,12 @@ tests/e2e/
 
 ### 3.2 Skills Section
 
-**Features:**
-- Interactive grid cards
-- Magnetic hover effect
-- Staggered scroll reveal
-- Category icons
+**Tasks:**
+- Create interactive grid cards
+- Implement magnetic hover effect
+- Add staggered scroll reveal
+- Create category icons
+- Handle responsive grid layout
 
 **Verification:**
 - [ ] E2E test: Cards have magnetic hover effect
@@ -342,11 +433,12 @@ tests/e2e/
 
 ### 3.3 Projects Section
 
-**Features:**
-- Git log-style layout
-- 3D tilt effect on hover
-- Clip-path reveal animation
-- Glassmorphic backgrounds
+**Tasks:**
+- Build Git log-style layout
+- Implement 3D tilt effect on hover
+- Create clip-path reveal animation
+- Add glassmorphic backgrounds
+- Handle single-column mobile layout
 
 **Verification:**
 - [ ] E2E test: Project cards render
@@ -355,11 +447,12 @@ tests/e2e/
 
 ### 3.4 Hobbies Section (Trifecta)
 
-**Features:**
-- Three-column glassmorphic cards
-- Running: Strava stats widget
-- Piano: Mini interactive keyboard
-- Languages: Progress bars
+**Tasks:**
+- Create three-column glassmorphic cards
+- Build Strava stats widget
+- Create mini interactive keyboard
+- Build language progress bars
+- Handle stacked mobile layout
 
 **Verification:**
 - [ ] E2E test: All three cards visible
@@ -368,11 +461,12 @@ tests/e2e/
 
 ### 3.5 Contact Section
 
-**Features:**
-- Clean centered layout
-- Magnetic input fields
-- Form validation
-- Success particle burst
+**Tasks:**
+- Build clean centered layout
+- Implement magnetic input fields
+- Create form validation
+- Add success particle burst
+- Handle mobile form layout
 
 **Verification:**
 - [ ] E2E test: Form validates email
@@ -380,10 +474,11 @@ tests/e2e/
 
 ### 3.6 Footer
 
-**Features:**
-- Interactive piano keyboard
-- Theme color shifts on key press
-- Copyright and links
+**Tasks:**
+- Build responsive footer layout
+- Integrate interactive piano keyboard
+- Implement theme color shifts on key press
+- Add copyright and links
 
 **Verification:**
 - [ ] E2E test: Footer piano keys produce sound
@@ -393,13 +488,12 @@ tests/e2e/
 
 ## Phase 4: Strava API Integration
 
-**Duration:** 1 day
-
-**Features:**
-- OAuth flow (manual, one-time)
-- Token refresh utility
-- Build-time data fetch
-- Activity display component
+**Tasks:**
+- Implement OAuth flow (manual, one-time)
+- Create token refresh utility
+- Build build-time data fetch script
+- Create activity display component
+- Add hover heartbeat integration
 
 **Files:**
 ```
