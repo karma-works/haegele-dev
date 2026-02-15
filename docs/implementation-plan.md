@@ -823,11 +823,11 @@ See Phase 0.2 for full ReduceMotionProvider details. Key points:
 ### 5.3 Responsive Testing
 
 **Viewports to Test:**
-- Mobile (375px) - simplified animations, 8 piano keys, proportional wave
+- Mobile (375px) - simplified animations, 8 piano keys (C3 start), proportional wave
 - Mobile landscape (667px)
-- Tablet (768px) - partial effects, 17 piano keys
+- Tablet (768px) - partial effects, 17 piano keys (C2 start)
 - Tablet landscape (1024px)
-- Desktop (1440px) - full effects, 25 piano keys
+- Desktop (1440px) - full effects, 25 piano keys (C2 start)
 
 **Responsive Assertions:**
 - Piano: Key count matches viewport breakpoint
@@ -835,10 +835,13 @@ See Phase 0.2 for full ReduceMotionProvider details. Key points:
 - Wave: Amplitude:wavelength ratio consistent (~1:8)
 - Wave: No visual stretching on any viewport
 
+**Performance Monitoring (Not Test Gates):**
+See Phase 5.1 for performance targets. CI reports metrics but doesn't fail builds.
+
 **E2E Test Suite:**
 ```typescript
 tests/e2e/
-├── performance.spec.ts    // Lighthouse audits
+├── performance.spec.ts    // Lighthouse audits (monitoring only)
 ├── accessibility.spec.ts  // axe-core tests
 └── responsive.spec.ts     // Viewport + component tests
 ```
@@ -854,6 +857,10 @@ test('desktop shows 25 keys starting from C2', ...)
 test('mobile wave maintains proportional amplitude', ...)
 test('wave amplitude scales with viewport height', ...)
 test('wave wavelength scales with viewport width', ...)
+
+// reduced motion tests
+test('prefers-reduced-motion disables non-critical animations', ...)
+test('ReduceMotionProvider toggles via data attribute', ...)
 ```
 
 ---
@@ -879,25 +886,28 @@ test('wave wavelength scales with viewport width', ...)
 
 | Phase | Unit Tests | E2E Tests |
 |-------|------------|-----------|
-| 0: Scaffold | 0 | 1 (smoke) |
-| 1.1: Pulse Background | 6 | 6 |
-| 1.2: Web Piano | 5 | 8 |
-| 1.3: Strava Hover | 1 | 3 |
+| 0: Scaffold | 4 (Effects + ReduceMotion) | 1 (smoke) |
+| 1.1: Pulse Background (Core) | 6 | 4 |
+| 1.5: Optional (Piano + Strava) | 6 | 10 |
 | 2: Layout | 3 | 5 |
-| 3: Content | 2 | 10 |
-| 4: Strava | 1 | 2 |
-| 5: Polish | 0 | 9 |
-| **Total** | **18** | **44** |
+| 3: Content | 2 | 11 |
+| 4: Strava API | 2 | 4 |
+| 5: Polish | 0 | 3 (monitoring) |
+| **Total** | **23** | **38** |
 
 ### Phase 1 Test Breakdown
 
-**Pulse Background (6 unit, 6 e2e):**
-- Unit: sineWave, lerp, useWaveScaling (ratio), useWaveScaling (mobile), useWaveEngine (pluck), useWaveEngine (state)
-- E2E: renders, reduced-motion, mobile proportional, amplitude scaling, piano integration, strava integration
+**Pulse Background (6 unit, 4 e2e):**
+- Unit: sineWave, lerp, useWaveScaling (ratio), useWaveScaling (mobile), useWaveEngine (pluck), EffectsController integration
+- E2E: renders, reduced-motion, mobile proportional, amplitude scaling
 
-**Web Piano (5 unit, 8 e2e):**
-- Unit: keyMap, keyRanges, useResponsiveKeys (C2 start), useResponsiveKeys (breakpoints), usePianoEngine
-- E2E: sound, keyboard, polyphony, mobile keys, tablet keys, desktop keys, C2 start, velocity
+**Web Piano (4 unit, 6 e2e):**
+- Unit: keyMap, keyRanges, loadPianoEngine (lazy), usePianoEngine
+- E2E: engine invoked (mocked), keyboard input, mobile keys, tablet keys, desktop keys, bundle size
+
+**Strava (2 unit, 4 e2e):**
+- Unit: useHeartbeatTrigger, cache fallback
+- E2E: cached data, fallback UI, heartbeat via EffectsController, build succeeds without API
 
 ---
 
@@ -942,11 +952,13 @@ bun run test:e2e:ui         # Playwright UI mode
 
 | Risk | Mitigation |
 |------|------------|
-| Web Audio browser differences | Target Chrome/Firefox only, test both |
-| Canvas performance on mobile | Reduce point density, use will-change |
-| Strava API rate limits | Build-time fetch with caching |
-| Animation jank | Single RAF loop, CSS transforms only |
-| Memory leaks | Dispose audio nodes, cleanup event listeners |
+| Web Audio browser differences | Target Chrome/Firefox only; mock Web Audio in tests |
+| Canvas performance on mobile | Reduce point density; offer reduced-motion mode |
+| Strava API unavailable | Last successful cache; fallback UI; build never fails |
+| Animation jank | Single RAF loop; CSS transforms only |
+| Memory leaks | Cleanup in useEffect; AbortController for events |
+| Bundle size (Tone.js) | Lazy-load on first interaction; separate chunk |
+| Cross-feature coordination | EffectsController context (Phase 0.1) |
 
 ---
 
@@ -956,27 +968,28 @@ bun run test:e2e:ui         # Playwright UI mode
 
 | Risk | Severity | Description | Mitigation Strategy |
 |------|----------|-------------|---------------------|
-| **Web Audio API Complexity** | High | Browser differences in audio context handling, autoplay policies, and latency can cause inconsistent piano behavior across browsers | Target Chrome 120+ and Firefox 120+ only; implement robust audio context resume on user gesture; test extensively on both browsers |
-| **Canvas Performance on Mobile** | High | 60fps sine wave rendering may cause jank on low-end mobile devices, especially with multiple effects active | Reduce point density on mobile; use `will-change` sparingly; implement frame skipping when needed; offer reduced-motion mode |
-| **Responsive Wave Proportions** | Medium | Maintaining visual wave balance (amplitude:wavelength ratio) across all viewport sizes is mathematically complex | Use CSS `clamp()` with viewport-relative units; extensive automated testing at all breakpoints |
-| **Tone.js Bundle Size** | Medium | Tone.js is a large library (~200KB) that could impact initial load performance | Lazy-load Tone.js only when user interacts with piano; consider lighter alternatives if needed |
-| **Memory Leaks** | Medium | Audio nodes, event listeners, and animation frames can cause memory leaks if not properly cleaned up | Implement strict cleanup in `useEffect` returns; use AbortController for event listeners; test with Chrome DevTools memory profiler |
+| **Web Audio API Complexity** | High | Browser differences in audio context handling, autoplay policies | Target Chrome 120+ and Firefox 120+ only; mock Web Audio in E2E tests; audio context resume on user gesture |
+| **Canvas Performance on Mobile** | High | 60fps sine wave rendering may cause jank on low-end devices | Reduce point density on mobile; ReduceMotionProvider for simplified mode; frame skipping when needed |
+| **Responsive Wave Proportions** | Medium | Maintaining wave balance (amplitude:wavelength ratio) across viewports | CSS `clamp()` with viewport-relative units; automated testing at all breakpoints |
+| **Tone.js Bundle Size** | Medium | ~200KB library could impact initial load | **Lazy-load on first piano interaction**; dynamic import creates separate chunk; show "Click to activate" placeholder |
+| **Memory Leaks** | Medium | Audio nodes, event listeners, animation frames | Cleanup in useEffect returns; AbortController for events; Chrome DevTools memory profiler testing |
 
 ### Integration Risks
 
 | Risk | Severity | Description | Mitigation Strategy |
 |------|----------|-------------|---------------------|
-| **Strava API Rate Limits** | Low | Strava has strict rate limits (100 requests/15 min) that could block data fetching | Fetch only at build time; cache results locally; implement fallback to static data |
+| **Strava API Unavailable** | Low | Strava API may be down, rate-limited, or token expired during build | **Last successful cache** mechanism; build succeeds with fallback UI if no cache exists |
 | **Strava Token Expiry** | Medium | OAuth tokens expire and require manual refresh | Implement automated token refresh utility; store refresh tokens securely; document refresh process |
-| **Cross-Component State** | Medium | Piano, wave, and Strava components need to communicate (pluck effects, heartbeat mode) without tight coupling | Use event bus pattern; implement clean subscription/unsubscription; avoid prop drilling |
+| **Cross-Feature Coordination** | Low | Piano, wave, and Strava need to communicate | **EffectsController** context provides typed, centralized coordination (Phase 0.1) |
+| **Tone.js Lazy Load Failure** | Low | Dynamic import may fail on slow networks | Show graceful "Piano unavailable" state; log error for monitoring |
 
 ### User Experience Risks
 
 | Risk | Severity | Description | Mitigation Strategy |
 |------|----------|-------------|---------------------|
-| **Mobile Piano Playability** | High | Touch targets on mobile must be large enough to play comfortably while fitting limited screen space | Minimum 44px touch targets; white keys only on very small screens; always start from C2 for consistency |
-| **Reduced Motion Support** | Medium | Users with vestibular disorders need reduced-motion support without breaking functionality | Respect `prefers-reduced-motion` globally; provide static fallbacks; test with accessibility tools |
-| **First-Time Audio Context** | Medium | Browsers block audio until user interaction, which can confuse users | Clear visual indication that piano needs a click/tap to activate; graceful degradation |
+| **Mobile Piano Playability** | High | Touch targets on mobile must be large enough to play comfortably | Minimum 44px touch targets; white keys only on mobile; start from C3 for mobile UX |
+| **Reduced Motion Support** | Medium | Users with vestibular disorders need reduced-motion support | **ReduceMotionProvider** (Phase 0.2) provides global state; non-critical animations disabled |
+| **First-Time Audio Context** | Medium | Browsers block audio until user interaction | Clear "Click to activate" indicator; lazy-load Tone.js on first interaction |
 
 ### Project Risks
 
