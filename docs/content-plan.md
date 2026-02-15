@@ -43,10 +43,12 @@ The design is playful, joyful. It uses modern web design and javascript/css tric
 
 **Effect Integration:**
 - Terminal-style typing animation for greeting
-- Sinusoidal wave background (mimics sound wave/heartbeat)
+- Sinusoidal wave background (mimics sound wave/heartbeat), see #pulse-background.md
 - Text fades in with staggered delay
 - Glassmorphic overlay elements
 - Smooth scroll indicator at bottom
+
+see #landing-view.md for more details.
 
 ---
 
