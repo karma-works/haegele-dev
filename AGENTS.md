@@ -62,5 +62,8 @@
 - CSS custom properties: type cast as `{'--my-var': 'value'} as CSSProperties`
 - Cards over PulseBackground: need explicit `z-index` to appear above canvas
 
+### Piano Audio
+- Salamander samples: file names use 'Ds'/'Fs' format (e.g., `Ds2.mp3` not `D#2.mp3`)
+
 ### Deployment
 - Vercel: requires `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` secrets

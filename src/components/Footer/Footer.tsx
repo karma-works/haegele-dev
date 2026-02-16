@@ -223,7 +223,7 @@ export const Footer = memo(function Footer() {
                 '--current-accent': themeColor.accent,
               } as React.CSSProperties}
             />
-            <span>Theme shifts with each note</span>
+            <span>Keyboard mapping: A-L for white keys (C4-D5), W/E/T/Y/U/O for black keys</span>
           </div>
 
           <p className={styles.copyright}>
