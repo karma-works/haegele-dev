@@ -219,10 +219,9 @@ export async function fetchAndStoreData(outputPath: string): Promise<StoredStrav
   const tokenResponse = await refreshAccessToken();
   const accessToken = tokenResponse.access_token;
 
-  const athleteId = tokenResponse.athlete?.id;
-  if (!athleteId) {
-    throw new Error('No athlete ID in token response');
-  }
+  console.log('Fetching athlete info...');
+  const athlete = await fetchCurrentAthlete(accessToken);
+  const athleteId = athlete.id;
 
   console.log('Fetching athlete stats...');
   const stats = await fetchAthleteStats(accessToken, athleteId);
