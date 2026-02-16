@@ -1,9 +1,5 @@
 import type { PianoEngine } from '../contexts/EffectsContext';
-
-interface ActiveNote {
-  oscillator: OscillatorNode;
-  gainNode: GainNode;
-}
+import * as Tone from 'tone';
 
 const NOTE_FREQUENCIES: Record<string, number> = {
   'C2': 65.41, 'C#2': 69.30, 'D2': 73.42, 'D#2': 77.78, 'E2': 82.41, 'F2': 87.31,
@@ -17,25 +13,72 @@ const NOTE_FREQUENCIES: Record<string, number> = {
   'C6': 1046.50, 'C#6': 1108.73, 'D6': 1174.66, 'D#6': 1244.51, 'E6': 1318.51, 'F6': 1396.91,
 };
 
+const SALAMANDER_BASE_URL = 'https://tonejs.github.io/audio/salamander/';
+
 export class PianoEngineImpl implements PianoEngine {
-  private audioContext: AudioContext | null = null;
-  private masterGain: GainNode | null = null;
-  private activeNotes: Map<string, ActiveNote> = new Map();
+  private sampler: Tone.Sampler | null = null;
+  private activeNotes: Set<string> = new Set();
   private noteTriggerCallback: ((freq: number) => void) | null = null;
   private isInitialized = false;
-
-  private async ensureContext(): Promise<void> {
-    if (this.audioContext && this.masterGain) return;
-
-    this.audioContext = new AudioContext();
-    this.masterGain = this.audioContext.createGain();
-    this.masterGain.gain.value = 0.5;
-    this.masterGain.connect(this.audioContext.destination);
-    this.isInitialized = true;
-  }
+  private initPromise: Promise<void> | null = null;
+  private volume: Tone.Volume | null = null;
 
   private getFrequency(note: string): number {
     return NOTE_FREQUENCIES[note] ?? 440;
+  }
+
+  private async ensureContext(): Promise<void> {
+    if (this.isInitialized && this.sampler) return;
+
+    if (this.initPromise) {
+      return this.initPromise;
+    }
+
+    this.initPromise = this.initSampler();
+    return this.initPromise;
+  }
+
+  private async initSampler(): Promise<void> {
+    await Tone.start();
+
+    this.volume = new Tone.Volume(-6).toDestination();
+
+    this.sampler = new Tone.Sampler({
+      urls: {
+        C2: 'C2.mp3',
+        'D#2': 'Ds2.mp3',
+        'F#2': 'Fs2.mp3',
+        A2: 'A2.mp3',
+        C3: 'C3.mp3',
+        'D#3': 'Ds3.mp3',
+        'F#3': 'Fs3.mp3',
+        A3: 'A3.mp3',
+        C4: 'C4.mp3',
+        'D#4': 'Ds4.mp3',
+        'F#4': 'Fs4.mp3',
+        A4: 'A4.mp3',
+        C5: 'C5.mp3',
+        'D#5': 'Ds5.mp3',
+        'F#5': 'Fs5.mp3',
+        A5: 'A5.mp3',
+        C6: 'C6.mp3',
+        'D#6': 'Ds6.mp3',
+        'F#6': 'Fs6.mp3',
+        A6: 'A6.mp3',
+        C7: 'C7.mp3',
+        'D#7': 'Ds7.mp3',
+        'F#7': 'Fs7.mp3',
+        A7: 'A7.mp3',
+      },
+      baseUrl: SALAMANDER_BASE_URL,
+      release: 0.8,
+      onload: () => {
+        this.isInitialized = true;
+      },
+    }).connect(this.volume!);
+
+    await Tone.loaded();
+    this.isInitialized = true;
   }
 
   async play(note: string, velocity: number = 0.7): Promise<void> {
@@ -45,37 +88,15 @@ export class PianoEngineImpl implements PianoEngine {
       this.stop(note);
     }
 
-    if (!this.audioContext || !this.masterGain) return;
+    if (!this.sampler) return;
 
     const frequency = this.getFrequency(note);
-    
-    const oscillator = this.audioContext.createOscillator();
-    const gainNode = this.audioContext.createGain();
-    const filter = this.audioContext.createBiquadFilter();
 
-    oscillator.type = 'triangle';
-    oscillator.frequency.value = frequency;
+    if (this.sampler.loaded) {
+      this.sampler.triggerAttack(note, Tone.now(), velocity);
+    }
 
-    filter.type = 'lowpass';
-    filter.frequency.value = 2000;
-    filter.Q.value = 1;
-
-    const now = this.audioContext.currentTime;
-    const attackTime = 0.005;
-    const decayTime = 0.1;
-    const sustainLevel = velocity * 0.6;
-
-    gainNode.gain.setValueAtTime(0, now);
-    gainNode.gain.linearRampToValueAtTime(velocity, now + attackTime);
-    gainNode.gain.linearRampToValueAtTime(sustainLevel, now + attackTime + decayTime);
-
-    oscillator.connect(filter);
-    filter.connect(gainNode);
-    gainNode.connect(this.masterGain);
-
-    oscillator.start(now);
-
-    this.activeNotes.set(note, { oscillator, gainNode });
+    this.activeNotes.add(note);
 
     if (this.noteTriggerCallback) {
       this.noteTriggerCallback(frequency);
@@ -83,18 +104,11 @@ export class PianoEngineImpl implements PianoEngine {
   }
 
   stop(note: string): void {
-    const activeNote = this.activeNotes.get(note);
-    if (!activeNote || !this.audioContext) return;
+    if (!this.sampler || !this.activeNotes.has(note)) return;
 
-    const { oscillator, gainNode } = activeNote;
-    const now = this.audioContext.currentTime;
-    const releaseTime = 0.3;
-
-    gainNode.gain.cancelScheduledValues(now);
-    gainNode.gain.setValueAtTime(gainNode.gain.value, now);
-    gainNode.gain.linearRampToValueAtTime(0, now + releaseTime);
-
-    oscillator.stop(now + releaseTime + 0.01);
+    if (this.sampler.loaded) {
+      this.sampler.triggerRelease(note, Tone.now());
+    }
 
     this.activeNotes.delete(note);
   }
@@ -104,43 +118,48 @@ export class PianoEngineImpl implements PianoEngine {
   }
 
   destroy(): void {
-    this.activeNotes.forEach((_, note) => this.stop(note));
-    
-    if (this.audioContext) {
-      this.audioContext.close();
-      this.audioContext = null;
-      this.masterGain = null;
+    this.activeNotes.forEach((note) => this.stop(note));
+
+    if (this.sampler) {
+      this.sampler.dispose();
+      this.sampler = null;
     }
-    
+
+    if (this.volume) {
+      this.volume.dispose();
+      this.volume = null;
+    }
+
     this.activeNotes.clear();
     this.isInitialized = false;
+    this.initPromise = null;
   }
 }
 
 let pianoEngineInstance: PianoEngineImpl | null = null;
-let initPromise: Promise<PianoEngineImpl> | null = null;
+let getPianoEnginePromise: Promise<PianoEngineImpl> | null = null;
 
 export async function getPianoEngine(): Promise<PianoEngineImpl> {
   if (pianoEngineInstance) {
     return pianoEngineInstance;
   }
 
-  if (initPromise) {
-    return initPromise;
+  if (getPianoEnginePromise) {
+    return getPianoEnginePromise;
   }
 
-  initPromise = (async () => {
+  getPianoEnginePromise = (async () => {
     pianoEngineInstance = new PianoEngineImpl();
     return pianoEngineInstance;
   })();
 
-  return initPromise;
+  return getPianoEnginePromise;
 }
 
 export function destroyPianoEngine(): void {
   if (pianoEngineInstance) {
     pianoEngineInstance.destroy();
     pianoEngineInstance = null;
-    initPromise = null;
+    getPianoEnginePromise = null;
   }
 }

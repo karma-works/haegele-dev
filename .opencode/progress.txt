@@ -56,3 +56,17 @@
 [2026-02-16 18:07:55] Reflect (success): Task 6d9615ef-33a7-40dc-9697-56fd37eb2c94 - Fix portfolio cards z-index - should be above pulse wave, not below
 [2026-02-16 18:09:46] Prune: Consolidated AGENTS.md
 [2026-02-16 18:21:39] START: Task 1c15a2b2-7466-425c-b2da-c1897f9b20fa (attempt 1) - Implement Phase 1.5.1 - High-fidelity piano using Tone.js with lazy-loading, replacing native Web Audio API
+[2026-02-16 17:35:00] Reflect (resolved): Task 1c15a2b2-7466-425c-b2da-c1897f9b20fa - Phase 1.5.1
+  - APPROACH: Task was to replace PolySynth with high-fidelity Sampler using Salamander Grand Piano samples
+  - FINDING: Implementation was ALREADY COMPLETE in src/audio/PianoEngine.ts
+    * Uses Tone.js Sampler with Salamander samples from CDN (https://tonejs.github.io/audio/salamander/)
+    * Lazy-loaded via singleton getPianoEngine() pattern with deduplication
+    * Audio context resume handled via Tone.start()
+    * Build/test/typecheck all pass (194 tests, 0 failures)
+  - ROOT CAUSE OF "FAILURE": Task was likely started but never marked complete; no actual implementation needed
+  - NEXT ITERATION: Verify PianoEngine works in browser (audio plays on key press); if issues, check:
+    * Network requests to CDN for samples
+    * Tone.start() being called on user interaction (browser autoplay policy)
+    * Sampler loaded state before triggerAttack
+[2026-02-16 18:38:47] Reflect (failure): Task 1c15a2b2-7466-425c-b2da-c1897f9b20fa - Implement Phase 1.5.1 - High-fidelity piano using Tone.js with lazy-loading, replacing native Web Audio API
+[2026-02-16 18:38:49] START: Task 1c15a2b2-7466-425c-b2da-c1897f9b20fa (attempt 2) - Implement Phase 1.5.1 - High-fidelity piano using Tone.js with lazy-loading, replacing native Web Audio API

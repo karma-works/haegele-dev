@@ -16,7 +16,7 @@
 - Keyboard mapping: A-L for white keys (C4-D5), W/E/T/Y/U/O for black keys
 - Responsive: Mobile C3 (9 white keys), Desktop/Tablet C2 (15 white keys)
 - Default velocity: 0.7; components use `memo()` for performance
-- Audio: Web Audio API via `getPianoEngine()` from `src/audio/PianoEngine.ts` (lazy-loaded)
+- Audio: Tone.js Sampler via `getPianoEngine()` from `src/audio/PianoEngine.ts` (lazy-loaded with Salamander Grand Piano samples)
 - Pointer events: use `setPointerCapture()` for reliable touch/mouse tracking
 
 ### Contexts

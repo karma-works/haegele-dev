@@ -9,6 +9,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom'],
+          'vendor-tone': ['tone'],
         },
         chunkFileNames: (chunkInfo) => {
           if (chunkInfo.name === 'vendor-react') {
