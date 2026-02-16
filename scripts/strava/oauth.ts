@@ -117,6 +117,21 @@ export async function fetchRecentActivities(accessToken: string, perPage: number
   return response.json();
 }
 
+export async function fetchCurrentAthlete(accessToken: string): Promise<{ id: number }> {
+  const response = await fetch(`${STRAVA_API_BASE}/athlete`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Failed to fetch athlete: ${response.status} - ${error}`);
+  }
+
+  return response.json();
+}
+
 export function transformStats(stats: StravaAthleteStats): StravaStatsDisplay {
   return {
     totalDistance: stats.all_run_totals?.distance || 0,
