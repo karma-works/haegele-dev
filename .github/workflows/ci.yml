@@ -68,19 +68,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 9
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+          bun-version: latest
       
       - name: Fetch Strava data
         env:
@@ -88,6 +79,13 @@ jobs:
           STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
           STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
         run: bun scripts/strava/oauth.ts fetch public/data/strava.json
+      
+      - name: Upload Strava data
+        uses: actions/upload-artifact@v4
+        with:
+          name: strava-data
+          path: public/data/strava.json
+          retention-days: 1
 
   build:
     name: Build
@@ -96,6 +94,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Download Strava data
+        uses: actions/download-artifact@v4
+        with:
+          name: strava-data
+          path: public/data
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -124,36 +128,17 @@ jobs:
   deploy-github-pages:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    needs: [lint-and-typecheck, test, strava-fetch]
+    needs: build
     if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && github.event_name == 'push'
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
         with:
-          version: 9
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      
-      - name: Fetch Strava data
-        env:
-          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
-        run: bun scripts/strava/oauth.ts fetch public/data/strava.json
-      
-      - name: Build
-        run: pnpm build
-      
+          name: dist
+          path: dist
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
