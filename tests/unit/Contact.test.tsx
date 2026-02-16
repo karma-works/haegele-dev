@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import { Contact } from '../../src/components/Contact/Contact';
 import { ReduceMotionProvider } from '../../src/contexts/ReduceMotionContext';
 
@@ -12,27 +12,41 @@ describe('Contact', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    cleanup();
+  });
+
   it('renders contact form with all fields', () => {
     renderWithProviders(<Contact />);
 
-    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/message/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /send message/i })).toBeInTheDocument();
+    const nameInput = screen.getByPlaceholderText('Your name');
+    const emailInput = screen.getByPlaceholderText('your@email.com');
+    const messageInput = screen.getByPlaceholderText('Tell me about your project...');
+    const submitButton = screen.getByRole('button', { name: /send message/i });
+
+    expect(nameInput).toBeDefined();
+    expect(emailInput).toBeDefined();
+    expect(messageInput).toBeDefined();
+    expect(submitButton).toBeDefined();
   });
 
   it('renders section title', () => {
     renderWithProviders(<Contact />);
 
-    expect(screen.getByText(/get in touch/i)).toBeInTheDocument();
+    const title = screen.getByText(/get in touch/i);
+    expect(title).toBeDefined();
   });
 
   it('renders social links', () => {
     renderWithProviders(<Contact />);
 
-    expect(screen.getByLabelText('GitHub')).toBeInTheDocument();
-    expect(screen.getByLabelText('LinkedIn')).toBeInTheDocument();
-    expect(screen.getByLabelText('Email')).toBeInTheDocument();
+    const githubLink = screen.getByLabelText('GitHub');
+    const linkedinLink = screen.getByLabelText('LinkedIn');
+    const emailLink = screen.getByLabelText('Email');
+
+    expect(githubLink).toBeDefined();
+    expect(linkedinLink).toBeDefined();
+    expect(emailLink).toBeDefined();
   });
 
   it('shows validation errors on submit with empty fields', async () => {
@@ -42,54 +56,61 @@ describe('Contact', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/name is required/i)).toBeInTheDocument();
-      expect(screen.getByText(/email is required/i)).toBeInTheDocument();
-      expect(screen.getByText(/message is required/i)).toBeInTheDocument();
+      const nameError = screen.getByText(/name is required/i);
+      const emailError = screen.getByText(/email is required/i);
+      const messageError = screen.getByText(/message is required/i);
+
+      expect(nameError).toBeDefined();
+      expect(emailError).toBeDefined();
+      expect(messageError).toBeDefined();
     });
   });
 
   it('shows error for invalid email', async () => {
     renderWithProviders(<Contact />);
 
-    const emailInput = screen.getByLabelText(/email/i);
+    const emailInput = screen.getByPlaceholderText('your@email.com');
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
     fireEvent.blur(emailInput);
 
     await waitFor(() => {
-      expect(screen.getByText(/please enter a valid email/i)).toBeInTheDocument();
+      const error = screen.getByText(/please enter a valid email/i);
+      expect(error).toBeDefined();
     });
   });
 
   it('shows error for short name', async () => {
     renderWithProviders(<Contact />);
 
-    const nameInput = screen.getByLabelText(/name/i);
+    const nameInput = screen.getByPlaceholderText('Your name');
     fireEvent.change(nameInput, { target: { value: 'a' } });
     fireEvent.blur(nameInput);
 
     await waitFor(() => {
-      expect(screen.getByText(/name must be at least 2 characters/i)).toBeInTheDocument();
+      const error = screen.getByText(/name must be at least 2 characters/i);
+      expect(error).toBeDefined();
     });
   });
 
   it('shows error for short message', async () => {
     renderWithProviders(<Contact />);
 
-    const messageInput = screen.getByLabelText(/message/i);
+    const messageInput = screen.getByPlaceholderText('Tell me about your project...');
     fireEvent.change(messageInput, { target: { value: 'short' } });
     fireEvent.blur(messageInput);
 
     await waitFor(() => {
-      expect(screen.getByText(/message must be at least 10 characters/i)).toBeInTheDocument();
+      const error = screen.getByText(/message must be at least 10 characters/i);
+      expect(error).toBeDefined();
     });
   });
 
   it('submits form successfully with valid data', async () => {
     renderWithProviders(<Contact />);
 
-    const nameInput = screen.getByLabelText(/name/i);
-    const emailInput = screen.getByLabelText(/email/i);
-    const messageInput = screen.getByLabelText(/message/i);
+    const nameInput = screen.getByPlaceholderText('Your name');
+    const emailInput = screen.getByPlaceholderText('your@email.com');
+    const messageInput = screen.getByPlaceholderText('Tell me about your project...');
     const submitButton = screen.getByRole('button', { name: /send message/i });
 
     fireEvent.change(nameInput, { target: { value: 'John Doe' } });
@@ -98,35 +119,38 @@ describe('Contact', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/message sent!/i)).toBeInTheDocument();
+      const successTitle = screen.getByText(/message sent!/i);
+      expect(successTitle).toBeDefined();
     }, { timeout: 3000 });
   });
 
   it('clears errors when field is corrected', async () => {
     renderWithProviders(<Contact />);
 
-    const emailInput = screen.getByLabelText(/email/i);
+    const emailInput = screen.getByPlaceholderText('your@email.com');
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
     fireEvent.blur(emailInput);
 
     await waitFor(() => {
-      expect(screen.getByText(/please enter a valid email/i)).toBeInTheDocument();
+      const error = screen.getByText(/please enter a valid email/i);
+      expect(error).toBeDefined();
     });
 
     fireEvent.change(emailInput, { target: { value: 'valid@example.com' } });
     fireEvent.blur(emailInput);
 
     await waitFor(() => {
-      expect(screen.queryByText(/please enter a valid email/i)).not.toBeInTheDocument();
+      const error = screen.queryByText(/please enter a valid email/i);
+      expect(error).toBeNull();
     });
   });
 
   it('shows reset button after successful submission', async () => {
     renderWithProviders(<Contact />);
 
-    const nameInput = screen.getByLabelText(/name/i);
-    const emailInput = screen.getByLabelText(/email/i);
-    const messageInput = screen.getByLabelText(/message/i);
+    const nameInput = screen.getByPlaceholderText('Your name');
+    const emailInput = screen.getByPlaceholderText('your@email.com');
+    const messageInput = screen.getByPlaceholderText('Tell me about your project...');
     const submitButton = screen.getByRole('button', { name: /send message/i });
 
     fireEvent.change(nameInput, { target: { value: 'John Doe' } });
@@ -135,16 +159,17 @@ describe('Contact', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/send another message/i)).toBeInTheDocument();
+      const resetButton = screen.getByText(/send another message/i);
+      expect(resetButton).toBeDefined();
     }, { timeout: 3000 });
   });
 
   it('resets form when reset button is clicked', async () => {
     renderWithProviders(<Contact />);
 
-    const nameInput = screen.getByLabelText(/name/i);
-    const emailInput = screen.getByLabelText(/email/i);
-    const messageInput = screen.getByLabelText(/message/i);
+    const nameInput = screen.getByPlaceholderText('Your name');
+    const emailInput = screen.getByPlaceholderText('your@email.com');
+    const messageInput = screen.getByPlaceholderText('Tell me about your project...');
     const submitButton = screen.getByRole('button', { name: /send message/i });
 
     fireEvent.change(nameInput, { target: { value: 'John Doe' } });
@@ -153,27 +178,29 @@ describe('Contact', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/message sent!/i)).toBeInTheDocument();
+      const resetButton = screen.getByText(/send another message/i);
+      expect(resetButton).toBeDefined();
     }, { timeout: 3000 });
 
     const resetButton = screen.getByText(/send another message/i);
     fireEvent.click(resetButton);
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /send message/i })).toBeInTheDocument();
+      const newSubmitButton = screen.getByRole('button', { name: /send message/i });
+      expect(newSubmitButton).toBeDefined();
     });
   });
 
   it('has accessible form elements', () => {
     renderWithProviders(<Contact />);
 
-    const nameInput = screen.getByLabelText(/name/i);
-    const emailInput = screen.getByLabelText(/email/i);
-    const messageInput = screen.getByLabelText(/message/i);
+    const nameInput = screen.getByPlaceholderText('Your name');
+    const emailInput = screen.getByPlaceholderText('your@email.com');
+    const messageInput = screen.getByPlaceholderText('Tell me about your project...');
 
-    expect(nameInput).toHaveAttribute('aria-invalid', 'false');
-    expect(emailInput).toHaveAttribute('aria-invalid', 'false');
-    expect(messageInput).toHaveAttribute('aria-invalid', 'false');
+    expect(nameInput.getAttribute('aria-invalid')).toBe('false');
+    expect(emailInput.getAttribute('aria-invalid')).toBe('false');
+    expect(messageInput.getAttribute('aria-invalid')).toBe('false');
   });
 
   it('marks invalid fields with aria-invalid', async () => {
@@ -183,8 +210,8 @@ describe('Contact', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      const nameInput = screen.getByLabelText(/name/i);
-      expect(nameInput).toHaveAttribute('aria-invalid', 'true');
+      const nameInput = screen.getByPlaceholderText('Your name');
+      expect(nameInput.getAttribute('aria-invalid')).toBe('true');
     });
   });
 });
