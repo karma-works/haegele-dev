@@ -19,9 +19,11 @@ interface Language {
 }
 
 const languages: Language[] = [
-  { name: 'German', level: 75, flag: '🇩🇪' },
-  { name: 'Japanese', level: 40, flag: '🇯🇵' },
-  { name: 'Spanish', level: 25, flag: '🇪🇸' },
+  { name: 'German', level: 100, flag: '🇩🇪' },
+  { name: 'English', level: 90, flag: '🇲🇽' },
+  { name: 'Spanish', level: 90, flag: '🇲🇽' },
+  { name: 'French', level: 80, flag: '🇫🇷' },
+  { name: 'Chinese (Mandarin)', level: 60, flag: '🇨🇳' },
 ];
 
 const MINI_PIANO_RANGE: PianoKeyRange = {

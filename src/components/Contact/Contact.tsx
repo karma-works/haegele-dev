@@ -427,7 +427,7 @@ export const Contact = memo(function Contact() {
 
         <div className={styles.socialLinks}>
           <a
-            href="https://github.com"
+            href="hhttps://github.com/karma-works/"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialLink}
@@ -438,7 +438,7 @@ export const Contact = memo(function Contact() {
             </svg>
           </a>
           <a
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/in/christian-haegele-3403aaa/"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialLink}
@@ -449,7 +449,7 @@ export const Contact = memo(function Contact() {
             </svg>
           </a>
           <a
-            href="mailto:hello@example.com"
+            href="mailto:christian@haegele.dev"
             className={styles.socialLink}
             aria-label="Email"
           >

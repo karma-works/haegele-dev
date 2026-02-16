@@ -110,9 +110,9 @@ export const About = memo(function About() {
 {`const developer = {
   name: "Developer",
   location: "Remote",
-  skills: ["TypeScript", 
+  skills: ["Java", 
            "React", 
-           "Node.js"],
+           "Go"],
   passion: "Building things",
   coffee: Infinity
 };`}

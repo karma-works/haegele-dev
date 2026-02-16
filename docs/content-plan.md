@@ -209,7 +209,7 @@ An ambitious attempt to create a fully open-source SimCity 2000 city viewer by r
 
 #### Languages
 - "Language Level" grid with progress bars styled like code loading sequences
-- Languages: German (native), English (fluent), French (learning), Spanish (exploring)
+- Languages: German (native), English (fluent), French (fluent), Spanish (fluent), Chinese (exploring)
 - Visual progress indicators
 
 **Effects:**

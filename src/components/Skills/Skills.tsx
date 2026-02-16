@@ -27,10 +27,9 @@ const skillCategories: SkillCategory[] = [
       </svg>
     ),
     skills: [
-      { name: 'React', level: 95 },
-      { name: 'TypeScript', level: 90 },
-      { name: 'Vue.js', level: 80 },
-      { name: 'Next.js', level: 85 },
+      { name: 'React', level: 80 },
+      { name: 'TypeScript', level: 75 },
+      { name: 'JSF', level: 60 },
     ],
   },
   {
@@ -44,10 +43,10 @@ const skillCategories: SkillCategory[] = [
       </svg>
     ),
     skills: [
-      { name: 'Node.js', level: 90 },
-      { name: 'Python', level: 85 },
-      { name: 'Go', level: 75 },
-      { name: 'PostgreSQL', level: 85 },
+      { name: 'Quarkus', level: 90 },
+      { name: 'Go', level: 85 },
+      { name: 'Wildfly', level: 75 },
+      { name: 'MSSQL', level: 85 },
     ],
   },
   {
@@ -62,9 +61,9 @@ const skillCategories: SkillCategory[] = [
     ),
     skills: [
       { name: 'Docker', level: 90 },
+      { name: 'CI/CD', level: 75 },
       { name: 'Kubernetes', level: 75 },
-      { name: 'AWS', level: 80 },
-      { name: 'CI/CD', level: 85 },
+      { name: 'Azure', level: 70 },
     ],
   },
   {
@@ -76,9 +75,9 @@ const skillCategories: SkillCategory[] = [
       </svg>
     ),
     skills: [
-      { name: 'Git', level: 95 },
-      { name: 'Vim', level: 80 },
-      { name: 'Figma', level: 70 },
+      { name: 'VSCode', level: 95 },
+      { name: 'Git', level: 80 },
+      { name: 'OpenCode', level: 70 },
       { name: 'Linux', level: 85 },
     ],
   },
@@ -92,9 +91,10 @@ const skillCategories: SkillCategory[] = [
       </svg>
     ),
     skills: [
-      { name: 'English', level: 95 },
-      { name: 'German', level: 75 },
-      { name: 'Japanese', level: 40 },
+      { name: 'Java', level: 100 },
+      { name: 'Kotlin', level: 90 },
+      { name: 'Typescript', level: 90 },
+      { name: 'Go', level: 85 },
     ],
   },
   {
@@ -110,7 +110,7 @@ const skillCategories: SkillCategory[] = [
     skills: [
       { name: 'Leadership', level: 85 },
       { name: 'Communication', level: 90 },
-      { name: 'Problem Solving', level: 95 },
+      { name: 'Problem Solving', level: 80 },
     ],
   },
 ];
