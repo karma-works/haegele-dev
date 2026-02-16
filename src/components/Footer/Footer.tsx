@@ -2,6 +2,7 @@ import { memo, useState, useCallback, useRef, useEffect } from 'react';
 import { Piano } from '../Piano';
 import { useResponsivePianoKeys } from '../../hooks/useResponsivePianoKeys';
 import { type PianoKeyRange } from '../../utils/pianoKeyboard';
+import { useEffects } from '../../contexts/EffectsContext';
 import styles from './Footer.module.css';
 
 interface ThemeColor {
@@ -26,7 +27,7 @@ const NOTE_COLORS: Record<string, ThemeColor> = {
 
 const FOOTER_PIANO_RANGE: PianoKeyRange = {
   startOctave: 3,
-  whiteKeyCount: 15,
+  whiteKeyCount: 22,
 };
 
 function getNoteBase(note: string): string {
@@ -51,6 +52,7 @@ function getThemeColorForNotes(notes: Set<string>): ThemeColor {
 }
 
 export const Footer = memo(function Footer() {
+  const effects = useEffects();
   const { keyRange } = useResponsivePianoKeys();
   const [activeNotes, setActiveNotes] = useState<Set<string>>(new Set());
   const [themeColor, setThemeColor] = useState<ThemeColor>(NOTE_COLORS['C'] ?? DEFAULT_THEME);
@@ -71,7 +73,11 @@ export const Footer = memo(function Footer() {
       next.add(note);
       return next;
     });
-  }, []);
+    
+    if (!effects.isMuted) {
+      effects.pianoEngineRef.current?.play(note, velocity);
+    }
+  }, [effects]);
 
   const handleNoteOff = useCallback((note: string) => {
     setActiveNotes((prev) => {
@@ -79,7 +85,11 @@ export const Footer = memo(function Footer() {
       next.delete(note);
       return next;
     });
-  }, []);
+    
+    if (!effects.isMuted) {
+      effects.pianoEngineRef.current?.stop(note);
+    }
+  }, [effects]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

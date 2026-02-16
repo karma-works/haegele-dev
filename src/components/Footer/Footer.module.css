@@ -1,5 +1,6 @@
 .footer {
   position: relative;
+  margin-top: var(--spacing-2xl);
   padding: var(--spacing-2xl) var(--spacing-2xl) var(--spacing-xl);
   background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
   overflow: hidden;

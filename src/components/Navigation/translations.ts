@@ -4,42 +4,42 @@ export const translations = {
     de: 'Über mich',
     es: 'Sobre mí',
     fr: 'À propos',
-    ja: '自己紹介',
+    zh: '关于',
   },
   skills: {
     en: 'Skills',
     de: 'Fähigkeiten',
     es: 'Habilidades',
     fr: 'Compétences',
-    ja: 'スキル',
+    zh: '技能',
   },
   projects: {
     en: 'Projects',
     de: 'Projekte',
     es: 'Proyectos',
     fr: 'Projets',
-    ja: 'プロジェクト',
+    zh: '项目',
   },
   hobbies: {
     en: 'Hobbies',
     de: 'Hobbys',
     es: 'Pasatiempos',
     fr: 'Loisirs',
-    ja: '趣味',
+    zh: '爱好',
   },
   contact: {
     en: 'Contact',
     de: 'Kontakt',
     es: 'Contacto',
     fr: 'Contact',
-    ja: '連絡先',
+    zh: '联系',
   },
 } as const;
 
 export type NavKey = keyof typeof translations;
 export type Language = keyof (typeof translations)[NavKey];
 
-export const languages: Language[] = ['en', 'de', 'es', 'fr', 'ja'];
+export const languages: Language[] = ['en', 'de', 'es', 'fr', 'zh'];
 
 export function getNextLanguage(current: Language): Language {
   const currentIndex = languages.indexOf(current);

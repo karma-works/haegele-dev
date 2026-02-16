@@ -24,8 +24,18 @@ export default defineConfig({
     cssCodeSplit: true,
     minify: 'esbuild',
     sourcemap: false,
+    reportCompressedSize: true,
+    chunkSizeWarningLimit: 500,
   },
   css: {
     devSourcemap: true
-  }
+  },
+  server: {
+    port: 3000,
+    strictPort: true,
+  },
+  preview: {
+    port: 4173,
+    strictPort: true,
+  },
 })
