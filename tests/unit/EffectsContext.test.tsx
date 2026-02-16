@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render } from '@testing-library/react';
 import { useEffects, EffectsProvider } from '../../src/contexts/EffectsContext';
 
 function TestComponent({ onEffects }: { onEffects: (effects: ReturnType<typeof useEffects>) => void }) {

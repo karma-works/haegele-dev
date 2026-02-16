@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { useTypewriter } from '../../src/hooks/useTypewriter';
@@ -8,18 +8,29 @@ const wrapper = ({ children }: { children: ReactNode }) => (
   <ReduceMotionProvider>{children}</ReduceMotionProvider>
 );
 
+const mockMatchMedia = (matches: boolean = false) => vi.fn().mockImplementation((query: string) => ({
+  matches,
+  media: query,
+  onchange: null,
+  addListener: vi.fn(),
+  removeListener: vi.fn(),
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  dispatchEvent: vi.fn(),
+}));
+
 describe('useTypewriter', () => {
+  let originalMatchMedia: typeof window.matchMedia | undefined;
+
   beforeEach(() => {
-    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    }));
+    originalMatchMedia = window.matchMedia;
+    window.matchMedia = mockMatchMedia(false);
+  });
+
+  afterEach(() => {
+    if (originalMatchMedia) {
+      window.matchMedia = originalMatchMedia;
+    }
   });
 
   it('starts with empty text and typing state', () => {
@@ -41,16 +52,7 @@ describe('useTypewriter', () => {
   });
 
   it('shows full text immediately when reduced motion is enabled', () => {
-    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-      matches: query === '(prefers-reduced-motion: reduce)',
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    }));
+    window.matchMedia = mockMatchMedia(true);
 
     const { result } = renderHook(() =>
       useTypewriter({ text: 'Instant', speed: 100 })

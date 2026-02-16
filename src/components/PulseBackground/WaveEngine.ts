@@ -1,5 +1,5 @@
 import type { WavePoint, WaveConfig } from '../../utils/waveMath.ts';
-import { sineWave } from '../../utils/waveMath.ts';
+import { sineWave, lerpColor, lerp } from '../../utils/waveMath.ts';
 import type { WaveScaling, WaveState } from '../../types/index.ts';
 
 interface WaveEngineConfig {
@@ -7,6 +7,7 @@ interface WaveEngineConfig {
   scaling: WaveScaling;
   colorStart: string;
   colorEnd: string;
+  reducedMotion?: boolean;
   onAnimationTick?: () => void;
 }
 
@@ -18,12 +19,17 @@ export class WaveEngine {
   private colorStart: string;
   private colorEnd: string;
   private currentColor: string;
+  private colorProgress: number = 0;
+  private targetColorProgress: number = 0;
   private state: WaveState = 'idle';
   private animationId: number | null = null;
   private lastTime: number = 0;
   private pluckIntensity: number = 0;
   private heartbeatActive: boolean = false;
   private heartbeatPhase: number = 0;
+  private reducedMotion: boolean = false;
+  private mouseProximity: number = 0;
+  private targetMouseProximity: number = 0;
   private onAnimationTick?: () => void;
 
   constructor(options: WaveEngineConfig) {
@@ -35,13 +41,14 @@ export class WaveEngine {
     this.colorStart = options.colorStart;
     this.colorEnd = options.colorEnd;
     this.currentColor = this.colorStart;
+    this.reducedMotion = options.reducedMotion ?? false;
     this.onAnimationTick = options.onAnimationTick;
 
     this.config = {
       amplitude: this.scaling.amplitude,
       wavelength: this.scaling.wavelength,
       phase: 0,
-      speed: 0.02,
+      speed: this.reducedMotion ? 0.005 : 0.02,
       yOffset: this.canvas.height / 2,
     };
 
@@ -49,6 +56,7 @@ export class WaveEngine {
   }
 
   pluck(intensity: number): void {
+    if (this.reducedMotion) return;
     this.pluckIntensity = Math.min(1, Math.max(0, intensity));
     this.state = 'plucked';
   }
@@ -60,6 +68,19 @@ export class WaveEngine {
 
   setColor(color: string): void {
     this.currentColor = color;
+  }
+
+  setColorProgress(progress: number): void {
+    this.targetColorProgress = Math.min(1, Math.max(0, progress));
+  }
+
+  setReducedMotion(reduced: boolean): void {
+    this.reducedMotion = reduced;
+    this.config.speed = reduced ? 0.005 : 0.02;
+  }
+
+  setMouseProximity(proximity: number): void {
+    this.targetMouseProximity = Math.min(1, Math.max(0, proximity));
   }
 
   updateViewport(width: number, height: number): void {
@@ -101,7 +122,14 @@ export class WaveEngine {
   private update(deltaTime: number): void {
     this.config.phase += this.config.speed;
 
-    if (this.state === 'plucked') {
+    this.colorProgress = lerp(this.colorProgress, this.targetColorProgress, 0.05);
+    this.mouseProximity = lerp(this.mouseProximity, this.targetMouseProximity, 0.1);
+
+    if (Math.abs(this.colorProgress) > 0.001) {
+      this.currentColor = lerpColor(this.colorStart, this.colorEnd, this.colorProgress);
+    }
+
+    if (this.state === 'plucked' && !this.reducedMotion) {
       this.pluckIntensity *= 0.95;
       if (this.pluckIntensity < 0.01) {
         this.pluckIntensity = 0;
@@ -109,7 +137,7 @@ export class WaveEngine {
       }
     }
 
-    if (this.state === 'heartbeat') {
+    if (this.state === 'heartbeat' && !this.reducedMotion) {
       this.heartbeatPhase += deltaTime * 1.3;
     }
   }
@@ -128,13 +156,17 @@ export class WaveEngine {
 
     let effectiveAmplitude = this.config.amplitude;
 
-    if (this.state === 'plucked') {
-      effectiveAmplitude *= 1 + this.pluckIntensity * 0.5;
-    }
+    if (!this.reducedMotion) {
+      if (this.state === 'plucked') {
+        effectiveAmplitude *= 1 + this.pluckIntensity * 0.5;
+      }
 
-    if (this.state === 'heartbeat') {
-      const heartbeatOffset = Math.sin(this.heartbeatPhase * Math.PI * 2) * 0.3;
-      effectiveAmplitude *= 1 + heartbeatOffset;
+      if (this.state === 'heartbeat') {
+        const heartbeatOffset = Math.sin(this.heartbeatPhase * Math.PI * 2) * 0.3;
+        effectiveAmplitude *= 1 + heartbeatOffset;
+      }
+
+      effectiveAmplitude *= 1 + this.mouseProximity * 0.2;
     }
 
     return sineWave(0, width, pointCount, {
@@ -156,8 +188,10 @@ export class WaveEngine {
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = 'round';
 
-    this.ctx.shadowColor = this.currentColor;
-    this.ctx.shadowBlur = this.scaling.glowRadius;
+    if (!this.reducedMotion) {
+      this.ctx.shadowColor = this.currentColor;
+      this.ctx.shadowBlur = this.scaling.glowRadius * (1 + this.mouseProximity * 0.5);
+    }
 
     this.ctx.beginPath();
     this.ctx.moveTo(first.x, first.y);

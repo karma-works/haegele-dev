@@ -27,9 +27,10 @@ function AnimateTestComponent() {
 }
 
 describe('ReduceMotionContext', () => {
-  const originalMatchMedia = window.matchMedia;
+  let originalMatchMedia: typeof window.matchMedia;
 
   beforeEach(() => {
+    originalMatchMedia = window.matchMedia;
     window.matchMedia = vi.fn().mockImplementation((query: string) => ({
       matches: false,
       media: query,

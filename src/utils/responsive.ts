@@ -17,11 +17,11 @@ function getBreakpoint(width: number): Breakpoint {
 
 function isTouchDevice(): boolean {
   if (typeof window === 'undefined') return false;
+  const matchMedia = window.matchMedia as (query: string) => MediaQueryList | undefined;
   return (
     'ontouchstart' in window ||
     navigator.maxTouchPoints > 0 ||
-    // biome-ignore lint/suspicious/noExplicitAny: matchMedia types vary
-    Boolean((window.matchMedia as any)?.('(pointer: coarse)')?.matches)
+    Boolean(matchMedia?.('(pointer: coarse)')?.matches)
   );
 }
 
