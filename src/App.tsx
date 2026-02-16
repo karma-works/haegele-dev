@@ -5,7 +5,8 @@ import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { Skills } from './components/Skills';
 import { Projects } from './components/Projects';
-import { StravaCard } from './components/Strava';
+import { Hobbies } from './components/Hobbies';
+import { Contact } from './components/Contact';
 import { useViewport } from './utils/responsive';
 
 function App() {
@@ -43,13 +44,8 @@ function App() {
         <About />
         <Skills />
         <Projects />
-        <section id="hobbies" style={{ minHeight: '100vh', padding: '2rem' }}>
-          <h2>Hobbies Section</h2>
-          <StravaCard className="max-w-md" />
-        </section>
-        <section id="contact" style={{ minHeight: '100vh', padding: '2rem' }}>
-          <h2>Contact Section</h2>
-        </section>
+        <Hobbies />
+        <Contact />
       </main>
     </div>
   );

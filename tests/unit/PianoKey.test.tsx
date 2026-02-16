@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { PianoKey } from '../../src/components/Piano/PianoKey';
 
 describe('PianoKey', () => {
@@ -9,6 +9,10 @@ describe('PianoKey', () => {
   beforeEach(() => {
     mockOnNoteStart.mockClear();
     mockOnNoteEnd.mockClear();
+  });
+
+  afterEach(() => {
+    cleanup();
   });
 
   it('renders a white key with correct note', () => {

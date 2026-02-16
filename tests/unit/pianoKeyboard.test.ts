@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import {
   WHITE_KEY_MAP,
   BLACK_KEY_MAP,
@@ -8,6 +8,11 @@ import {
   noteToFrequency,
   calculateVelocity,
   getKeyboardLayout,
+  generateKeyMap,
+  setKeyMap,
+  getKeyMap,
+  MOBILE_KEY_RANGE,
+  DESKTOP_KEY_RANGE,
 } from '../../src/utils/pianoKeyboard';
 
 describe('pianoKeyboard', () => {
@@ -40,6 +45,10 @@ describe('pianoKeyboard', () => {
   });
 
   describe('getKeyNote', () => {
+    beforeEach(() => {
+      setKeyMap(FULL_KEY_MAP);
+    });
+
     it('returns note info for valid key', () => {
       const result = getKeyNote('a');
       expect(result).toEqual({ note: 'C4', velocity: 0.7, isSharp: false });
@@ -62,6 +71,10 @@ describe('pianoKeyboard', () => {
   });
 
   describe('isPianoKey', () => {
+    beforeEach(() => {
+      setKeyMap(FULL_KEY_MAP);
+    });
+
     it('returns true for valid piano keys', () => {
       expect(isPianoKey('a')).toBe(true);
       expect(isPianoKey('s')).toBe(true);
@@ -149,6 +162,105 @@ describe('pianoKeyboard', () => {
     it('black keys start with w', () => {
       const layout = getKeyboardLayout();
       expect(layout.black[0]).toBe('w');
+    });
+  });
+
+  describe('Responsive Key Ranges', () => {
+    beforeEach(() => {
+      setKeyMap(FULL_KEY_MAP);
+    });
+
+    describe('Key Range Constants', () => {
+      it('mobile range starts at octave 3', () => {
+        expect(MOBILE_KEY_RANGE.startOctave).toBe(3);
+      });
+
+      it('desktop range starts at octave 2', () => {
+        expect(DESKTOP_KEY_RANGE.startOctave).toBe(2);
+      });
+
+      it('mobile range has 9 white keys', () => {
+        expect(MOBILE_KEY_RANGE.whiteKeyCount).toBe(9);
+      });
+
+      it('desktop range has 15 white keys', () => {
+        expect(DESKTOP_KEY_RANGE.whiteKeyCount).toBe(15);
+      });
+    });
+
+    describe('generateKeyMap', () => {
+      it('generates mobile key map starting from C3', () => {
+        const keyMap = generateKeyMap(MOBILE_KEY_RANGE);
+        expect(keyMap.a?.note).toBe('C3');
+      });
+
+      it('generates desktop key map starting from C2', () => {
+        const keyMap = generateKeyMap(DESKTOP_KEY_RANGE);
+        expect(keyMap.a?.note).toBe('C2');
+      });
+
+      it('mobile map has correct number of white keys', () => {
+        const keyMap = generateKeyMap(MOBILE_KEY_RANGE);
+        const whiteKeys = Object.values(keyMap).filter(k => !k.isSharp);
+        expect(whiteKeys).toHaveLength(9);
+      });
+
+      it('desktop map has correct number of white keys', () => {
+        const keyMap = generateKeyMap(DESKTOP_KEY_RANGE);
+        const whiteKeys = Object.values(keyMap).filter(k => !k.isSharp);
+        expect(whiteKeys).toHaveLength(15);
+      });
+
+      it('includes sharps for mobile range', () => {
+        const keyMap = generateKeyMap(MOBILE_KEY_RANGE);
+        const blackKeys = Object.values(keyMap).filter(k => k.isSharp);
+        expect(blackKeys.length).toBeGreaterThan(0);
+      });
+
+      it('includes sharps for desktop range', () => {
+        const keyMap = generateKeyMap(DESKTOP_KEY_RANGE);
+        const blackKeys = Object.values(keyMap).filter(k => k.isSharp);
+        expect(blackKeys.length).toBeGreaterThan(0);
+      });
+
+      it('maps consecutive keys to consecutive notes', () => {
+        const keyMap = generateKeyMap(MOBILE_KEY_RANGE);
+        expect(keyMap.a?.note).toBe('C3');
+        expect(keyMap.s?.note).toBe('D3');
+        expect(keyMap.d?.note).toBe('E3');
+        expect(keyMap.f?.note).toBe('F3');
+      });
+
+      it('wraps octave correctly after B', () => {
+        const keyMap = generateKeyMap(MOBILE_KEY_RANGE);
+        expect(keyMap.j?.note).toBe('B3');
+        expect(keyMap.k?.note).toBe('C4');
+      });
+
+      it('sets default velocity to 0.7', () => {
+        const keyMap = generateKeyMap(MOBILE_KEY_RANGE);
+        Object.values(keyMap).forEach(key => {
+          expect(key.velocity).toBe(0.7);
+        });
+      });
+    });
+
+    describe('setKeyMap and getKeyMap', () => {
+      it('sets and gets the current key map', () => {
+        const customMap = generateKeyMap(MOBILE_KEY_RANGE);
+        setKeyMap(customMap);
+        expect(getKeyMap()).toBe(customMap);
+      });
+
+      it('updates key lookup after setKeyMap', () => {
+        const mobileMap = generateKeyMap(MOBILE_KEY_RANGE);
+        setKeyMap(mobileMap);
+        expect(getKeyNote('a')?.note).toBe('C3');
+        
+        const desktopMap = generateKeyMap(DESKTOP_KEY_RANGE);
+        setKeyMap(desktopMap);
+        expect(getKeyNote('a')?.note).toBe('C2');
+      });
     });
   });
 });

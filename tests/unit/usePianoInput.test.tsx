@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, act } from '@testing-library/react';
 import { useEffects, EffectsProvider } from '../../src/contexts/EffectsContext';
 import { usePianoInput } from '../../src/hooks/usePianoInput';
+import { DESKTOP_KEY_RANGE, generateKeyMap, setKeyMap, FULL_KEY_MAP } from '../../src/utils/pianoKeyboard';
 
 function TestWrapper({ children }: { children: React.ReactNode }) {
   return <EffectsProvider>{children}</EffectsProvider>;
@@ -28,6 +29,8 @@ function fireKeyEvent(type: 'keydown' | 'keyup', key: string, repeat = false) {
 describe('usePianoInput', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    const desktopKeyMap = generateKeyMap(DESKTOP_KEY_RANGE);
+    setKeyMap(desktopKeyMap);
   });
 
   it('renders without crashing', () => {
@@ -52,7 +55,7 @@ describe('usePianoInput', () => {
       fireKeyEvent('keydown', 'a');
     });
 
-    expect(onNoteOn).toHaveBeenCalledWith('C4', 0.7, expect.any(Number));
+    expect(onNoteOn).toHaveBeenCalledWith('C2', 0.7, expect.any(Number));
     expect(onNoteOn).toHaveBeenCalledTimes(1);
   });
 
@@ -66,7 +69,7 @@ describe('usePianoInput', () => {
     );
 
     act(() => {
-      fireKeyEvent('keydown', 'z');
+      fireKeyEvent('keydown', '1');
     });
 
     expect(onNoteOn).not.toHaveBeenCalled();
@@ -102,7 +105,7 @@ describe('usePianoInput', () => {
       fireKeyEvent('keyup', 'a');
     });
 
-    expect(onNoteOff).toHaveBeenCalledWith('C4');
+    expect(onNoteOff).toHaveBeenCalledWith('C2');
   });
 
   it('does not trigger callbacks when disabled', () => {
@@ -137,7 +140,7 @@ describe('usePianoInput', () => {
       fireKeyEvent('keydown', 'w');
     });
 
-    expect(onNoteOn).toHaveBeenCalledWith('C#4', 0.7, expect.any(Number));
+    expect(onNoteOn).toHaveBeenCalledWith('C#2', 0.7, expect.any(Number));
   });
 
   it('calls wavePluck with correct intensity', () => {
@@ -196,8 +199,8 @@ describe('usePianoInput', () => {
     });
 
     expect(onNoteOn).toHaveBeenCalledTimes(3);
-    expect(onNoteOn).toHaveBeenNthCalledWith(1, 'C4', 0.7, expect.any(Number));
-    expect(onNoteOn).toHaveBeenNthCalledWith(2, 'D4', 0.7, expect.any(Number));
-    expect(onNoteOn).toHaveBeenNthCalledWith(3, 'E4', 0.7, expect.any(Number));
+    expect(onNoteOn).toHaveBeenNthCalledWith(1, 'C2', 0.7, expect.any(Number));
+    expect(onNoteOn).toHaveBeenNthCalledWith(2, 'D2', 0.7, expect.any(Number));
+    expect(onNoteOn).toHaveBeenNthCalledWith(3, 'E2', 0.7, expect.any(Number));
   });
 });

@@ -6,6 +6,7 @@ import {
   type PianoKeyEvent,
 } from '../utils/pianoKeyboard.ts';
 import { useEffects } from '../contexts/EffectsContext.tsx';
+import { useResponsivePianoKeys } from './useResponsivePianoKeys.ts';
 
 export interface UsePianoInputOptions {
   enabled?: boolean;
@@ -22,6 +23,8 @@ export function usePianoInput(options: UsePianoInputOptions = {}): PianoInputCon
   const effects = useEffects();
   const activeNotesRef = useRef<Set<string>>(new Set());
   const isKeyDownRef = useRef<Set<string>>(new Set());
+  
+  useResponsivePianoKeys();
 
   const triggerNote = useCallback((keyEvent: PianoKeyEvent) => {
     const { note, velocity } = keyEvent;

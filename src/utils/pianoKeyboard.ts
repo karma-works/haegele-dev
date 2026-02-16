@@ -1,3 +1,8 @@
+export interface PianoKeyRange {
+  startOctave: number;
+  whiteKeyCount: number;
+}
+
 export interface PianoKeyEvent {
   note: string;
   velocity: number;
@@ -5,6 +10,62 @@ export interface PianoKeyEvent {
 }
 
 export type KeyMap = Record<string, PianoKeyEvent>;
+
+export const WHITE_KEY_NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
+export const BLACK_KEY_NOTES = ['C#', 'D#', null, 'F#', 'G#', 'A#', null] as const;
+
+export const MOBILE_KEY_RANGE: PianoKeyRange = {
+  startOctave: 3,
+  whiteKeyCount: 9,
+};
+
+export const DESKTOP_KEY_RANGE: PianoKeyRange = {
+  startOctave: 2,
+  whiteKeyCount: 15,
+};
+
+const WHITE_KEYS = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", '\\', 'z', 'x', 'c'];
+const BLACK_KEYS = ['w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'n', 'm', ',', '.'];
+
+export function generateKeyMap(range: PianoKeyRange): KeyMap {
+  const whiteKeyMap: KeyMap = {};
+  const blackKeyMap: KeyMap = {};
+  
+  let keyIndex = 0;
+  const { startOctave, whiteKeyCount } = range;
+  
+  for (let octaveOffset = 0; octaveOffset < Math.ceil(whiteKeyCount / 7); octaveOffset++) {
+    const currentOctave = startOctave + octaveOffset;
+    
+    for (let noteIndex = 0; noteIndex < 7 && keyIndex < whiteKeyCount; noteIndex++) {
+      const whiteKey = WHITE_KEYS[keyIndex];
+      const whiteNote = WHITE_KEY_NOTES[noteIndex];
+      
+      if (whiteKey && whiteNote) {
+        whiteKeyMap[whiteKey] = {
+          note: `${whiteNote}${currentOctave}`,
+          velocity: 0.7,
+          isSharp: false,
+        };
+      }
+      
+      const blackKey = BLACK_KEYS[keyIndex];
+      const blackNote = BLACK_KEY_NOTES[noteIndex];
+      
+      if (blackKey && blackNote) {
+        blackKeyMap[blackKey] = {
+          note: `${blackNote}${currentOctave}`,
+          velocity: 0.7,
+          isSharp: true,
+        };
+      }
+      
+      keyIndex++;
+    }
+  }
+  
+  return { ...whiteKeyMap, ...blackKeyMap };
+}
 
 export const WHITE_KEY_MAP: KeyMap = {
   a: { note: 'C4', velocity: 0.7, isSharp: false },
@@ -29,13 +90,24 @@ export const BLACK_KEY_MAP: KeyMap = {
 
 export const FULL_KEY_MAP: KeyMap = { ...WHITE_KEY_MAP, ...BLACK_KEY_MAP };
 
+let currentKeyMap: KeyMap = FULL_KEY_MAP;
+
+export function setKeyMap(keyMap: KeyMap): void {
+  currentKeyMap = keyMap;
+}
+
+export function getKeyMap(): KeyMap {
+  return currentKeyMap;
+}
+
 export function getKeyNote(key: string): PianoKeyEvent | null {
   const normalizedKey = key.toLowerCase();
-  return FULL_KEY_MAP[normalizedKey] || null;
+  return currentKeyMap[normalizedKey] || FULL_KEY_MAP[normalizedKey] || null;
 }
 
 export function isPianoKey(key: string): boolean {
-  return key.toLowerCase() in FULL_KEY_MAP;
+  const normalizedKey = key.toLowerCase();
+  return normalizedKey in currentKeyMap || normalizedKey in FULL_KEY_MAP;
 }
 
 export function noteToFrequency(note: string): number {
