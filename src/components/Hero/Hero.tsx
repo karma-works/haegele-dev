@@ -3,7 +3,7 @@ import styles from './Hero.module.css';
 
 const terminalLines = [
   { type: 'prompt', content: 'whoami' } as const,
-  { type: 'output', content: 'Developer | Creator | Problem Solver' } as const,
+  { type: 'output', content: 'Developer | Runner | Problem Solver' } as const,
   { type: 'prompt', content: 'cat skills.txt' } as const,
   { type: 'output', content: 'TypeScript, React, Java, Go...' } as const,
 ];

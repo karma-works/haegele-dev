@@ -19,7 +19,6 @@ The centerpiece of the design is a floating terminal window that acts as the pri
 * **Console Text:** A terminal-style greeting:
 * `> Hello, I'm [Your Name].`
 * `> Senior Developer.`
-* `> Passionate Creator.`
 
 
 * **Visual Element:** Behind the terminal is a dynamic, teal **heartbeat/waveform line** that stretches across the screen, symbolizing both coding activity and a runner's pulse. see #puplse-background.md
