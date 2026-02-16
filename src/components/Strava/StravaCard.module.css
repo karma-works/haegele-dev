@@ -13,6 +13,10 @@
   overflow: hidden;
 }
 
+.card.stale {
+  border-color: rgba(234, 179, 8, 0.5);
+}
+
 .card:hover,
 .card.hovered {
   border-color: var(--color-accent-pink);
@@ -153,6 +157,107 @@
   .pulse {
     animation: none;
   }
+}
+
+.activitiesSection {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--glass-border);
+}
+
+.activitiesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xs);
+}
+
+.activitiesTitle {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.staleIndicator {
+  font-size: 0.6rem;
+  color: rgba(234, 179, 8, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.activityList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activityItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 0.75rem;
+}
+
+.activityName {
+  flex: 1;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activityDistance {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-accent-mint);
+  min-width: 40px;
+  text-align: right;
+}
+
+.activityDate {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  min-width: 60px;
+  text-align: right;
+}
+
+.noActivities {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: var(--spacing-sm);
+}
+
+.errorState {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.errorIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(239, 68, 68, 0.2);
+  border-radius: 50%;
+  color: #ef4444;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.errorMessage {
+  font-size: 0.75rem;
+  color: #ef4444;
 }
 
 @media (max-width: 480px) {

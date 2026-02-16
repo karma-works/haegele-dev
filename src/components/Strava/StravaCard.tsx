@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react';
 import { useEffects } from '../../contexts/EffectsContext.tsx';
-import { useStravaData, type StravaStats } from '../../hooks/useStravaData.ts';
+import { useStravaData, type StravaStats, type StravaActivity } from '../../hooks/useStravaData.ts';
 import styles from './StravaCard.module.css';
 
 interface StravaCardProps {
@@ -18,6 +18,20 @@ function formatTime(seconds: number): string {
     return `${hours}h ${Math.floor((seconds % 3600) / 60)}m`;
   }
   return `${Math.floor(seconds / 60)}m`;
+}
+
+function formatRelativeDate(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 14) return '1 week ago';
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 function StatsDisplay({ stats }: { stats: StravaStats }) {
@@ -64,9 +78,67 @@ function PlaceholderStats() {
   );
 }
 
+function ActivityItem({ activity }: { activity: StravaActivity }) {
+  return (
+    <li className={styles.activityItem}>
+      <span className={styles.activityName}>{activity.name}</span>
+      <span className={styles.activityDistance}>{formatDistance(activity.distance)} km</span>
+      <span className={styles.activityDate}>{formatRelativeDate(activity.start_date)}</span>
+    </li>
+  );
+}
+
+function ActivityList({ activities, isStale }: { activities: StravaActivity[]; isStale: boolean }) {
+  if (activities.length === 0) {
+    return <div className={styles.noActivities}>No recent activities</div>;
+  }
+
+  return (
+    <div className={styles.activitiesSection}>
+      <div className={styles.activitiesHeader}>
+        <span className={styles.activitiesTitle}>Recent Activities</span>
+        {isStale && <span className={styles.staleIndicator}>Using cached data</span>}
+      </div>
+      <ul className={styles.activityList} aria-label="Recent activities">
+        {activities.slice(0, 3).map((activity) => (
+          <ActivityItem key={activity.id} activity={activity} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function PlaceholderActivities() {
+  return (
+    <div className={styles.activitiesSection}>
+      <div className={styles.activitiesHeader}>
+        <span className={styles.activitiesTitle}>Recent Activities</span>
+      </div>
+      <ul className={styles.activityList} aria-label="Recent activities placeholder">
+        {[1, 2, 3].map((i) => (
+          <li key={i} className={styles.activityItem}>
+            <span className={styles.activityName}>--</span>
+            <span className={styles.activityDistance}>-- km</span>
+            <span className={styles.activityDate}>--</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ErrorState({ message }: { message: string }) {
+  return (
+    <div className={styles.errorState} role="alert">
+      <span className={styles.errorIcon}>!</span>
+      <span className={styles.errorMessage}>{message}</span>
+    </div>
+  );
+}
+
 function StravaCardBase({ className }: StravaCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const { stats, isLoading, isAvailable } = useStravaData();
+  const { stats, activities, isLoading, isAvailable, error, isStale } = useStravaData();
   const { waveSetHeartbeat } = useEffects();
 
   const handleMouseEnter = useCallback(() => {
@@ -79,13 +151,18 @@ function StravaCardBase({ className }: StravaCardProps) {
     waveSetHeartbeat(false);
   }, [waveSetHeartbeat]);
 
+  const showStats = isAvailable && stats;
+  const showActivities = isAvailable;
+  const showError = error && !isAvailable;
+
   return (
     <div
-      className={`${styles.card} ${isHovered ? styles.hovered : ''} ${className ?? ''}`}
+      className={`${styles.card} ${isHovered ? styles.hovered : ''} ${isStale ? styles.stale : ''} ${className ?? ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       role="region"
       aria-label="Running Statistics from Strava"
+      aria-busy={isLoading}
     >
       <div className={styles.header}>
         <div className={styles.icon}>
@@ -95,7 +172,7 @@ function StravaCardBase({ className }: StravaCardProps) {
         </div>
         <div className={styles.title}>
           <h3>Running</h3>
-          {!isAvailable && <span className={styles.unavailable}>Connect Strava</span>}
+          {!isAvailable && !isLoading && <span className={styles.unavailable}>Connect Strava</span>}
         </div>
       </div>
 
@@ -104,10 +181,16 @@ function StravaCardBase({ className }: StravaCardProps) {
           <div className={styles.loadingSpinner} />
           <span>Loading stats...</span>
         </div>
-      ) : isAvailable && stats ? (
-        <StatsDisplay stats={stats} />
       ) : (
-        <PlaceholderStats />
+        <>
+          {showError && <ErrorState message={error} />}
+          {showStats ? <StatsDisplay stats={stats} /> : !showError && <PlaceholderStats />}
+          {showActivities ? (
+            <ActivityList activities={activities} isStale={isStale} />
+          ) : !showError ? (
+            <PlaceholderActivities />
+          ) : null}
+        </>
       )}
 
       {isHovered && (

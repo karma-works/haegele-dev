@@ -28,6 +28,27 @@ body {
   min-height: 100vh;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--color-focus);
+  color: var(--color-bg);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+  outline: 3px solid var(--color-bg);
+  outline-offset: 2px;
+}
+
 a {
   color: var(--color-accent-mint);
   text-decoration: none;
@@ -38,8 +59,12 @@ a:hover {
   color: var(--color-accent-pink);
 }
 
-a:focus-visible {
-  outline: 2px solid var(--color-accent-mint);
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
@@ -49,12 +74,6 @@ button {
   cursor: pointer;
   border: none;
   background: none;
-}
-
-button:focus-visible {
-  outline: 2px solid var(--color-accent-mint);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
 }
 
 input,
@@ -94,4 +113,16 @@ canvas {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

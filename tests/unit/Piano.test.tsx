@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { Piano } from '../../src/components/Piano/Piano';
 import { EffectsProvider } from '../../src/contexts/EffectsContext';
 
@@ -27,6 +27,10 @@ describe('Piano', () => {
     mockPianoEngine.play.mockClear();
     mockPianoEngine.stop.mockClear();
     mockWaveEngine.pluck.mockClear();
+  });
+
+  afterEach(() => {
+    cleanup();
   });
 
   it('renders correct number of white keys for given range', () => {

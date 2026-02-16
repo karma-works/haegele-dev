@@ -101,6 +101,11 @@
   transform: translateY(-2px);
 }
 
+.socialLink:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 .copyright {
   font-size: 0.75rem;
   color: var(--color-text-muted);

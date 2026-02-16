@@ -14,14 +14,14 @@ export function Terminal({ lines, typewriterText }: TerminalProps) {
   });
 
   return (
-    <div className={styles.terminal}>
+    <div className={styles.terminal} role="region" aria-label="Terminal display">
       <div className={styles.header}>
         <span className={`${styles.button} ${styles.buttonClose}`} aria-hidden="true" />
         <span className={`${styles.button} ${styles.buttonMinimize}`} aria-hidden="true" />
         <span className={`${styles.button} ${styles.buttonMaximize}`} aria-hidden="true" />
         <span className={styles.title}>terminal</span>
       </div>
-      <div className={styles.content}>
+      <div className={styles.content} role="log" aria-live="polite" aria-label="Terminal output">
         {lines.map((line, index) => (
           <div key={index} className={styles.line}>
             {line.type === 'prompt' ? (

@@ -4,9 +4,11 @@ import {
   useState,
   useCallback,
   useRef,
+  useEffect,
   type ReactNode,
   type MutableRefObject,
 } from 'react';
+import { getPianoEngine } from '../audio/PianoEngine';
 
 export interface WaveEngine {
   pluck(intensity: number): void;
@@ -17,7 +19,7 @@ export interface WaveEngine {
 }
 
 export interface PianoEngine {
-  play(note: string, velocity?: number): void;
+  play(note: string, velocity?: number): Promise<void>;
   stop(note: string): void;
   onNoteTrigger(callback: (freq: number) => void): void;
   destroy(): void;
@@ -32,6 +34,7 @@ export interface EffectsController {
   setActiveSection(section: string): void;
   waveEngineRef: MutableRefObject<WaveEngine | null>;
   pianoEngineRef: MutableRefObject<PianoEngine | null>;
+  initPianoEngine: () => Promise<void>;
 }
 
 const EffectsContext = createContext<EffectsController | null>(null);
@@ -53,6 +56,7 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
   const pianoEngineRef = useRef<PianoEngine | null>(null);
   const [isMuted, setIsMuted] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const pianoInitRef = useRef(false);
 
   const wavePluck = useCallback((intensity: number) => {
     waveEngineRef.current?.pluck(intensity);
@@ -70,6 +74,36 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
     setActiveSection(section);
   }, []);
 
+  const initPianoEngine = useCallback(async () => {
+    if (pianoEngineRef.current || pianoInitRef.current) return;
+    
+    pianoInitRef.current = true;
+    
+    try {
+      const engine = await getPianoEngine();
+      pianoEngineRef.current = engine;
+    } catch (error) {
+      console.error('Failed to initialize piano engine:', error);
+      pianoInitRef.current = false;
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      initPianoEngine();
+    };
+
+    document.addEventListener('click', handleFirstInteraction, { once: true });
+    document.addEventListener('keydown', handleFirstInteraction, { once: true });
+    document.addEventListener('touchstart', handleFirstInteraction, { once: true });
+
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+    };
+  }, [initPianoEngine]);
+
   const value: EffectsController = {
     wavePluck,
     waveSetHeartbeat,
@@ -79,6 +113,7 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
     setActiveSection: handleSetActiveSection,
     waveEngineRef,
     pianoEngineRef,
+    initPianoEngine,
   };
 
   return (

@@ -4,10 +4,12 @@
   --color-bg: #0a0a0f;
   --color-bg-secondary: #12121a;
   --color-text: #e4e4e7;
-  --color-text-muted: #71717a;
-  --color-accent-mint: #10b981;
-  --color-accent-pink: #ec4899;
-  --color-accent-blue: #3b82f6;
+  --color-text-muted: #9ca3af;
+  --color-accent-mint: #34d399;
+  --color-accent-pink: #f472b6;
+  --color-accent-blue: #60a5fa;
+  --color-focus: #fbbf24;
+  --color-focus-ring: rgba(251, 191, 36, 0.4);
 
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;

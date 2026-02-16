@@ -31,6 +31,7 @@ export class WaveEngine {
   private mouseProximity: number = 0;
   private targetMouseProximity: number = 0;
   private onAnimationTick?: () => void;
+  private isVisible: boolean = true;
 
   constructor(options: WaveEngineConfig) {
     this.canvas = options.canvas;
@@ -83,6 +84,10 @@ export class WaveEngine {
     this.targetMouseProximity = Math.min(1, Math.max(0, proximity));
   }
 
+  setVisible(visible: boolean): void {
+    this.isVisible = visible;
+  }
+
   updateViewport(width: number, height: number): void {
     this.canvas.width = width;
     this.canvas.height = height;
@@ -113,7 +118,10 @@ export class WaveEngine {
     this.lastTime = now;
 
     this.update(deltaTime);
-    this.render();
+    
+    if (this.isVisible) {
+      this.render();
+    }
 
     this.onAnimationTick?.();
     this.animationId = requestAnimationFrame(this.animate);

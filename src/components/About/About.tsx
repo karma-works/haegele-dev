@@ -20,7 +20,7 @@ const aboutContent = {
     }
   ],
   stats: [
-    { label: 'Years Experience', value: '10+' },
+    { label: 'Years Experience', value: '20+' },
     { label: 'Projects Completed', value: '50+' },
     { label: 'Technologies', value: '20+' }
   ]

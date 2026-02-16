@@ -48,10 +48,23 @@ describe('useStravaData', () => {
       recentDistance: 5000,
       recentRuns: 3,
     };
+    const cachedActivities = [
+      {
+        id: 1,
+        name: 'Cached Run',
+        type: 'Run',
+        distance: 5000,
+        moving_time: 1500,
+        start_date: new Date().toISOString(),
+      },
+    ];
 
     localStorageMock.setItem(
       'strava_stats_cache',
-      JSON.stringify({ data: cachedStats, timestamp: Date.now() })
+      JSON.stringify({
+        data: { stats: cachedStats, activities: cachedActivities },
+        timestamp: Date.now(),
+      }),
     );
 
     vi.spyOn(global, 'fetch').mockResolvedValueOnce({
@@ -59,6 +72,7 @@ describe('useStravaData', () => {
       json: () =>
         Promise.resolve({
           stats: cachedStats,
+          recentActivities: cachedActivities,
           lastUpdated: new Date().toISOString(),
           expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
         }),
@@ -102,12 +116,23 @@ describe('useStravaData', () => {
       recentDistance: 10000,
       recentRuns: 5,
     };
+    const apiActivities = [
+      {
+        id: 1,
+        name: 'Morning Run',
+        type: 'Run',
+        distance: 5200,
+        moving_time: 1800,
+        start_date: new Date().toISOString(),
+      },
+    ];
 
     vi.spyOn(global, 'fetch').mockResolvedValueOnce({
       ok: true,
       json: () =>
         Promise.resolve({
           stats: apiStats,
+          recentActivities: apiActivities,
           lastUpdated: new Date().toISOString(),
           expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
         }),
@@ -120,8 +145,10 @@ describe('useStravaData', () => {
     });
 
     expect(result.current.stats).toEqual(apiStats);
+    expect(result.current.activities).toEqual(apiActivities);
     expect(result.current.isAvailable).toBe(true);
     expect(result.current.isLoading).toBe(false);
+    expect(result.current.isStale).toBe(false);
   });
 
   it('handles fetch errors gracefully', async () => {

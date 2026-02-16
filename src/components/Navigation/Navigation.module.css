@@ -32,8 +32,13 @@
 }
 
 .link:hover,
-.link:focus-visible {
+.link:focus {
   color: var(--color-text);
+}
+
+.link:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 .link[data-active='true'] {
@@ -79,6 +84,13 @@
   border-radius: var(--radius-md);
   color: var(--color-text);
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.mobileToggle:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 @media (max-width: 768px) {

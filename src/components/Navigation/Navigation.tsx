@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef, memo } from 'react';
 import { useReducedMotion } from '../../contexts/ReduceMotionContext.tsx';
 import {
   translations,
@@ -15,19 +15,40 @@ interface NavigationProps {
 
 const navItems: NavKey[] = ['about', 'skills', 'projects', 'hobbies', 'contact'];
 
-export function Navigation({ activeSection = 'hero' }: NavigationProps) {
+function NavigationComponent({ activeSection = 'hero' }: NavigationProps) {
   const [hoveredKey, setHoveredKey] = useState<NavKey | null>(null);
   const [languages, setLanguages] = useState<Record<NavKey, Language>>(() =>
     Object.fromEntries(navItems.map((key) => [key, 'en'])) as Record<NavKey, Language>
   );
   const [mobileOpen, setMobileOpen] = useState(false);
   const { isReducedMotion } = useReducedMotion();
+  const navRef = useRef<HTMLElement>(null);
+  const mobileToggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (isReducedMotion) {
       setMobileOpen(false);
     }
   }, [isReducedMotion]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && mobileOpen) {
+        setMobileOpen(false);
+        mobileToggleRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      const firstLink = navRef.current?.querySelector('a');
+      firstLink?.focus();
+    }
+  }, [mobileOpen]);
 
   const handleMouseEnter = useCallback((key: NavKey) => {
     if (isReducedMotion) return;
@@ -54,16 +75,24 @@ export function Navigation({ activeSection = 'hero' }: NavigationProps) {
   }, []);
 
   return (
-    <nav className={styles.container}>
+    <nav className={styles.container} ref={navRef} aria-label="Main navigation">
       <button
+        ref={mobileToggleRef}
         className={styles.mobileToggle}
         onClick={toggleMobile}
         aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={mobileOpen}
+        aria-controls="nav-menu"
       >
         {mobileOpen ? '✕' : '☰'}
       </button>
-      <ul className={styles.nav} data-open={mobileOpen} role="menubar">
+      <ul 
+        id="nav-menu"
+        className={styles.nav} 
+        data-open={mobileOpen} 
+        role="menubar"
+        aria-label="Site navigation"
+      >
         {navItems.map((key) => (
           <NavLink
             key={key}
@@ -81,6 +110,8 @@ export function Navigation({ activeSection = 'hero' }: NavigationProps) {
     </nav>
   );
 }
+
+export const Navigation = memo(NavigationComponent);
 
 export { navItems };
 export type { NavigationProps };

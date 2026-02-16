@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react';
 
+export interface StravaActivity {
+  id: number;
+  name: string;
+  type: string;
+  distance: number;
+  moving_time: number;
+  start_date: string;
+}
+
 export interface StravaStats {
   totalDistance: number;
   totalRuns: number;
@@ -12,24 +21,25 @@ export interface StravaStats {
 
 interface StoredStravaData {
   stats: StravaStats;
-  recentActivities?: Array<{
-    id: number;
-    name: string;
-    type: string;
-    distance: number;
-    moving_time: number;
-    start_date: string;
-  }>;
+  recentActivities?: StravaActivity[];
   lastUpdated: string;
   expiresAt: string;
 }
 
+interface CachedData {
+  stats: StravaStats;
+  activities: StravaActivity[];
+  timestamp: number;
+}
+
 interface StravaDataState {
   stats: StravaStats | null;
+  activities: StravaActivity[];
   isLoading: boolean;
   isAvailable: boolean;
   error: string | null;
   lastUpdated: string | null;
+  isStale: boolean;
 }
 
 const DEFAULT_STATS: StravaStats = {
@@ -45,21 +55,31 @@ const DEFAULT_STATS: StravaStats = {
 const CACHE_KEY = 'strava_stats_cache';
 const FALLBACK_DATA_URL = '/data/strava.json';
 
-function loadCachedData(): { stats: StravaStats; timestamp: number } | null {
+function loadCachedData(): CachedData | null {
   try {
     const cached = localStorage.getItem(CACHE_KEY);
     if (!cached) return null;
 
     const { data, timestamp } = JSON.parse(cached);
-    return { stats: data, timestamp };
+    return {
+      stats: data.stats ?? DEFAULT_STATS,
+      activities: data.activities ?? [],
+      timestamp,
+    };
   } catch {
     return null;
   }
 }
 
-function cacheData(data: StravaStats): void {
+function cacheData(stats: StravaStats, activities: StravaActivity[]): void {
   try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
+    localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({
+        data: { stats, activities },
+        timestamp: Date.now(),
+      }),
+    );
   } catch {
     // localStorage might be unavailable
   }
@@ -78,10 +98,12 @@ export function useStravaData(): StravaDataState {
     const cached = loadCachedData();
     return {
       stats: cached?.stats ?? null,
+      activities: cached?.activities ?? [],
       isLoading: true,
-      isAvailable: false,
+      isAvailable: cached !== null,
       error: null,
       lastUpdated: cached ? new Date(cached.timestamp).toISOString() : null,
+      isStale: false,
     };
   });
 
@@ -97,10 +119,12 @@ export function useStravaData(): StravaDataState {
             const cached = loadCachedData();
             setState({
               stats: cached?.stats ?? null,
+              activities: cached?.activities ?? [],
               isLoading: false,
               isAvailable: cached !== null,
               error: null,
               lastUpdated: cached ? new Date(cached.timestamp).toISOString() : null,
+              isStale: cached !== null,
             });
           }
           return;
@@ -112,28 +136,36 @@ export function useStravaData(): StravaDataState {
           throw new Error('Invalid data format');
         }
 
-        if (isDataExpired(data.expiresAt)) {
+        const activities = data.recentActivities ?? [];
+        const stale = isDataExpired(data.expiresAt);
+
+        if (stale) {
           if (mounted) {
             const cached = loadCachedData();
+            const useCache = cached !== null;
             setState({
-              stats: cached?.stats ?? data.stats,
+              stats: useCache ? cached.stats : data.stats,
+              activities: useCache ? cached.activities : activities,
               isLoading: false,
               isAvailable: true,
               error: null,
               lastUpdated: data.lastUpdated,
+              isStale: true,
             });
           }
           return;
         }
 
         if (mounted) {
-          cacheData(data.stats);
+          cacheData(data.stats, activities);
           setState({
             stats: data.stats,
+            activities,
             isLoading: false,
             isAvailable: true,
             error: null,
             lastUpdated: data.lastUpdated,
+            isStale: false,
           });
         }
       } catch (error) {
@@ -141,10 +173,12 @@ export function useStravaData(): StravaDataState {
           const cached = loadCachedData();
           setState({
             stats: cached?.stats ?? null,
+            activities: cached?.activities ?? [],
             isLoading: false,
             isAvailable: cached !== null,
             error: error instanceof Error ? error.message : 'Unknown error',
             lastUpdated: cached ? new Date(cached.timestamp).toISOString() : null,
+            isStale: cached !== null,
           });
         }
       }
@@ -160,13 +194,17 @@ export function useStravaData(): StravaDataState {
   return state;
 }
 
-export function useStravaDataWithFallback(fallbackStats?: StravaStats): StravaDataState {
+export function useStravaDataWithFallback(
+  fallbackStats?: StravaStats,
+  fallbackActivities?: StravaActivity[],
+): StravaDataState {
   const result = useStravaData();
 
-  if (!result.isAvailable && fallbackStats) {
+  if (!result.isAvailable && (fallbackStats || fallbackActivities)) {
     return {
       ...result,
-      stats: fallbackStats,
+      stats: fallbackStats ?? null,
+      activities: fallbackActivities ?? [],
       isAvailable: true,
     };
   }

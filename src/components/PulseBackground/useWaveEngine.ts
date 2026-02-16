@@ -10,7 +10,7 @@ const COLOR_MINT = '#10b981';
 const COLOR_PINK = '#ec4899';
 const SCROLL_COLOR_THRESHOLD = 1000;
 
-export function useWaveEngine(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
+export function useWaveEngine(canvasRef: React.RefObject<HTMLCanvasElement | null>, isVisible: boolean = true) {
   const engineRef = useRef<WaveEngine | null>(null);
   const { width, height, breakpoint } = useViewport();
   const scaling = useWaveScaling(width, height, breakpoint);
@@ -41,6 +41,12 @@ export function useWaveEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       effects.waveEngineRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (engineRef.current) {
+      engineRef.current.setVisible?.(isVisible);
+    }
+  }, [isVisible]);
 
   useEffect(() => {
     engineRef.current?.setReducedMotion(!shouldAnimate);
