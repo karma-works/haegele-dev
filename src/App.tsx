@@ -7,6 +7,7 @@ import { Skills } from './components/Skills';
 import { Projects } from './components/Projects';
 import { Hobbies } from './components/Hobbies';
 import { Contact } from './components/Contact';
+import { Footer } from './components/Footer';
 import { useViewport } from './utils/responsive';
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
         <Hobbies />
         <Contact />
       </main>
+      <Footer />
     </div>
   );
 }
