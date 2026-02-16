@@ -15,6 +15,7 @@
 - Piano components use `memo()` for performance
 - Pointer events use `setPointerCapture()` for reliable touch/mouse tracking
 - Access EffectsContext via `useEffects()` from `src/contexts/EffectsContext.tsx`
+- Strava data: static fallback at `/data/strava.json` with `stats`, `lastUpdated`, `expiresAt` fields
 
 ## Gotchas
 - Keyboard handlers: check `e.repeat` to prevent key-hold double-triggers

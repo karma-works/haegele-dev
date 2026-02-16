@@ -38,7 +38,7 @@ describe('useStravaData', () => {
     expect(result.current.stats).toBeNull();
   });
 
-  it('uses cached data when available', () => {
+  it('uses cached data when available but still fetches', async () => {
     const cachedStats = {
       totalDistance: 50000,
       totalRuns: 25,
@@ -54,9 +54,27 @@ describe('useStravaData', () => {
       JSON.stringify({ data: cachedStats, timestamp: Date.now() })
     );
 
+    vi.spyOn(global, 'fetch').mockResolvedValueOnce({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          stats: cachedStats,
+          lastUpdated: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
+        }),
+    } as unknown as Response);
+
     const { result } = renderHook(() => useStravaData());
+
     expect(result.current.stats).toEqual(cachedStats);
+    expect(result.current.isLoading).toBe(true);
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
     expect(result.current.isLoading).toBe(false);
+    expect(result.current.isAvailable).toBe(true);
   });
 
   it('handles unavailable Strava API', async () => {
@@ -87,7 +105,12 @@ describe('useStravaData', () => {
 
     vi.spyOn(global, 'fetch').mockResolvedValueOnce({
       ok: true,
-      json: () => Promise.resolve(apiStats),
+      json: () =>
+        Promise.resolve({
+          stats: apiStats,
+          lastUpdated: new Date().toISOString(),
+          expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
+        }),
     } as unknown as Response);
 
     const { result } = renderHook(() => useStravaData());

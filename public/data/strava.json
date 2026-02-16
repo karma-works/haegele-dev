@@ -1,0 +1,39 @@
+{
+  "stats": {
+    "totalDistance": 1250000,
+    "totalRuns": 150,
+    "totalTime": 5400000,
+    "ytdDistance": 180000,
+    "ytdRuns": 22,
+    "recentDistance": 42000,
+    "recentRuns": 5
+  },
+  "recentActivities": [
+    {
+      "id": 1,
+      "name": "Morning Run",
+      "type": "Run",
+      "distance": 5200,
+      "moving_time": 1800,
+      "start_date": "2026-02-15T07:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Trail Run",
+      "type": "Run",
+      "distance": 8100,
+      "moving_time": 3000,
+      "start_date": "2026-02-13T08:30:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Easy Run",
+      "type": "Run",
+      "distance": 4000,
+      "moving_time": 1440,
+      "start_date": "2026-02-11T06:45:00Z"
+    }
+  ],
+  "lastUpdated": "2026-02-16T00:00:00Z",
+  "expiresAt": "2026-02-16T06:00:00Z"
+}

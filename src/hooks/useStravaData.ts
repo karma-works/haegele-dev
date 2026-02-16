@@ -10,11 +10,26 @@ export interface StravaStats {
   recentRuns: number;
 }
 
+interface StoredStravaData {
+  stats: StravaStats;
+  recentActivities?: Array<{
+    id: number;
+    name: string;
+    type: string;
+    distance: number;
+    moving_time: number;
+    start_date: string;
+  }>;
+  lastUpdated: string;
+  expiresAt: string;
+}
+
 interface StravaDataState {
   stats: StravaStats | null;
   isLoading: boolean;
   isAvailable: boolean;
   error: string | null;
+  lastUpdated: string | null;
 }
 
 const DEFAULT_STATS: StravaStats = {
@@ -28,20 +43,15 @@ const DEFAULT_STATS: StravaStats = {
 };
 
 const CACHE_KEY = 'strava_stats_cache';
-const CACHE_DURATION = 6 * 60 * 60 * 1000;
+const FALLBACK_DATA_URL = '/data/strava.json';
 
-function loadCachedData(): StravaStats | null {
+function loadCachedData(): { stats: StravaStats; timestamp: number } | null {
   try {
     const cached = localStorage.getItem(CACHE_KEY);
     if (!cached) return null;
 
     const { data, timestamp } = JSON.parse(cached);
-    if (Date.now() - timestamp > CACHE_DURATION) {
-      localStorage.removeItem(CACHE_KEY);
-      return null;
-    }
-
-    return data;
+    return { stats: data, timestamp };
   } catch {
     return null;
   }
@@ -55,66 +65,92 @@ function cacheData(data: StravaStats): void {
   }
 }
 
+function isDataExpired(expiresAt: string): boolean {
+  try {
+    return new Date(expiresAt) < new Date();
+  } catch {
+    return true;
+  }
+}
+
 export function useStravaData(): StravaDataState {
   const [state, setState] = useState<StravaDataState>(() => {
     const cached = loadCachedData();
     return {
-      stats: cached,
-      isLoading: !cached,
+      stats: cached?.stats ?? null,
+      isLoading: true,
       isAvailable: false,
       error: null,
+      lastUpdated: cached ? new Date(cached.timestamp).toISOString() : null,
     };
   });
 
   useEffect(() => {
-    if (state.stats && !state.isLoading) {
-      return;
-    }
-
     let mounted = true;
 
-    async function fetchStravaData() {
+    async function loadStravaData() {
       try {
-        const response = await fetch('/api/strava/stats');
+        const response = await fetch(FALLBACK_DATA_URL);
 
         if (!response.ok) {
-          if (response.status === 404) {
-            if (mounted) {
-              setState((prev) => ({
-                ...prev,
-                isLoading: false,
-                isAvailable: false,
-              }));
-            }
-            return;
+          if (mounted) {
+            const cached = loadCachedData();
+            setState({
+              stats: cached?.stats ?? null,
+              isLoading: false,
+              isAvailable: cached !== null,
+              error: null,
+              lastUpdated: cached ? new Date(cached.timestamp).toISOString() : null,
+            });
           }
-          throw new Error(`Failed to fetch: ${response.status}`);
+          return;
         }
 
-        const data = await response.json();
+        const data: StoredStravaData = await response.json();
+
+        if (!data.stats) {
+          throw new Error('Invalid data format');
+        }
+
+        if (isDataExpired(data.expiresAt)) {
+          if (mounted) {
+            const cached = loadCachedData();
+            setState({
+              stats: cached?.stats ?? data.stats,
+              isLoading: false,
+              isAvailable: true,
+              error: null,
+              lastUpdated: data.lastUpdated,
+            });
+          }
+          return;
+        }
 
         if (mounted) {
-          cacheData(data);
+          cacheData(data.stats);
           setState({
-            stats: data,
+            stats: data.stats,
             isLoading: false,
             isAvailable: true,
             error: null,
+            lastUpdated: data.lastUpdated,
           });
         }
       } catch (error) {
         if (mounted) {
-          setState((prev) => ({
-            ...prev,
+          const cached = loadCachedData();
+          setState({
+            stats: cached?.stats ?? null,
             isLoading: false,
-            isAvailable: false,
+            isAvailable: cached !== null,
             error: error instanceof Error ? error.message : 'Unknown error',
-          }));
+            lastUpdated: cached ? new Date(cached.timestamp).toISOString() : null,
+          });
         }
       }
     }
 
-    fetchStravaData();
+    loadStravaData();
 
     return () => {
       mounted = false;
