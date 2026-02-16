@@ -172,7 +172,7 @@ export const Footer = memo(function Footer() {
         <div className={styles.content}>
           <div className={styles.socialLinks}>
             <a
-              href="https://github.com"
+              href="https://github.com/karma-works/"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialLink}
@@ -183,7 +183,7 @@ export const Footer = memo(function Footer() {
               </svg>
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/christian-haegele-3403aaa/"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialLink}
