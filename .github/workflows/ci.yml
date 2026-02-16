@@ -93,29 +93,41 @@ jobs:
           path: dist
           retention-days: 7
 
-  deploy-vercel:
-    name: Deploy to Vercel
+  deploy-github-pages:
+    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    needs: build
+    needs: [lint-and-typecheck, test, strava-fetch]
     if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && github.event_name == 'push'
-    environment:
-      name: production
-      url: ${{ steps.deploy.outputs.url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          name: dist
-          path: dist
-
-      - name: Deploy to Vercel
-        id: deploy
-        run: |
-          npx vercel --token=${{ secrets.VERCEL_TOKEN }} --yes --prod > deployment-url.txt
-          echo "url=$(cat deployment-url.txt)" >> $GITHUB_OUTPUT
+          version: 9
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Fetch Strava data
         env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+        run: bun scripts/strava/oauth.ts fetch public/data/strava.json
+      
+      - name: Build
+        run: pnpm build
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
