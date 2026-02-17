@@ -5,3 +5,4 @@ _site/
 .DS_Store
 dist/*
 .pnpm-store/*
+dist/index.html
