@@ -4076,7 +4076,8 @@ var z = /* @__PURE__ */ Object.freeze({
 // skills/agentic-tasks/scripts/manager.ts
 var PLUGIN_NAME = "agentic-tasks";
 var TASK_LIST_ID = process.env.OPENCODE_TASK_LIST_ID || "default";
-var BASE_DIR = path.join(os.homedir(), ".config", "opencode", "tasks", TASK_LIST_ID);
+var PROJECT_ROOT = process.cwd();
+var BASE_DIR = path.join(PROJECT_ROOT, "tasks");
 var TASKS_FILE = path.join(BASE_DIR, "tasks.json");
 var BACKUP_FILE = path.join(BASE_DIR, "tasks.json.bak");
 var TaskStatusSchema = z.enum(["pending", "in_progress", "completed", "blocked", "cancelled"]);
