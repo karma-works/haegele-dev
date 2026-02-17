@@ -190,19 +190,6 @@ function StravaCardBase({ className }: StravaCardProps) {
       aria-label="Running Statistics from Strava"
       aria-busy={isLoading}
     >
-      <div className={styles.header}>
-        <div className={styles.icon}>
-          <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-            <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066l-2.084 4.116zM7.731 8.712l2.928 5.772h4.574L7.731 0 0 14.484h4.574l3.157-5.772z" />
-          </svg>
-        </div>
-        <div className={styles.title}>
-          <h3>Running</h3>
-          {!isAvailable && !isLoading && (
-            <span className={styles.unavailable}>Connect Strava</span>
-          )}
-        </div>
-      </div>
 
       {isLoading ? (
         <div className={styles.loading}>
