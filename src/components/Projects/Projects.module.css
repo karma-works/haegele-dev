@@ -161,6 +161,24 @@
   transition: transform 0.3s ease-out, box-shadow 0.3s ease;
 }
 
+.cardImageWrapper {
+  margin: calc(var(--spacing-xl) * -1);
+  margin-bottom: var(--spacing-lg);
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.cardImage {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.projectCard:hover .cardImage {
+  transform: scale(1.05);
+}
+
 .cardInner:hover {
   box-shadow: 
     0 20px 40px rgba(0, 0, 0, 0.3),

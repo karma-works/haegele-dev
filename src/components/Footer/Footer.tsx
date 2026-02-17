@@ -284,8 +284,7 @@ export const Footer = memo(function Footer() {
           </div>
 
           <p className={styles.copyright}>
-            &copy; {currentYear} <a href="/">haegele.dev</a> — Built with
-            passion
+            &copy; {currentYear} <a href="/">haegele.dev</a> — Days since last bug: 0
           </p>
         </div>
       </div>
