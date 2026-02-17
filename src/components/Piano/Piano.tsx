@@ -88,6 +88,7 @@ function PianoComponent({
         effects.pianoEngineRef.current?.play(note, velocity);
       }
       
+      effects.waveSetMode('oscilloscope');
       effects.wavePluck(frequency / 1000);
     },
     [effects]

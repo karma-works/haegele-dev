@@ -4,6 +4,7 @@ import { useWaveScaling, getPointCount } from './useWaveScaling.ts';
 import { useViewport } from '../../utils/responsive.ts';
 import { useEffects } from '../../contexts/EffectsContext.tsx';
 import { useShouldAnimate } from '../../contexts/ReduceMotionContext.tsx';
+import { getAudioAnalyzer, destroyAudioAnalyzer } from '../../audio/AudioAnalyzerService.ts';
 import type { WaveScaling } from '../../types/index.ts';
 
 const COLOR_MINT = '#10b981';
@@ -35,10 +36,22 @@ export function useWaveEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
     engineRef.current = engine;
     effects.waveEngineRef.current = engine;
 
+    getAudioAnalyzer({ fftSize: 2048, smoothingTimeConstant: 0.5 })
+      .then((analyzer) => {
+        engine.setAudioAnalyzer(analyzer);
+        if (effects.pianoEngineRef.current) {
+          effects.pianoEngineRef.current.setAudioAnalyzer(analyzer);
+        }
+      })
+      .catch((error) => {
+        console.warn('Failed to initialize audio analyzer:', error);
+      });
+
     return () => {
       engine.destroy();
       engineRef.current = null;
       effects.waveEngineRef.current = null;
+      destroyAudioAnalyzer();
     };
   }, []);
 

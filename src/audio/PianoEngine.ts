@@ -1,5 +1,6 @@
 import type { PianoEngine } from '../contexts/EffectsContext';
 import * as Tone from 'tone';
+import type { AudioAnalyzerServiceImpl } from './AudioAnalyzerService';
 
 const NOTE_FREQUENCIES: Record<string, number> = {
   'C2': 65.41, 'C#2': 69.30, 'D2': 73.42, 'D#2': 77.78, 'E2': 82.41, 'F2': 87.31,
@@ -22,6 +23,7 @@ export class PianoEngineImpl implements PianoEngine {
   private isInitialized = false;
   private initPromise: Promise<void> | null = null;
   private volume: Tone.Volume | null = null;
+  private audioAnalyzer: AudioAnalyzerServiceImpl | null = null;
 
   private getFrequency(note: string): number {
     return NOTE_FREQUENCIES[note] ?? 440;
@@ -115,6 +117,24 @@ export class PianoEngineImpl implements PianoEngine {
 
   onNoteTrigger(callback: (freq: number) => void): void {
     this.noteTriggerCallback = callback;
+  }
+
+  setAudioAnalyzer(analyzer: AudioAnalyzerServiceImpl | null): void {
+    if (!this.volume) return;
+
+    this.volume.disconnect();
+
+    if (analyzer) {
+      const analyserNode = analyzer.getAnalyserNode();
+      if (analyserNode) {
+        this.volume.connect(analyserNode as unknown as Tone.ToneAudioNode);
+        analyzer.connect();
+        this.audioAnalyzer = analyzer;
+      }
+    } else {
+      this.volume.toDestination();
+      this.audioAnalyzer = null;
+    }
   }
 
   destroy(): void {

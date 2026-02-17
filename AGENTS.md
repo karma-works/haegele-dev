@@ -18,6 +18,7 @@
 - Default velocity: 0.7; components use `memo()` for performance
 - Audio: Tone.js Sampler via `getPianoEngine()` from `src/audio/PianoEngine.ts` (lazy-loaded with Salamander Grand Piano samples)
 - Pointer events: use `setPointerCapture()` for reliable touch/mouse tracking
+- Oscilloscope: `pianoEngine.setAudioAnalyzer(analyzer)` routes audio through AnalyserNode for visualization
 
 ### Contexts
 - EffectsContext: `useEffects()` from `src/contexts/EffectsContext.tsx`
@@ -43,6 +44,9 @@
 ### Signal Generators
 - Singleton pattern: `getGenerator()` + `destroyGenerator()` for lazy initialization with test cleanup
 - Gaussian waves: use `width / 2.355` to convert FWHM to sigma for bell curves
+- ECG generator: `ECGWaveGenerator` class for PQRST waveform; instantiated in WaveEngine, not singleton
+- Audio analyzer: `getAudioAnalyzer()` + `destroyAudioAnalyzer()` singleton from `src/audio/AudioAnalyzerService.ts`
+- WaveEngine modes: `WaveMode` type is `'idle' | 'ecg' | 'oscilloscope'`; switch via `waveSetMode()`
 
 ## Gotchas
 

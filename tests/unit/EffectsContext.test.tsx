@@ -55,6 +55,8 @@ describe('EffectsContext', () => {
         getMode: vi.fn().mockReturnValue('idle'),
         setColor: vi.fn(),
         updateViewport: vi.fn(),
+        setAudioAnalyzer: vi.fn(),
+        setAudioData: vi.fn(),
         destroy: vi.fn(),
       };
 
@@ -82,6 +84,8 @@ describe('EffectsContext', () => {
         getMode: vi.fn().mockReturnValue('idle'),
         setColor: vi.fn(),
         updateViewport: vi.fn(),
+        setAudioAnalyzer: vi.fn(),
+        setAudioData: vi.fn(),
         destroy: vi.fn(),
       };
 
@@ -109,6 +113,8 @@ describe('EffectsContext', () => {
         getMode: vi.fn().mockReturnValue('idle'),
         setColor: vi.fn(),
         updateViewport: vi.fn(),
+        setAudioAnalyzer: vi.fn(),
+        setAudioData: vi.fn(),
         destroy: vi.fn(),
       };
 
@@ -134,6 +140,8 @@ describe('EffectsContext', () => {
         getMode: vi.fn().mockReturnValue('idle'),
         setColor: vi.fn(),
         updateViewport: vi.fn(),
+        setAudioAnalyzer: vi.fn(),
+        setAudioData: vi.fn(),
         destroy: vi.fn(),
       };
 

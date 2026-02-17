@@ -139,17 +139,17 @@ function ErrorState({ message }: { message: string }) {
 function StravaCardBase({ className }: StravaCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { stats, activities, isLoading, isAvailable, error, isStale } = useStravaData();
-  const { waveSetHeartbeat } = useEffects();
+  const { waveSetMode } = useEffects();
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
-    waveSetHeartbeat(true);
-  }, [waveSetHeartbeat]);
+    waveSetMode('ecg');
+  }, [waveSetMode]);
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
-    waveSetHeartbeat(false);
-  }, [waveSetHeartbeat]);
+    waveSetMode('idle');
+  }, [waveSetMode]);
 
   const showStats = isAvailable && stats;
   const showActivities = isAvailable;

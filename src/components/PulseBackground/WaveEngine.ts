@@ -2,6 +2,7 @@ import type { WavePoint, WaveConfig } from '../../utils/waveMath.ts';
 import { sineWave, lerpColor, lerp } from '../../utils/waveMath.ts';
 import type { WaveScaling, WaveState, WaveMode } from '../../types/index.ts';
 import { ECGWaveGenerator } from '../../utils/ECGWaveGenerator.ts';
+import type { AudioAnalyzerServiceImpl, TimeDomainData } from '../../audio/AudioAnalyzerService.ts';
 
 interface WaveEngineConfig {
   canvas: HTMLCanvasElement;
@@ -35,6 +36,8 @@ export class WaveEngine {
   private ecgGenerator: ECGWaveGenerator | null = null;
   private ecgPoints: { x: number; y: number }[] = [];
   private oscilloscopePhase: number = 0;
+  private audioAnalyzer: AudioAnalyzerServiceImpl | null = null;
+  private externalAudioData: TimeDomainData | null = null;
 
   constructor(options: WaveEngineConfig) {
     this.canvas = options.canvas;
@@ -105,6 +108,14 @@ export class WaveEngine {
 
   setMouseProximity(proximity: number): void {
     this.targetMouseProximity = Math.min(1, Math.max(0, proximity));
+  }
+
+  setAudioAnalyzer(analyzer: AudioAnalyzerServiceImpl | null): void {
+    this.audioAnalyzer = analyzer;
+  }
+
+  setAudioData(data: TimeDomainData | null): void {
+    this.externalAudioData = data;
   }
 
   setVisible(visible: boolean): void {
@@ -243,6 +254,46 @@ export class WaveEngine {
     const amplitude = this.scaling.amplitude * (1 + this.mouseProximity * 0.3);
     
     const points: { x: number; y: number }[] = [];
+
+    if (this.externalAudioData && this.externalAudioData.data) {
+      const data = this.externalAudioData.data;
+      const pointCount = Math.min(data.length, Math.max(50, Math.round(width / 3)));
+      const step = data.length / pointCount;
+      
+      for (let i = 0; i < pointCount; i++) {
+        const dataIndex = Math.floor(i * step);
+        const sample = data[dataIndex] ?? 128;
+        const x = (i / pointCount) * width;
+        const normalized = (sample - 128) / 128;
+        const y = centerY - normalized * amplitude;
+        points.push({ x, y });
+      }
+      
+      this.drawWavePoints(points);
+      return;
+    }
+
+    if (this.audioAnalyzer && this.audioAnalyzer.isActive()) {
+      const timeData = this.audioAnalyzer.getByteTimeDomainData();
+      if (timeData) {
+        const data = timeData.data;
+        const pointCount = Math.min(data.length, Math.max(50, Math.round(width / 3)));
+        const step = data.length / pointCount;
+        
+        for (let i = 0; i < pointCount; i++) {
+          const dataIndex = Math.floor(i * step);
+          const sample = data[dataIndex] ?? 128;
+          const x = (i / pointCount) * width;
+          const normalized = (sample - 128) / 128;
+          const y = centerY - normalized * amplitude;
+          points.push({ x, y });
+        }
+        
+        this.drawWavePoints(points);
+        return;
+      }
+    }
+
     const pointCount = Math.max(50, Math.round(width / 3));
     
     for (let i = 0; i < pointCount; i++) {

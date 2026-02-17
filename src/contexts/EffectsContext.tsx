@@ -9,6 +9,7 @@ import {
   type MutableRefObject,
 } from 'react';
 import { getPianoEngine } from '../audio/PianoEngine';
+import type { AudioAnalyzerServiceImpl, TimeDomainData } from '../audio/AudioAnalyzerService';
 import type { WaveMode } from '../types/index.ts';
 
 export interface WaveEngine {
@@ -18,6 +19,8 @@ export interface WaveEngine {
   getMode(): WaveMode;
   setColor(color: string): void;
   updateViewport(width: number, height: number): void;
+  setAudioAnalyzer(analyzer: AudioAnalyzerServiceImpl | null): void;
+  setAudioData(data: TimeDomainData | null): void;
   destroy(): void;
 }
 
@@ -25,6 +28,7 @@ export interface PianoEngine {
   play(note: string, velocity?: number): Promise<void>;
   stop(note: string): void;
   onNoteTrigger(callback: (freq: number) => void): void;
+  setAudioAnalyzer(analyzer: AudioAnalyzerServiceImpl | null): void;
   destroy(): void;
 }
 
@@ -32,6 +36,7 @@ export interface EffectsController {
   wavePluck(intensity: number): void;
   waveSetHeartbeat(active: boolean): void;
   waveSetMode(mode: WaveMode): void;
+  waveSetAudioData(data: TimeDomainData | null): void;
   isMuted: boolean;
   setIsMuted(value: boolean): void;
   activeSection: string;
@@ -72,6 +77,10 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
 
   const waveSetMode = useCallback((mode: WaveMode) => {
     waveEngineRef.current?.setMode(mode);
+  }, []);
+
+  const waveSetAudioData = useCallback((data: TimeDomainData | null) => {
+    waveEngineRef.current?.setAudioData(data);
   }, []);
 
   const handleSetIsMuted = useCallback((value: boolean) => {
@@ -116,6 +125,7 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
     wavePluck,
     waveSetHeartbeat,
     waveSetMode,
+    waveSetAudioData,
     isMuted,
     setIsMuted: handleSetIsMuted,
     activeSection,

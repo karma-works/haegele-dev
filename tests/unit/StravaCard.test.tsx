@@ -4,7 +4,7 @@ import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/re
 import { StravaCard } from '../../src/components/Strava/StravaCard';
 import { EffectsProvider } from '../../src/contexts/EffectsContext';
 
-const mockWaveSetHeartbeat = vi.fn();
+const mockWaveSetMode = vi.fn();
 const mockWavePluck = vi.fn();
 
 vi.mock('../../src/contexts/EffectsContext', async () => {
@@ -12,7 +12,7 @@ vi.mock('../../src/contexts/EffectsContext', async () => {
   return {
     ...actual,
     useEffects: () => ({
-      waveSetHeartbeat: mockWaveSetHeartbeat,
+      waveSetMode: mockWaveSetMode,
       wavePluck: mockWavePluck,
       isMuted: false,
       setIsMuted: vi.fn(),
@@ -93,16 +93,16 @@ describe('StravaCard', () => {
     expect(screen.getAllByText('50 runs')[0]).toBeInTheDocument();
   });
 
-  it('triggers heartbeat on hover', () => {
+  it('triggers ECG mode on hover', () => {
     renderWithProviders(<StravaCard />);
     const cards = screen.getAllByRole('region', { name: /running statistics/i });
     const card = cards[0]!;
 
     fireEvent.mouseEnter(card);
-    expect(mockWaveSetHeartbeat).toHaveBeenCalledWith(true);
+    expect(mockWaveSetMode).toHaveBeenCalledWith('ecg');
 
     fireEvent.mouseLeave(card);
-    expect(mockWaveSetHeartbeat).toHaveBeenCalledWith(false);
+    expect(mockWaveSetMode).toHaveBeenCalledWith('idle');
   });
 
   it('shows heartbeat indicator when hovered', async () => {
