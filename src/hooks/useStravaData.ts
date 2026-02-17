@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export interface StravaActivity {
   id: number;
@@ -52,8 +52,8 @@ const DEFAULT_STATS: StravaStats = {
   recentRuns: 0,
 };
 
-const CACHE_KEY = 'strava_stats_cache';
-const FALLBACK_DATA_URL = '/data/strava.json';
+const CACHE_KEY = "strava_stats_cache";
+const FALLBACK_DATA_URL = "/data/strava.json";
 
 function loadCachedData(): CachedData | null {
   try {
@@ -123,7 +123,9 @@ export function useStravaData(): StravaDataState {
               isLoading: false,
               isAvailable: cached !== null,
               error: null,
-              lastUpdated: cached ? new Date(cached.timestamp).toISOString() : null,
+              lastUpdated: cached
+                ? new Date(cached.timestamp).toISOString()
+                : null,
               isStale: cached !== null,
             });
           }
@@ -133,7 +135,7 @@ export function useStravaData(): StravaDataState {
         const data: StoredStravaData = await response.json();
 
         if (!data.stats) {
-          throw new Error('Invalid data format');
+          throw new Error("Invalid data format");
         }
 
         const activities = data.recentActivities ?? [];
@@ -141,11 +143,9 @@ export function useStravaData(): StravaDataState {
 
         if (stale) {
           if (mounted) {
-            const cached = loadCachedData();
-            const useCache = cached !== null;
             setState({
-              stats: useCache ? cached.stats : data.stats,
-              activities: useCache ? cached.activities : activities,
+              stats: data.stats,
+              activities,
               isLoading: false,
               isAvailable: true,
               error: null,
@@ -176,8 +176,10 @@ export function useStravaData(): StravaDataState {
             activities: cached?.activities ?? [],
             isLoading: false,
             isAvailable: cached !== null,
-            error: error instanceof Error ? error.message : 'Unknown error',
-            lastUpdated: cached ? new Date(cached.timestamp).toISOString() : null,
+            error: error instanceof Error ? error.message : "Unknown error",
+            lastUpdated: cached
+              ? new Date(cached.timestamp).toISOString()
+              : null,
             isStale: cached !== null,
           });
         }
