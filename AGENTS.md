@@ -67,6 +67,11 @@
 - Cleanup: `afterEach(() => cleanup())` between test cases
 - Private methods: access via bracket notation for testing internals (e.g., `instance['privateMethod']()`)
 
+### Audio Testing
+- Tone.js mock: mock `getContext().rawContext.createAnalyser()` with AnalyserNode interface for AudioAnalyzerService tests
+- Mock audio analyzer: use `as unknown as AudioAnalyzerServiceImpl` type-casting for WaveEngine oscilloscope tests
+- Singleton cleanup: call `destroyAudioAnalyzer()` in `beforeEach`/`afterEach` to reset state between tests
+
 ### Styling
 - CSS custom properties: type cast as `{'--my-var': 'value'} as CSSProperties`
 - Cards over PulseBackground: need explicit `z-index` to appear above canvas
