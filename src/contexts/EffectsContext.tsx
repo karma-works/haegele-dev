@@ -7,10 +7,13 @@ import {
   useEffect,
   type ReactNode,
   type MutableRefObject,
-} from 'react';
-import { getPianoEngine } from '../audio/PianoEngine';
-import type { AudioAnalyzerServiceImpl, TimeDomainData } from '../audio/AudioAnalyzerService';
-import type { WaveMode } from '../types/index.ts';
+} from "react";
+import { getPianoEngine } from "../audio/PianoEngine";
+import type {
+  AudioAnalyzerServiceImpl,
+  TimeDomainData,
+} from "../audio/AudioAnalyzerService";
+import type { WaveMode } from "../types/index.ts";
 
 export interface WaveEngine {
   pluck(intensity: number): void;
@@ -37,6 +40,8 @@ export interface EffectsController {
   waveSetHeartbeat(active: boolean): void;
   waveSetMode(mode: WaveMode): void;
   waveSetAudioData(data: TimeDomainData | null): void;
+  onPianoActivity(): void;
+  scheduleReturnToIdle(): void;
   isMuted: boolean;
   setIsMuted(value: boolean): void;
   activeSection: string;
@@ -51,7 +56,7 @@ const EffectsContext = createContext<EffectsController | null>(null);
 export function useEffects(): EffectsController {
   const context = useContext(EffectsContext);
   if (!context) {
-    throw new Error('useEffects must be used within an EffectsProvider');
+    throw new Error("useEffects must be used within an EffectsProvider");
   }
   return context;
 }
@@ -60,12 +65,34 @@ interface EffectsProviderProps {
   children: ReactNode;
 }
 
+const SCREENSAVER_DELAY_MS = 2000;
+
 export function EffectsProvider({ children }: EffectsProviderProps) {
   const waveEngineRef = useRef<WaveEngine | null>(null);
   const pianoEngineRef = useRef<PianoEngine | null>(null);
   const [isMuted, setIsMuted] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState("hero");
   const pianoInitRef = useRef(false);
+  const screensaverTimeoutRef = useRef<number | null>(null);
+
+  const cancelScreensaver = useCallback(() => {
+    if (screensaverTimeoutRef.current !== null) {
+      clearTimeout(screensaverTimeoutRef.current);
+      screensaverTimeoutRef.current = null;
+    }
+  }, []);
+
+  const scheduleReturnToIdle = useCallback(() => {
+    cancelScreensaver();
+    screensaverTimeoutRef.current = window.setTimeout(() => {
+      waveEngineRef.current?.setMode("idle");
+    }, SCREENSAVER_DELAY_MS);
+  }, [cancelScreensaver]);
+
+  const onPianoActivity = useCallback(() => {
+    waveEngineRef.current?.setMode("oscilloscope");
+    scheduleReturnToIdle();
+  }, [scheduleReturnToIdle]);
 
   const wavePluck = useCallback((intensity: number) => {
     waveEngineRef.current?.pluck(intensity);
@@ -93,14 +120,14 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
 
   const initPianoEngine = useCallback(async () => {
     if (pianoEngineRef.current || pianoInitRef.current) return;
-    
+
     pianoInitRef.current = true;
-    
+
     try {
       const engine = await getPianoEngine();
       pianoEngineRef.current = engine;
     } catch (error) {
-      console.error('Failed to initialize piano engine:', error);
+      console.error("Failed to initialize piano engine:", error);
       pianoInitRef.current = false;
     }
   }, []);
@@ -110,14 +137,18 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
       initPianoEngine();
     };
 
-    document.addEventListener('click', handleFirstInteraction, { once: true });
-    document.addEventListener('keydown', handleFirstInteraction, { once: true });
-    document.addEventListener('touchstart', handleFirstInteraction, { once: true });
+    document.addEventListener("click", handleFirstInteraction, { once: true });
+    document.addEventListener("keydown", handleFirstInteraction, {
+      once: true,
+    });
+    document.addEventListener("touchstart", handleFirstInteraction, {
+      once: true,
+    });
 
     return () => {
-      document.removeEventListener('click', handleFirstInteraction);
-      document.removeEventListener('keydown', handleFirstInteraction);
-      document.removeEventListener('touchstart', handleFirstInteraction);
+      document.removeEventListener("click", handleFirstInteraction);
+      document.removeEventListener("keydown", handleFirstInteraction);
+      document.removeEventListener("touchstart", handleFirstInteraction);
     };
   }, [initPianoEngine]);
 
@@ -126,6 +157,8 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
     waveSetHeartbeat,
     waveSetMode,
     waveSetAudioData,
+    onPianoActivity,
+    scheduleReturnToIdle,
     isMuted,
     setIsMuted: handleSetIsMuted,
     activeSection,

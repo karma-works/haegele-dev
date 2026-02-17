@@ -1,16 +1,16 @@
-import { memo, useState, useCallback, useRef, useEffect } from 'react';
-import { useScrollAnimation } from '../../hooks/useScrollAnimation';
-import { useMagneticHover } from '../../hooks/useMagneticHover';
-import { StravaCard } from '../Strava';
-import { Piano } from '../Piano';
-import { useEffects } from '../../contexts/EffectsContext';
-import { 
-  WHITE_KEY_NOTES, 
-  BLACK_KEY_NOTES, 
+import { memo, useState, useCallback, useRef, useEffect } from "react";
+import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+import { useMagneticHover } from "../../hooks/useMagneticHover";
+import { StravaCard } from "../Strava";
+import { Piano } from "../Piano";
+import { useEffects } from "../../contexts/EffectsContext";
+import {
+  WHITE_KEY_NOTES,
+  BLACK_KEY_NOTES,
   noteToFrequency,
-  type PianoKeyRange 
-} from '../../utils/pianoKeyboard';
-import styles from './Hobbies.module.css';
+  type PianoKeyRange,
+} from "../../utils/pianoKeyboard";
+import styles from "./Hobbies.module.css";
 
 interface Language {
   name: string;
@@ -19,11 +19,11 @@ interface Language {
 }
 
 const languages: Language[] = [
-  { name: 'German', level: 100, flag: '🇩🇪' },
-  { name: 'English', level: 90, flag: '🇺🇸' },
-  { name: 'Spanish', level: 90, flag: '🇲🇽' },
-  { name: 'French', level: 80, flag: '🇫🇷' },
-  { name: 'Chinese (Mandarin)', level: 60, flag: '🇨🇳' },
+  { name: "German", level: 100, flag: "🇩🇪" },
+  { name: "English", level: 90, flag: "🇺🇸" },
+  { name: "Spanish", level: 90, flag: "🇲🇽" },
+  { name: "French", level: 80, flag: "🇫🇷" },
+  { name: "Chinese (Mandarin)", level: 60, flag: "🇨🇳" },
 ];
 
 const MINI_PIANO_RANGE: PianoKeyRange = {
@@ -40,20 +40,20 @@ interface HobbyCardProps {
   className?: string;
 }
 
-const HobbyCard = memo(function HobbyCard({ 
-  title, 
-  icon, 
-  index, 
-  isVisible, 
+const HobbyCard = memo(function HobbyCard({
+  title,
+  icon,
+  index,
+  isVisible,
   children,
-  className 
+  className,
 }: HobbyCardProps) {
   const { ref, style, handlers } = useMagneticHover({ strength: 0.2 });
 
   return (
     <div
       ref={ref}
-      className={`${styles.card} ${isVisible ? styles.visible : ''} ${className || ''}`}
+      className={`${styles.card} ${isVisible ? styles.visible : ""} ${className || ""}`}
       style={{
         ...style,
         transitionDelay: `${index * 100}ms`,
@@ -68,9 +68,7 @@ const HobbyCard = memo(function HobbyCard({
         </div>
         <h3 className={styles.cardTitle}>{title}</h3>
       </div>
-      <div className={styles.cardContent}>
-        {children}
-      </div>
+      <div className={styles.cardContent}>{children}</div>
       <div className={styles.cardGlow} />
     </div>
   );
@@ -91,27 +89,36 @@ const MiniPianoKey = memo(function MiniPianoKey({
   onNoteStart,
   onNoteEnd,
 }: MiniPianoKeyProps) {
-  const handlePointerDown = useCallback((e: React.PointerEvent) => {
-    e.preventDefault();
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-    onNoteStart(note);
-  }, [note, onNoteStart]);
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault();
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+      onNoteStart(note);
+    },
+    [note, onNoteStart],
+  );
 
-  const handlePointerUp = useCallback((e: React.PointerEvent) => {
-    e.preventDefault();
-    onNoteEnd(note);
-  }, [note, onNoteEnd]);
-
-  const handlePointerLeave = useCallback((e: React.PointerEvent) => {
-    if (e.buttons > 0) {
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault();
       onNoteEnd(note);
-    }
-  }, [note, onNoteEnd]);
+    },
+    [note, onNoteEnd],
+  );
+
+  const handlePointerLeave = useCallback(
+    (e: React.PointerEvent) => {
+      if (e.buttons > 0) {
+        onNoteEnd(note);
+      }
+    },
+    [note, onNoteEnd],
+  );
 
   return (
     <button
       type="button"
-      className={`${isSharp ? styles.miniBlackKey : styles.miniWhiteKey} ${isActive ? styles.active : ''}`}
+      className={`${isSharp ? styles.miniBlackKey : styles.miniWhiteKey} ${isActive ? styles.active : ""}`}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerLeave}
@@ -134,42 +141,53 @@ const MiniPiano = memo(function MiniPiano({ className }: MiniPianoProps) {
     activeNotesRef.current = activeNotes;
   }, [activeNotes]);
 
-  const handleNoteStart = useCallback((note: string) => {
-    setActiveNotes((prev) => {
-      const next = new Set(prev);
-      next.add(note);
-      return next;
-    });
-    
-    const frequency = noteToFrequency(note);
-    
-    if (!effects.isMuted) {
-      effects.pianoEngineRef.current?.play(note, 0.7);
-    }
-    
-    effects.wavePluck(frequency / 1000);
-  }, [effects]);
+  const handleNoteStart = useCallback(
+    (note: string) => {
+      setActiveNotes((prev) => {
+        const next = new Set(prev);
+        next.add(note);
+        return next;
+      });
 
-  const handleNoteEnd = useCallback((note: string) => {
-    setActiveNotes((prev) => {
-      const next = new Set(prev);
-      next.delete(note);
-      return next;
-    });
-    
-    if (!effects.isMuted) {
-      effects.pianoEngineRef.current?.stop(note);
-    }
-  }, [effects]);
+      const frequency = noteToFrequency(note);
+
+      if (!effects.isMuted) {
+        effects.pianoEngineRef.current?.play(note, 0.7);
+      }
+
+      effects.onPianoActivity();
+      effects.wavePluck(frequency / 1000);
+    },
+    [effects],
+  );
+
+  const handleNoteEnd = useCallback(
+    (note: string) => {
+      setActiveNotes((prev) => {
+        const next = new Set(prev);
+        next.delete(note);
+        return next;
+      });
+
+      if (!effects.isMuted) {
+        effects.pianoEngineRef.current?.stop(note);
+      }
+    },
+    [effects],
+  );
 
   const { whiteKeys, blackKeyMap } = generateMiniKeyLayout(MINI_PIANO_RANGE);
 
   return (
-    <div className={`${styles.miniPiano} ${className || ''}`} role="application" aria-label="Mini piano keyboard">
+    <div
+      className={`${styles.miniPiano} ${className || ""}`}
+      role="application"
+      aria-label="Mini piano keyboard"
+    >
       <div className={styles.miniKeyboard}>
         {whiteKeys.map((keyInfo) => {
           const blackKey = blackKeyMap.get(keyInfo.note);
-          
+
           return (
             <div key={keyInfo.note} className={styles.miniWhiteKeyWrapper}>
               <MiniPianoKey
@@ -201,28 +219,39 @@ interface KeyInfo {
   isSharp: boolean;
 }
 
-function generateMiniKeyLayout(range: PianoKeyRange): { whiteKeys: KeyInfo[]; blackKeyMap: Map<string, KeyInfo> } {
+function generateMiniKeyLayout(range: PianoKeyRange): {
+  whiteKeys: KeyInfo[];
+  blackKeyMap: Map<string, KeyInfo>;
+} {
   const whiteKeys: KeyInfo[] = [];
   const blackKeyMap = new Map<string, KeyInfo>();
-  
+
   const { startOctave, whiteKeyCount } = range;
   let keyIndex = 0;
-  
-  for (let octaveOffset = 0; octaveOffset < Math.ceil(whiteKeyCount / 7); octaveOffset++) {
+
+  for (
+    let octaveOffset = 0;
+    octaveOffset < Math.ceil(whiteKeyCount / 7);
+    octaveOffset++
+  ) {
     const currentOctave = startOctave + octaveOffset;
-    
-    for (let noteIndex = 0; noteIndex < 7 && keyIndex < whiteKeyCount; noteIndex++) {
+
+    for (
+      let noteIndex = 0;
+      noteIndex < 7 && keyIndex < whiteKeyCount;
+      noteIndex++
+    ) {
       const whiteNote = WHITE_KEY_NOTES[noteIndex];
-      
+
       if (whiteNote) {
         whiteKeys.push({
           note: `${whiteNote}${currentOctave}`,
           isSharp: false,
         });
       }
-      
+
       const blackNote = BLACK_KEY_NOTES[noteIndex];
-      
+
       if (blackNote) {
         const blackKeyInfo: KeyInfo = {
           note: `${blackNote}${currentOctave}`,
@@ -230,15 +259,21 @@ function generateMiniKeyLayout(range: PianoKeyRange): { whiteKeys: KeyInfo[]; bl
         };
         blackKeyMap.set(`${whiteNote}${currentOctave}`, blackKeyInfo);
       }
-      
+
       keyIndex++;
     }
   }
-  
+
   return { whiteKeys, blackKeyMap };
 }
 
-function LanguageProgress({ languages: langs, isVisible }: { languages: Language[]; isVisible: boolean }) {
+function LanguageProgress({
+  languages: langs,
+  isVisible,
+}: {
+  languages: Language[];
+  isVisible: boolean;
+}) {
   return (
     <div className={styles.languageList}>
       {langs.map((lang, index) => (
@@ -252,7 +287,7 @@ function LanguageProgress({ languages: langs, isVisible }: { languages: Language
             <div
               className={styles.languageProgress}
               style={{
-                width: isVisible ? `${lang.level}%` : '0%',
+                width: isVisible ? `${lang.level}%` : "0%",
                 transitionDelay: `${index * 100}ms`,
               }}
             />
@@ -264,13 +299,15 @@ function LanguageProgress({ languages: langs, isVisible }: { languages: Language
 }
 
 export const Hobbies = memo(function Hobbies() {
-  const [containerRef, isVisible] = useScrollAnimation<HTMLDivElement>({ threshold: 0.1 });
+  const [containerRef, isVisible] = useScrollAnimation<HTMLDivElement>({
+    threshold: 0.1,
+  });
 
   return (
     <section id="hobbies" className={styles.section}>
       <div
         ref={containerRef}
-        className={`${styles.container} ${isVisible ? styles.visible : ''}`}
+        className={`${styles.container} ${isVisible ? styles.visible : ""}`}
       >
         <h2 className={styles.title}>
           <span className={styles.titleAccent}>//</span> Hobbies
@@ -280,7 +317,12 @@ export const Hobbies = memo(function Hobbies() {
           <HobbyCard
             title="Running"
             icon={
-              <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                width="24"
+                height="24"
+              >
                 <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066l-2.084 4.116zM7.731 8.712l2.928 5.772h4.574L7.731 0 0 14.484h4.574l3.157-5.772z" />
               </svg>
             }
@@ -293,7 +335,12 @@ export const Hobbies = memo(function Hobbies() {
           <HobbyCard
             title="Piano"
             icon={
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <rect x="2" y="4" width="20" height="16" rx="2" />
                 <line x1="6" y1="4" x2="6" y2="14" />
                 <line x1="10" y1="4" x2="10" y2="14" />
@@ -309,16 +356,19 @@ export const Hobbies = memo(function Hobbies() {
                 I enjoy playing piano in my free time. Try it out below!
               </p>
               <MiniPiano />
-              <p className={styles.pianoHint}>
-                Click or tap keys to play
-              </p>
+              <p className={styles.pianoHint}>Click or tap keys to play</p>
             </div>
           </HobbyCard>
 
           <HobbyCard
             title="Languages"
             icon={
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <circle cx="12" cy="12" r="10" />
                 <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
               </svg>

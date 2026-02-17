@@ -1,9 +1,9 @@
-import { memo, useState, useCallback, useRef, useEffect } from 'react';
-import { Piano } from '../Piano';
-import { useResponsivePianoKeys } from '../../hooks/useResponsivePianoKeys';
-import { type PianoKeyRange } from '../../utils/pianoKeyboard';
-import { useEffects } from '../../contexts/EffectsContext';
-import styles from './Footer.module.css';
+import { memo, useState, useCallback, useRef, useEffect } from "react";
+import { Piano } from "../Piano";
+import { useResponsivePianoKeys } from "../../hooks/useResponsivePianoKeys";
+import { type PianoKeyRange } from "../../utils/pianoKeyboard";
+import { useEffects } from "../../contexts/EffectsContext";
+import styles from "./Footer.module.css";
 
 interface ThemeColor {
   accent: string;
@@ -11,18 +11,18 @@ interface ThemeColor {
 }
 
 const NOTE_COLORS: Record<string, ThemeColor> = {
-  'C': { accent: '#10b981', glow: 'rgba(16, 185, 129, 0.2)' },
-  'C#': { accent: '#059669', glow: 'rgba(5, 150, 105, 0.2)' },
-  'D': { accent: '#14b8a6', glow: 'rgba(20, 184, 166, 0.2)' },
-  'D#': { accent: '#06b6d4', glow: 'rgba(6, 182, 212, 0.2)' },
-  'E': { accent: '#3b82f6', glow: 'rgba(59, 130, 246, 0.2)' },
-  'F': { accent: '#6366f1', glow: 'rgba(99, 102, 241, 0.2)' },
-  'F#': { accent: '#8b5cf6', glow: 'rgba(139, 92, 246, 0.2)' },
-  'G': { accent: '#a855f7', glow: 'rgba(168, 85, 247, 0.2)' },
-  'G#': { accent: '#d946ef', glow: 'rgba(217, 70, 239, 0.2)' },
-  'A': { accent: '#ec4899', glow: 'rgba(236, 72, 153, 0.2)' },
-  'A#': { accent: '#f43f5e', glow: 'rgba(244, 63, 94, 0.2)' },
-  'B': { accent: '#f97316', glow: 'rgba(249, 115, 22, 0.2)' },
+  C: { accent: "#10b981", glow: "rgba(16, 185, 129, 0.2)" },
+  "C#": { accent: "#059669", glow: "rgba(5, 150, 105, 0.2)" },
+  D: { accent: "#14b8a6", glow: "rgba(20, 184, 166, 0.2)" },
+  "D#": { accent: "#06b6d4", glow: "rgba(6, 182, 212, 0.2)" },
+  E: { accent: "#3b82f6", glow: "rgba(59, 130, 246, 0.2)" },
+  F: { accent: "#6366f1", glow: "rgba(99, 102, 241, 0.2)" },
+  "F#": { accent: "#8b5cf6", glow: "rgba(139, 92, 246, 0.2)" },
+  G: { accent: "#a855f7", glow: "rgba(168, 85, 247, 0.2)" },
+  "G#": { accent: "#d946ef", glow: "rgba(217, 70, 239, 0.2)" },
+  A: { accent: "#ec4899", glow: "rgba(236, 72, 153, 0.2)" },
+  "A#": { accent: "#f43f5e", glow: "rgba(244, 63, 94, 0.2)" },
+  B: { accent: "#f97316", glow: "rgba(249, 115, 22, 0.2)" },
 };
 
 const FOOTER_PIANO_RANGE: PianoKeyRange = {
@@ -31,10 +31,13 @@ const FOOTER_PIANO_RANGE: PianoKeyRange = {
 };
 
 function getNoteBase(note: string): string {
-  return note.replace(/\d+$/, '');
+  return note.replace(/\d+$/, "");
 }
 
-const DEFAULT_THEME: ThemeColor = { accent: '#10b981', glow: 'rgba(16, 185, 129, 0.15)' };
+const DEFAULT_THEME: ThemeColor = {
+  accent: "#10b981",
+  glow: "rgba(16, 185, 129, 0.15)",
+};
 
 function getThemeColorForNotes(notes: Set<string>): ThemeColor {
   if (notes.size === 0) {
@@ -44,22 +47,25 @@ function getThemeColorForNotes(notes: Set<string>): ThemeColor {
   const noteArray = Array.from(notes);
   const lastNote = noteArray[noteArray.length - 1];
   if (!lastNote) {
-    return NOTE_COLORS['C'] ?? DEFAULT_THEME;
+    return NOTE_COLORS["C"] ?? DEFAULT_THEME;
   }
   const baseNote = getNoteBase(lastNote);
-  
-  return NOTE_COLORS[baseNote] ?? NOTE_COLORS['C'] ?? DEFAULT_THEME;
+
+  return NOTE_COLORS[baseNote] ?? NOTE_COLORS["C"] ?? DEFAULT_THEME;
 }
 
 export const Footer = memo(function Footer() {
   const effects = useEffects();
   const { keyRange } = useResponsivePianoKeys();
   const [activeNotes, setActiveNotes] = useState<Set<string>>(new Set());
-  const [themeColor, setThemeColor] = useState<ThemeColor>(NOTE_COLORS['C'] ?? DEFAULT_THEME);
+  const [themeColor, setThemeColor] = useState<ThemeColor>(
+    NOTE_COLORS["C"] ?? DEFAULT_THEME,
+  );
   const activeNotesRef = useRef<Set<string>>(activeNotes);
   const isKeyDownRef = useRef<Set<string>>(new Set());
 
-  const adjustedKeyRange = keyRange.whiteKeyCount >= 15 ? keyRange : FOOTER_PIANO_RANGE;
+  const adjustedKeyRange =
+    keyRange.whiteKeyCount >= 15 ? keyRange : FOOTER_PIANO_RANGE;
 
   useEffect(() => {
     activeNotesRef.current = activeNotes;
@@ -67,53 +73,80 @@ export const Footer = memo(function Footer() {
     setThemeColor(color);
   }, [activeNotes]);
 
-  const handleNoteOn = useCallback((note: string, velocity: number) => {
-    setActiveNotes((prev) => {
-      const next = new Set(prev);
-      next.add(note);
-      return next;
-    });
-    
-    if (!effects.isMuted) {
-      effects.pianoEngineRef.current?.play(note, velocity);
-    }
-  }, [effects]);
+  const handleNoteOn = useCallback(
+    (note: string, velocity: number) => {
+      setActiveNotes((prev) => {
+        const next = new Set(prev);
+        next.add(note);
+        return next;
+      });
 
-  const handleNoteOff = useCallback((note: string) => {
-    setActiveNotes((prev) => {
-      const next = new Set(prev);
-      next.delete(note);
-      return next;
-    });
-    
-    if (!effects.isMuted) {
-      effects.pianoEngineRef.current?.stop(note);
-    }
-  }, [effects]);
+      if (!effects.isMuted) {
+        effects.pianoEngineRef.current?.play(note, velocity);
+      }
+      effects.onPianoActivity();
+    },
+    [effects],
+  );
+
+  const handleNoteOff = useCallback(
+    (note: string) => {
+      setActiveNotes((prev) => {
+        const next = new Set(prev);
+        next.delete(note);
+        return next;
+      });
+
+      if (!effects.isMuted) {
+        effects.pianoEngineRef.current?.stop(note);
+      }
+    },
+    [effects],
+  );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.repeat) return;
-      
+
       const key = e.key.toLowerCase();
       const keyMap = {
-        'a': 'C', 'w': 'C#', 's': 'D', 'e': 'D#', 'd': 'E',
-        'f': 'F', 't': 'F#', 'g': 'G', 'y': 'G#', 'h': 'A',
-        'u': 'A#', 'j': 'B', 'k': 'C', 'o': 'C#', 'l': 'D',
+        a: "C",
+        w: "C#",
+        s: "D",
+        e: "D#",
+        d: "E",
+        f: "F",
+        t: "F#",
+        g: "G",
+        y: "G#",
+        h: "A",
+        u: "A#",
+        j: "B",
+        k: "C",
+        o: "C#",
+        l: "D",
       };
-      
+
       const noteBase = keyMap[key as keyof typeof keyMap];
       if (!noteBase) return;
-      
+
       const keyId = key;
       if (isKeyDownRef.current.has(keyId)) return;
-      
+
       isKeyDownRef.current.add(keyId);
-      
-      const octave = noteBase === 'C' || noteBase === 'C#' || noteBase === 'D' || noteBase === 'D#' || noteBase === 'E' || noteBase === 'F'
-        ? (key === 'k' || key === 'o' || key === 'l' ? 5 : 4)
-        : 4;
-      
+
+      const octave =
+        noteBase === "C" ||
+        noteBase === "C#" ||
+        noteBase === "D" ||
+        noteBase === "D#" ||
+        noteBase === "E" ||
+        noteBase === "F"
+          ? key === "k" || key === "o" || key === "l"
+            ? 5
+            : 4
+          : 4;
+
       const note = `${noteBase}${octave}`;
       handleNoteOn(note, 0.7);
     };
@@ -121,20 +154,40 @@ export const Footer = memo(function Footer() {
     const handleKeyUp = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
       const keyMap = {
-        'a': 'C', 'w': 'C#', 's': 'D', 'e': 'D#', 'd': 'E',
-        'f': 'F', 't': 'F#', 'g': 'G', 'y': 'G#', 'h': 'A',
-        'u': 'A#', 'j': 'B', 'k': 'C', 'o': 'C#', 'l': 'D',
+        a: "C",
+        w: "C#",
+        s: "D",
+        e: "D#",
+        d: "E",
+        f: "F",
+        t: "F#",
+        g: "G",
+        y: "G#",
+        h: "A",
+        u: "A#",
+        j: "B",
+        k: "C",
+        o: "C#",
+        l: "D",
       };
-      
+
       const noteBase = keyMap[key as keyof typeof keyMap];
       if (!noteBase) return;
-      
+
       isKeyDownRef.current.delete(key);
-      
-      const octave = noteBase === 'C' || noteBase === 'C#' || noteBase === 'D' || noteBase === 'D#' || noteBase === 'E' || noteBase === 'F'
-        ? (key === 'k' || key === 'o' || key === 'l' ? 5 : 4)
-        : 4;
-      
+
+      const octave =
+        noteBase === "C" ||
+        noteBase === "C#" ||
+        noteBase === "D" ||
+        noteBase === "D#" ||
+        noteBase === "E" ||
+        noteBase === "F"
+          ? key === "k" || key === "o" || key === "l"
+            ? 5
+            : 4
+          : 4;
+
       const note = `${noteBase}${octave}`;
       handleNoteOff(note);
     };
@@ -146,14 +199,14 @@ export const Footer = memo(function Footer() {
       isKeyDownRef.current.clear();
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-    window.addEventListener('blur', handleBlur);
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("blur", handleBlur);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
-      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("blur", handleBlur);
     };
   }, [handleNoteOn, handleNoteOff]);
 
@@ -163,19 +216,18 @@ export const Footer = memo(function Footer() {
     <footer className={styles.footer}>
       <div
         className={styles.footerGlow}
-        style={{
-          '--glow-color': themeColor.glow,
-        } as React.CSSProperties}
+        style={
+          {
+            "--glow-color": themeColor.glow,
+          } as React.CSSProperties
+        }
       />
-      
+
       <div className={styles.container}>
         <div className={styles.pianoWrapper}>
           <span className={styles.pianoLabel}>Play a tune</span>
           <div className={styles.footerPiano}>
-            <Piano
-              keyRange={adjustedKeyRange}
-              showLabels={false}
-            />
+            <Piano keyRange={adjustedKeyRange} showLabels={false} />
           </div>
         </div>
 
@@ -219,15 +271,21 @@ export const Footer = memo(function Footer() {
           <div className={styles.themeIndicator}>
             <div
               className={styles.colorDot}
-              style={{
-                '--current-accent': themeColor.accent,
-              } as React.CSSProperties}
+              style={
+                {
+                  "--current-accent": themeColor.accent,
+                } as React.CSSProperties
+              }
             />
-            <span>Keyboard mapping: A-L for white keys (C4-D5), W/E/T/Y/U/O for black keys</span>
+            <span>
+              Keyboard mapping: A-L for white keys (C4-D5), W/E/T/Y/U/O for
+              black keys
+            </span>
           </div>
 
           <p className={styles.copyright}>
-            &copy; {currentYear} <a href="/">haegele.dev</a> — Built with passion
+            &copy; {currentYear} <a href="/">haegele.dev</a> — Built with
+            passion
           </p>
         </div>
       </div>

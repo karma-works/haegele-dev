@@ -1,7 +1,11 @@
-import { memo, useCallback, useState } from 'react';
-import { useEffects } from '../../contexts/EffectsContext.tsx';
-import { useStravaData, type StravaStats, type StravaActivity } from '../../hooks/useStravaData.ts';
-import styles from './StravaCard.module.css';
+import { memo, useCallback, useState } from "react";
+import { useEffects } from "../../contexts/EffectsContext.tsx";
+import {
+  useStravaData,
+  type StravaStats,
+  type StravaActivity,
+} from "../../hooks/useStravaData.ts";
+import styles from "./StravaCard.module.css";
 
 interface StravaCardProps {
   className?: string;
@@ -26,12 +30,12 @@ function formatRelativeDate(dateString: string): string {
   const diffMs = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays === 0) return 'Today';
-  if (diffDays === 1) return 'Yesterday';
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
   if (diffDays < 7) return `${diffDays} days ago`;
-  if (diffDays < 14) return '1 week ago';
+  if (diffDays < 14) return "1 week ago";
   if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
 function StatsDisplay({ stats }: { stats: StravaStats }) {
@@ -39,17 +43,23 @@ function StatsDisplay({ stats }: { stats: StravaStats }) {
     <div className={styles.statsGrid}>
       <div className={styles.statItem}>
         <span className={styles.statLabel}>This Year</span>
-        <span className={styles.statValue}>{formatDistance(stats.ytdDistance)} km</span>
+        <span className={styles.statValue}>
+          {formatDistance(stats.ytdDistance)} km
+        </span>
         <span className={styles.statSub}>{stats.ytdRuns} runs</span>
       </div>
       <div className={styles.statItem}>
         <span className={styles.statLabel}>Last 4 Weeks</span>
-        <span className={styles.statValue}>{formatDistance(stats.recentDistance)} km</span>
+        <span className={styles.statValue}>
+          {formatDistance(stats.recentDistance)} km
+        </span>
         <span className={styles.statSub}>{stats.recentRuns} runs</span>
       </div>
       <div className={styles.statItem}>
         <span className={styles.statLabel}>All Time</span>
-        <span className={styles.statValue}>{formatDistance(stats.totalDistance)} km</span>
+        <span className={styles.statValue}>
+          {formatDistance(stats.totalDistance)} km
+        </span>
         <span className={styles.statSub}>{stats.totalRuns} runs</span>
       </div>
     </div>
@@ -82,13 +92,23 @@ function ActivityItem({ activity }: { activity: StravaActivity }) {
   return (
     <li className={styles.activityItem}>
       <span className={styles.activityName}>{activity.name}</span>
-      <span className={styles.activityDistance}>{formatDistance(activity.distance)} km</span>
-      <span className={styles.activityDate}>{formatRelativeDate(activity.start_date)}</span>
+      <span className={styles.activityDistance}>
+        {formatDistance(activity.distance)} km
+      </span>
+      <span className={styles.activityDate}>
+        {formatRelativeDate(activity.start_date)}
+      </span>
     </li>
   );
 }
 
-function ActivityList({ activities, isStale }: { activities: StravaActivity[]; isStale: boolean }) {
+function ActivityList({
+  activities,
+  isStale,
+}: {
+  activities: StravaActivity[];
+  isStale: boolean;
+}) {
   if (activities.length === 0) {
     return <div className={styles.noActivities}>No recent activities</div>;
   }
@@ -97,7 +117,9 @@ function ActivityList({ activities, isStale }: { activities: StravaActivity[]; i
     <div className={styles.activitiesSection}>
       <div className={styles.activitiesHeader}>
         <span className={styles.activitiesTitle}>Recent Activities</span>
-        {isStale && <span className={styles.staleIndicator}>Using cached data</span>}
+        {isStale && (
+          <span className={styles.staleIndicator}>Using cached data</span>
+        )}
       </div>
       <ul className={styles.activityList} aria-label="Recent activities">
         {activities.slice(0, 3).map((activity) => (
@@ -114,7 +136,10 @@ function PlaceholderActivities() {
       <div className={styles.activitiesHeader}>
         <span className={styles.activitiesTitle}>Recent Activities</span>
       </div>
-      <ul className={styles.activityList} aria-label="Recent activities placeholder">
+      <ul
+        className={styles.activityList}
+        aria-label="Recent activities placeholder"
+      >
         {[1, 2, 3].map((i) => (
           <li key={i} className={styles.activityItem}>
             <span className={styles.activityName}>--</span>
@@ -138,18 +163,19 @@ function ErrorState({ message }: { message: string }) {
 
 function StravaCardBase({ className }: StravaCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const { stats, activities, isLoading, isAvailable, error, isStale } = useStravaData();
-  const { waveSetMode } = useEffects();
+  const { stats, activities, isLoading, isAvailable, error, isStale } =
+    useStravaData();
+  const { waveSetMode, scheduleReturnToIdle } = useEffects();
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
-    waveSetMode('ecg');
+    waveSetMode("ecg");
   }, [waveSetMode]);
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
-    waveSetMode('idle');
-  }, [waveSetMode]);
+    scheduleReturnToIdle();
+  }, [scheduleReturnToIdle]);
 
   const showStats = isAvailable && stats;
   const showActivities = isAvailable;
@@ -157,7 +183,7 @@ function StravaCardBase({ className }: StravaCardProps) {
 
   return (
     <div
-      className={`${styles.card} ${isHovered ? styles.hovered : ''} ${isStale ? styles.stale : ''} ${className ?? ''}`}
+      className={`${styles.card} ${isHovered ? styles.hovered : ""} ${isStale ? styles.stale : ""} ${className ?? ""}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       role="region"
@@ -172,7 +198,9 @@ function StravaCardBase({ className }: StravaCardProps) {
         </div>
         <div className={styles.title}>
           <h3>Running</h3>
-          {!isAvailable && !isLoading && <span className={styles.unavailable}>Connect Strava</span>}
+          {!isAvailable && !isLoading && (
+            <span className={styles.unavailable}>Connect Strava</span>
+          )}
         </div>
       </div>
 
@@ -184,7 +212,11 @@ function StravaCardBase({ className }: StravaCardProps) {
       ) : (
         <>
           {showError && <ErrorState message={error} />}
-          {showStats ? <StatsDisplay stats={stats} /> : !showError && <PlaceholderStats />}
+          {showStats ? (
+            <StatsDisplay stats={stats} />
+          ) : (
+            !showError && <PlaceholderStats />
+          )}
           {showActivities ? (
             <ActivityList activities={activities} isStale={isStale} />
           ) : !showError ? (
