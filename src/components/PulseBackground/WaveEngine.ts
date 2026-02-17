@@ -38,6 +38,7 @@ export class WaveEngine {
   private isVisible: boolean = true;
   private ecgGenerator: ECGWaveGenerator | null = null;
   private ecgPoints: { x: number; y: number }[] = [];
+  private ecgTime: number = 0;
   private oscilloscopePhase: number = 0;
   private audioAnalyzer: AudioAnalyzerServiceImpl | null = null;
   private externalAudioData: TimeDomainData | null = null;
@@ -146,6 +147,7 @@ export class WaveEngine {
   }
 
   private initECG(): void {
+    this.ecgTime = 0;
     if (!this.ecgGenerator) {
       this.ecgGenerator = new ECGWaveGenerator({ bpm: 80 });
       this.ecgGenerator.start();
@@ -212,6 +214,7 @@ export class WaveEngine {
 
     if (this.mode === "ecg" && this.ecgGenerator && !this.reducedMotion) {
       this.ecgGenerator.update(deltaTime);
+      this.ecgTime += deltaTime;
     }
 
     if (this.mode === "oscilloscope" && !this.reducedMotion) {
@@ -244,20 +247,20 @@ export class WaveEngine {
     const centerY = height / 2;
     const amplitude = this.scaling.amplitude * (1 + this.mouseProximity * 0.2);
 
+    const beatsVisible = 4;
     const pointsPerBeat = 150;
+    const totalPoints = pointsPerBeat * beatsVisible;
     const beatDuration = this.ecgGenerator.getBeatDuration();
-    const currentPhase = this.ecgGenerator.getPhase();
+    const timeWindow = beatDuration * beatsVisible;
 
     this.ecgPoints = [];
 
-    for (let i = 0; i < pointsPerBeat; i++) {
-      const phaseOffset = (i / pointsPerBeat) * beatDuration;
-      const time = currentPhase + phaseOffset - beatDuration;
-      const value = this.ecgGenerator.getValueAtTime(
-        time % (beatDuration * 10),
-      );
+    for (let i = 0; i < totalPoints; i++) {
+      const t = i / totalPoints;
+      const time = this.ecgTime - timeWindow + t * timeWindow;
+      const value = this.ecgGenerator.getValueAtTime(time);
 
-      const x = (i / pointsPerBeat) * width;
+      const x = t * width;
       const y = centerY - value * amplitude;
       this.ecgPoints.push({ x, y });
     }
