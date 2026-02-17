@@ -5,7 +5,7 @@ const terminalLines = [
   { type: 'prompt', content: 'whoami' } as const,
   { type: 'output', content: 'Developer | Runner | Problem Solver' } as const,
   { type: 'prompt', content: 'cat skills.txt' } as const,
-  { type: 'output', content: 'TypeScript, React, Java, Go...' } as const,
+  { type: 'output', content: 'Agents, Skills, LLMs, React, Java, Go...' } as const,
 ];
 
 const typewriterText = 'echo "Welcome to my portfolio"';
