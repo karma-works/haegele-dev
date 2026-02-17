@@ -1,8 +1,16 @@
-import { memo, useState, useRef, useCallback, useEffect, type FormEvent, type ChangeEvent } from 'react';
-import { useScrollAnimation } from '../../hooks/useScrollAnimation';
-import { useMagneticHover } from '../../hooks/useMagneticHover';
-import { useReducedMotion } from '../../contexts/ReduceMotionContext';
-import styles from './Contact.module.css';
+import {
+  memo,
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  type FormEvent,
+  type ChangeEvent,
+} from "react";
+import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+import { useMagneticHover } from "../../hooks/useMagneticHover";
+import { useReducedMotion } from "../../contexts/ReduceMotionContext";
+import styles from "./Contact.module.css";
 
 interface FormData {
   name: string;
@@ -34,7 +42,7 @@ interface MagneticInputProps {
 const MagneticInput = memo(function MagneticInput({
   id,
   name,
-  type = 'text',
+  type = "text",
   label,
   value,
   error,
@@ -54,7 +62,7 @@ const MagneticInput = memo(function MagneticInput({
     onBlur();
   };
 
-  const inputClasses = `${styles.input} ${isFocused ? styles.focused : ''} ${error ? styles.error : ''} ${value ? styles.hasValue : ''}`;
+  const inputClasses = `${styles.input} ${isFocused ? styles.focused : ""} ${error ? styles.error : ""} ${value ? styles.hasValue : ""}`;
 
   return (
     <div
@@ -121,11 +129,11 @@ interface Particle {
 }
 
 const PARTICLE_COLORS = [
-  'var(--color-accent-mint)',
-  'var(--color-accent-pink)',
-  'var(--color-accent-blue)',
-  '#fbbf24',
-  '#a78bfa',
+  "var(--color-accent-mint)",
+  "var(--color-accent-pink)",
+  "var(--color-accent-blue)",
+  "#fbbf24",
+  "#a78bfa",
 ];
 
 interface ParticleBurstProps {
@@ -134,7 +142,11 @@ interface ParticleBurstProps {
   onComplete: () => void;
 }
 
-const ParticleBurst = memo(function ParticleBurst({ trigger, origin, onComplete }: ParticleBurstProps) {
+const ParticleBurst = memo(function ParticleBurst({
+  trigger,
+  origin,
+  onComplete,
+}: ParticleBurstProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animationRef = useRef<number | null>(null);
@@ -151,7 +163,7 @@ const ParticleBurst = memo(function ParticleBurst({ trigger, origin, onComplete 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     canvas.width = window.innerWidth;
@@ -165,7 +177,9 @@ const ParticleBurst = memo(function ParticleBurst({ trigger, origin, onComplete 
       vx: (Math.random() - 0.5) * 15,
       vy: (Math.random() - 0.5) * 15 - 5,
       size: Math.random() * 8 + 4,
-      color: PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)] as string,
+      color: PARTICLE_COLORS[
+        Math.floor(Math.random() * PARTICLE_COLORS.length)
+      ] as string,
       life: 0,
       maxLife: Math.random() * 60 + 40,
     }));
@@ -233,32 +247,34 @@ const validateForm = (data: FormData): FormErrors => {
   const errors: FormErrors = {};
 
   if (!data.name.trim()) {
-    errors.name = 'Name is required';
+    errors.name = "Name is required";
   } else if (data.name.trim().length < 2) {
-    errors.name = 'Name must be at least 2 characters';
+    errors.name = "Name must be at least 2 characters";
   }
 
   if (!data.email.trim()) {
-    errors.email = 'Email is required';
+    errors.email = "Email is required";
   } else if (!validateEmail(data.email)) {
-    errors.email = 'Please enter a valid email address';
+    errors.email = "Please enter a valid email address";
   }
 
   if (!data.message.trim()) {
-    errors.message = 'Message is required';
+    errors.message = "Message is required";
   } else if (data.message.trim().length < 10) {
-    errors.message = 'Message must be at least 10 characters';
+    errors.message = "Message must be at least 10 characters";
   }
 
   return errors;
 };
 
 export const Contact = memo(function Contact() {
-  const [containerRef, isVisible] = useScrollAnimation<HTMLDivElement>({ threshold: 0.2 });
+  const [containerRef, isVisible] = useScrollAnimation<HTMLDivElement>({
+    threshold: 0.2,
+  });
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    message: '',
+    name: "",
+    email: "",
+    message: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -268,49 +284,72 @@ export const Contact = memo(function Contact() {
   const [particleOrigin, setParticleOrigin] = useState({ x: 0, y: 0 });
   const submitRef = useRef<HTMLButtonElement>(null);
 
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    
-    if (touched[name]) {
-      const newErrors = validateForm({ ...formData, [name]: value });
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
+
+      if (touched[name]) {
+        const newErrors = validateForm({ ...formData, [name]: value });
+        setErrors((prev) => ({ ...prev, [name]: newErrors[name] }));
+      }
+    },
+    [formData, touched],
+  );
+
+  const handleBlur = useCallback(
+    (name: string) => {
+      setTouched((prev) => ({ ...prev, [name]: true }));
+      const newErrors = validateForm(formData);
       setErrors((prev) => ({ ...prev, [name]: newErrors[name] }));
-    }
-  }, [formData, touched]);
+    },
+    [formData],
+  );
 
-  const handleBlur = useCallback((name: string) => {
-    setTouched((prev) => ({ ...prev, [name]: true }));
-    const newErrors = validateForm(formData);
-    setErrors((prev) => ({ ...prev, [name]: newErrors[name] }));
-  }, [formData]);
+  const handleSubmit = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
 
-  const handleSubmit = useCallback(async (e: FormEvent) => {
-    e.preventDefault();
+      const newErrors = validateForm(formData);
+      setErrors(newErrors);
+      setTouched({ name: true, email: true, message: true });
 
-    const newErrors = validateForm(formData);
-    setErrors(newErrors);
-    setTouched({ name: true, email: true, message: true });
+      if (Object.keys(newErrors).length > 0) return;
 
-    if (Object.keys(newErrors).length > 0) return;
+      setIsSubmitting(true);
 
-    setIsSubmitting(true);
+      try {
+        const response = await fetch("https://formspree.io/f/xzdaglva", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+        if (!response.ok) {
+          throw new Error("Failed to send message");
+        }
+      } catch (error) {
+        setIsSubmitting(false);
+        setErrors({ message: "Failed to send message. Please try again." });
+        return;
+      }
 
-    if (submitRef.current) {
-      const rect = submitRef.current.getBoundingClientRect();
-      setParticleOrigin({
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2,
-      });
-    }
+      if (submitRef.current) {
+        const rect = submitRef.current.getBoundingClientRect();
+        setParticleOrigin({
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+        });
+      }
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setShowParticles(true);
-    setFormData({ name: '', email: '', message: '' });
-    setTouched({});
-  }, [formData]);
+      setIsSubmitting(false);
+      setIsSuccess(true);
+      setShowParticles(true);
+      setFormData({ name: "", email: "", message: "" });
+      setTouched({});
+    },
+    [formData],
+  );
 
   const handleParticleComplete = useCallback(() => {
     setShowParticles(false);
@@ -318,7 +357,7 @@ export const Contact = memo(function Contact() {
 
   const handleReset = useCallback(() => {
     setIsSuccess(false);
-    setFormData({ name: '', email: '', message: '' });
+    setFormData({ name: "", email: "", message: "" });
     setErrors({});
     setTouched({});
   }, []);
@@ -327,27 +366,34 @@ export const Contact = memo(function Contact() {
     <section id="contact" className={styles.section}>
       <div
         ref={containerRef}
-        className={`${styles.container} ${isVisible ? styles.visible : ''}`}
+        className={`${styles.container} ${isVisible ? styles.visible : ""}`}
       >
         <h2 className={styles.title}>
           <span className={styles.titleAccent}>//</span> Get In Touch
         </h2>
 
         <p className={styles.subtitle}>
-          Have a project in mind or just want to chat? I'd love to hear from you.
+          Have a project in mind or just want to chat? I'd love to hear from
+          you.
         </p>
 
         {isSuccess ? (
           <div className={styles.successMessage}>
             <div className={styles.successIcon}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                 <polyline points="22 4 12 14.01 9 11.01" />
               </svg>
             </div>
             <h3 className={styles.successTitle}>Message Sent!</h3>
             <p className={styles.successText}>
-              Thank you for reaching out. I'll get back to you as soon as possible.
+              Thank you for reaching out. I'll get back to you as soon as
+              possible.
             </p>
             <button
               onClick={handleReset}
@@ -368,7 +414,7 @@ export const Contact = memo(function Contact() {
               placeholder="Your name"
               required
               onChange={handleChange}
-              onBlur={() => handleBlur('name')}
+              onBlur={() => handleBlur("name")}
             />
 
             <MagneticInput
@@ -381,7 +427,7 @@ export const Contact = memo(function Contact() {
               placeholder="your@email.com"
               required
               onChange={handleChange}
-              onBlur={() => handleBlur('email')}
+              onBlur={() => handleBlur("email")}
             />
 
             <MagneticInput
@@ -394,7 +440,7 @@ export const Contact = memo(function Contact() {
               required
               multiline
               onChange={handleChange}
-              onBlur={() => handleBlur('message')}
+              onBlur={() => handleBlur("message")}
             />
 
             <div className={styles.submitWrapper}>
@@ -406,7 +452,12 @@ export const Contact = memo(function Contact() {
               >
                 {isSubmitting ? (
                   <span className={styles.spinner}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
                       <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
                       <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
                     </svg>
@@ -414,7 +465,13 @@ export const Contact = memo(function Contact() {
                 ) : (
                   <>
                     Send Message
-                    <svg className={styles.sendIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg
+                      className={styles.sendIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
                       <line x1="22" y1="2" x2="11" y2="13" />
                       <polygon points="22 2 15 22 11 13 2 9 22 2" />
                     </svg>
@@ -425,9 +482,7 @@ export const Contact = memo(function Contact() {
           </form>
         )}
 
-        <div className={styles.socialLinks}>
-        
-        </div>
+        <div className={styles.socialLinks}></div>
       </div>
 
       <ParticleBurst
