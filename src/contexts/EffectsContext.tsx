@@ -9,10 +9,13 @@ import {
   type MutableRefObject,
 } from 'react';
 import { getPianoEngine } from '../audio/PianoEngine';
+import type { WaveMode } from '../types/index.ts';
 
 export interface WaveEngine {
   pluck(intensity: number): void;
   setHeartbeat(active: boolean): void;
+  setMode(mode: WaveMode): void;
+  getMode(): WaveMode;
   setColor(color: string): void;
   updateViewport(width: number, height: number): void;
   destroy(): void;
@@ -28,6 +31,7 @@ export interface PianoEngine {
 export interface EffectsController {
   wavePluck(intensity: number): void;
   waveSetHeartbeat(active: boolean): void;
+  waveSetMode(mode: WaveMode): void;
   isMuted: boolean;
   setIsMuted(value: boolean): void;
   activeSection: string;
@@ -64,6 +68,10 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
 
   const waveSetHeartbeat = useCallback((active: boolean) => {
     waveEngineRef.current?.setHeartbeat(active);
+  }, []);
+
+  const waveSetMode = useCallback((mode: WaveMode) => {
+    waveEngineRef.current?.setMode(mode);
   }, []);
 
   const handleSetIsMuted = useCallback((value: boolean) => {
@@ -107,6 +115,7 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
   const value: EffectsController = {
     wavePluck,
     waveSetHeartbeat,
+    waveSetMode,
     isMuted,
     setIsMuted: handleSetIsMuted,
     activeSection,

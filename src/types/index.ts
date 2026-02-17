@@ -17,4 +17,5 @@ export interface WaveScaling {
   glowRadius: number;
 }
 
-export type WaveState = 'idle' | 'heartbeat' | 'plucked';
+export type WaveMode = 'idle' | 'ecg' | 'oscilloscope';
+export type WaveState = WaveMode | 'plucked';

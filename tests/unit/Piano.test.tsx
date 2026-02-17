@@ -13,6 +13,8 @@ const mockPianoEngine = {
 const mockWaveEngine = {
   pluck: vi.fn(),
   setHeartbeat: vi.fn(),
+  setMode: vi.fn(),
+  getMode: vi.fn().mockReturnValue('idle'),
   setColor: vi.fn(),
   updateViewport: vi.fn(),
   destroy: vi.fn(),

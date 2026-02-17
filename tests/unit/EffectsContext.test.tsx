@@ -32,6 +32,7 @@ describe('EffectsContext', () => {
       expect(effectsController).toBeDefined();
       expect(effectsController?.wavePluck).toBeTypeOf('function');
       expect(effectsController?.waveSetHeartbeat).toBeTypeOf('function');
+      expect(effectsController?.waveSetMode).toBeTypeOf('function');
       expect(effectsController?.isMuted).toBe(false);
       expect(effectsController?.activeSection).toBe('hero');
     });
@@ -50,6 +51,8 @@ describe('EffectsContext', () => {
       const mockEngine = {
         pluck: vi.fn(),
         setHeartbeat: vi.fn(),
+        setMode: vi.fn(),
+        getMode: vi.fn().mockReturnValue('idle'),
         setColor: vi.fn(),
         updateViewport: vi.fn(),
         destroy: vi.fn(),
@@ -75,6 +78,8 @@ describe('EffectsContext', () => {
       const mockEngine = {
         pluck: vi.fn(),
         setHeartbeat: vi.fn(),
+        setMode: vi.fn(),
+        getMode: vi.fn().mockReturnValue('idle'),
         setColor: vi.fn(),
         updateViewport: vi.fn(),
         destroy: vi.fn(),
@@ -84,6 +89,58 @@ describe('EffectsContext', () => {
       effectsController!.waveSetHeartbeat(true);
 
       expect(mockEngine.setHeartbeat).toHaveBeenCalledWith(true);
+    });
+  });
+
+  describe('waveSetMode', () => {
+    it('calls engine setMode method when waveEngineRef is set', () => {
+      let effectsController: ReturnType<typeof useEffects> | undefined;
+      
+      render(
+        <EffectsProvider>
+          <TestComponent onEffects={(e) => { effectsController = e; }} />
+        </EffectsProvider>
+      );
+
+      const mockEngine = {
+        pluck: vi.fn(),
+        setHeartbeat: vi.fn(),
+        setMode: vi.fn(),
+        getMode: vi.fn().mockReturnValue('idle'),
+        setColor: vi.fn(),
+        updateViewport: vi.fn(),
+        destroy: vi.fn(),
+      };
+
+      effectsController!.waveEngineRef.current = mockEngine;
+      effectsController!.waveSetMode('ecg');
+
+      expect(mockEngine.setMode).toHaveBeenCalledWith('ecg');
+    });
+
+    it('supports oscilloscope mode', () => {
+      let effectsController: ReturnType<typeof useEffects> | undefined;
+      
+      render(
+        <EffectsProvider>
+          <TestComponent onEffects={(e) => { effectsController = e; }} />
+        </EffectsProvider>
+      );
+
+      const mockEngine = {
+        pluck: vi.fn(),
+        setHeartbeat: vi.fn(),
+        setMode: vi.fn(),
+        getMode: vi.fn().mockReturnValue('idle'),
+        setColor: vi.fn(),
+        updateViewport: vi.fn(),
+        destroy: vi.fn(),
+      };
+
+      effectsController!.waveEngineRef.current = mockEngine;
+      effectsController!.waveSetMode('oscilloscope');
+
+      expect(mockEngine.setMode).toHaveBeenCalledWith('oscilloscope');
     });
   });
 });

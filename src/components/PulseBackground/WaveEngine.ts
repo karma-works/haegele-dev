@@ -1,6 +1,7 @@
 import type { WavePoint, WaveConfig } from '../../utils/waveMath.ts';
 import { sineWave, lerpColor, lerp } from '../../utils/waveMath.ts';
-import type { WaveScaling, WaveState } from '../../types/index.ts';
+import type { WaveScaling, WaveState, WaveMode } from '../../types/index.ts';
+import { ECGWaveGenerator } from '../../utils/ECGWaveGenerator.ts';
 
 interface WaveEngineConfig {
   canvas: HTMLCanvasElement;
@@ -22,16 +23,18 @@ export class WaveEngine {
   private colorProgress: number = 0;
   private targetColorProgress: number = 0;
   private state: WaveState = 'idle';
+  private mode: WaveMode = 'idle';
   private animationId: number | null = null;
   private lastTime: number = 0;
   private pluckIntensity: number = 0;
-  private heartbeatActive: boolean = false;
-  private heartbeatPhase: number = 0;
   private reducedMotion: boolean = false;
   private mouseProximity: number = 0;
   private targetMouseProximity: number = 0;
   private onAnimationTick?: () => void;
   private isVisible: boolean = true;
+  private ecgGenerator: ECGWaveGenerator | null = null;
+  private ecgPoints: { x: number; y: number }[] = [];
+  private oscilloscopePhase: number = 0;
 
   constructor(options: WaveEngineConfig) {
     this.canvas = options.canvas;
@@ -63,8 +66,28 @@ export class WaveEngine {
   }
 
   setHeartbeat(active: boolean): void {
-    this.heartbeatActive = active;
-    this.state = active ? 'heartbeat' : 'idle';
+    this.setMode(active ? 'ecg' : 'idle');
+  }
+
+  setMode(mode: WaveMode): void {
+    if (this.mode === mode) return;
+    
+    this.mode = mode;
+    this.state = mode;
+
+    if (mode === 'ecg') {
+      this.initECG();
+    } else {
+      this.destroyECG();
+    }
+
+    if (mode === 'oscilloscope') {
+      this.oscilloscopePhase = 0;
+    }
+  }
+
+  getMode(): WaveMode {
+    return this.mode;
   }
 
   setColor(color: string): void {
@@ -105,6 +128,22 @@ export class WaveEngine {
       cancelAnimationFrame(this.animationId);
       this.animationId = null;
     }
+    this.destroyECG();
+  }
+
+  private initECG(): void {
+    if (!this.ecgGenerator) {
+      this.ecgGenerator = new ECGWaveGenerator({ bpm: 80 });
+      this.ecgGenerator.start();
+    }
+  }
+
+  private destroyECG(): void {
+    if (this.ecgGenerator) {
+      this.ecgGenerator.destroy();
+      this.ecgGenerator = null;
+      this.ecgPoints = [];
+    }
   }
 
   private start(): void {
@@ -141,12 +180,16 @@ export class WaveEngine {
       this.pluckIntensity *= 0.95;
       if (this.pluckIntensity < 0.01) {
         this.pluckIntensity = 0;
-        this.state = this.heartbeatActive ? 'heartbeat' : 'idle';
+        this.state = this.mode;
       }
     }
 
-    if (this.state === 'heartbeat' && !this.reducedMotion) {
-      this.heartbeatPhase += deltaTime * 1.3;
+    if (this.mode === 'ecg' && this.ecgGenerator && !this.reducedMotion) {
+      this.ecgGenerator.update(deltaTime);
+    }
+
+    if (this.mode === 'oscilloscope' && !this.reducedMotion) {
+      this.oscilloscopePhase += deltaTime * 2;
     }
   }
 
@@ -154,8 +197,68 @@ export class WaveEngine {
     const { width, height } = this.canvas;
     this.ctx.clearRect(0, 0, width, height);
 
-    const points = this.generatePoints();
-    this.drawWave(points);
+    if (this.mode === 'ecg') {
+      this.renderECG();
+    } else if (this.mode === 'oscilloscope') {
+      this.renderOscilloscope();
+    } else {
+      const points = this.generatePoints();
+      this.drawWave(points);
+    }
+  }
+
+  private renderECG(): void {
+    if (!this.ecgGenerator || this.reducedMotion) {
+      const points = this.generatePoints();
+      this.drawWave(points);
+      return;
+    }
+
+    const { width, height } = this.canvas;
+    const centerY = height / 2;
+    const amplitude = this.scaling.amplitude * (1 + this.mouseProximity * 0.2);
+    
+    const pointsPerBeat = 150;
+    const beatDuration = this.ecgGenerator.getBeatDuration();
+    const currentPhase = this.ecgGenerator.getPhase();
+    
+    this.ecgPoints = [];
+    
+    for (let i = 0; i < pointsPerBeat; i++) {
+      const phaseOffset = (i / pointsPerBeat) * beatDuration;
+      const time = currentPhase + phaseOffset - beatDuration;
+      const value = this.ecgGenerator.getValueAtTime(time % (beatDuration * 10));
+      
+      const x = (i / pointsPerBeat) * width;
+      const y = centerY - value * amplitude;
+      this.ecgPoints.push({ x, y });
+    }
+    
+    this.drawWavePoints(this.ecgPoints);
+  }
+
+  private renderOscilloscope(): void {
+    const { width, height } = this.canvas;
+    const centerY = height / 2;
+    const amplitude = this.scaling.amplitude * (1 + this.mouseProximity * 0.3);
+    
+    const points: { x: number; y: number }[] = [];
+    const pointCount = Math.max(50, Math.round(width / 3));
+    
+    for (let i = 0; i < pointCount; i++) {
+      const x = (i / pointCount) * width;
+      const t = (i / pointCount) * Math.PI * 4 + this.oscilloscopePhase;
+      
+      const freq1 = Math.sin(t);
+      const freq2 = Math.sin(t * 2.3 + this.oscilloscopePhase * 0.5) * 0.3;
+      const freq3 = Math.sin(t * 0.7 - this.oscilloscopePhase * 0.3) * 0.2;
+      const value = (freq1 + freq2 + freq3) / 1.5;
+      
+      const y = centerY - value * amplitude;
+      points.push({ x, y });
+    }
+    
+    this.drawWavePoints(points);
   }
 
   private generatePoints(): WavePoint[] {
@@ -169,11 +272,6 @@ export class WaveEngine {
         effectiveAmplitude *= 1 + this.pluckIntensity * 0.5;
       }
 
-      if (this.state === 'heartbeat') {
-        const heartbeatOffset = Math.sin(this.heartbeatPhase * Math.PI * 2) * 0.3;
-        effectiveAmplitude *= 1 + heartbeatOffset;
-      }
-
       effectiveAmplitude *= 1 + this.mouseProximity * 0.2;
     }
 
@@ -181,6 +279,46 @@ export class WaveEngine {
       ...this.config,
       amplitude: effectiveAmplitude,
     });
+  }
+
+  private drawWavePoints(points: { x: number; y: number }[]): void {
+    if (points.length < 2) return;
+
+    const first = points[0];
+    if (!first) return;
+
+    this.ctx.save();
+
+    this.ctx.strokeStyle = this.currentColor;
+    this.ctx.lineWidth = this.scaling.strokeWidth;
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
+
+    if (!this.reducedMotion) {
+      this.ctx.shadowColor = this.currentColor;
+      this.ctx.shadowBlur = this.scaling.glowRadius * (1 + this.mouseProximity * 0.5);
+    }
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(first.x, first.y);
+
+    for (let i = 1; i < points.length - 2; i++) {
+      const current = points[i];
+      const next = points[i + 1];
+      if (!current || !next) continue;
+      const xc = (current.x + next.x) / 2;
+      const yc = (current.y + next.y) / 2;
+      this.ctx.quadraticCurveTo(current.x, current.y, xc, yc);
+    }
+
+    const last = points[points.length - 1];
+    const secondLast = points[points.length - 2];
+    if (last && secondLast) {
+      this.ctx.quadraticCurveTo(secondLast.x, secondLast.y, last.x, last.y);
+    }
+
+    this.ctx.stroke();
+    this.ctx.restore();
   }
 
   private drawWave(points: WavePoint[]): void {

@@ -40,6 +40,10 @@
 - Viewport: `page.setViewportSize({ width, height })`
 - Reduced motion: `page.emulateMedia({ reducedMotion: 'reduce' })`
 
+### Signal Generators
+- Singleton pattern: `getGenerator()` + `destroyGenerator()` for lazy initialization with test cleanup
+- Gaussian waves: use `width / 2.355` to convert FWHM to sigma for bell curves
+
 ## Gotchas
 
 ### Event Handlers
@@ -57,6 +61,7 @@
 - Mock EffectsContext: include `initPianoEngine: vi.fn()` in mock value
 - Dynamic hooks: `vi.doMock()` + `vi.resetModules()` + dynamic `await import()` pattern
 - Cleanup: `afterEach(() => cleanup())` between test cases
+- Private methods: access via bracket notation for testing internals (e.g., `instance['privateMethod']()`)
 
 ### Styling
 - CSS custom properties: type cast as `{'--my-var': 'value'} as CSSProperties`
@@ -64,6 +69,13 @@
 
 ### Piano Audio
 - Salamander samples: file names use 'Ds'/'Fs' format (e.g., `Ds2.mp3` not `D#2.mp3`)
+
+### Canvas
+- Shadow effects: reset `ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0` after drawing to prevent visual bleed
+
+### Web Audio
+- AudioContext requires user gesture (click/tap) to start - browsers block autoplay
+- Tone.js context: extract native AudioContext via `'native' in rawContext ? rawContext.native : rawContext` pattern
 
 ### Deployment
 - Vercel: requires `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` secrets
