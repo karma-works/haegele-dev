@@ -266,24 +266,26 @@ export const Projects = memo(function Projects() {
         <div className={styles.timeline}>
           <div className={styles.timelineLine} data-visible={isVisible} />
 
-          {projects.map((project, index) => {
-            const side = index % 2 === 0 ? "left" : "right";
-            return (
-              <div key={project.id} className={styles.timelineItem}>
-                <TimelineNode index={index} isVisible={isVisible} />
-                <div
-                  className={`${styles.cardWrapper} ${side === "right" ? styles.wrapperRight : styles.wrapperLeft}`}
-                >
-                  <ProjectCard
-                    project={project}
-                    index={index}
-                    isVisible={isVisible}
-                    side={side}
-                  />
+          {projects
+            .filter((p) => p.status !== "archived")
+            .map((project, index) => {
+              const side = index % 2 === 0 ? "left" : "right";
+              return (
+                <div key={project.id} className={styles.timelineItem}>
+                  <TimelineNode index={index} isVisible={isVisible} />
+                  <div
+                    className={`${styles.cardWrapper} ${side === "right" ? styles.wrapperRight : styles.wrapperLeft}`}
+                  >
+                    <ProjectCard
+                      project={project}
+                      index={index}
+                      isVisible={isVisible}
+                      side={side}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
 
           <div className={styles.timelineEnd}>
             <div

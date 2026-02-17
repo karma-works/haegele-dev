@@ -1,0 +1,56 @@
+import { memo } from "react";
+import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+import { useReducedMotion } from "../../contexts/ReduceMotionContext";
+import { TombstoneCard } from "./TombstoneCard";
+import { graveyardProjects } from "./graveyardData";
+import styles from "./Graveyard.module.css";
+
+export const Graveyard = memo(function Graveyard() {
+  const [containerRef, isVisible] = useScrollAnimation<HTMLDivElement>({
+    threshold: 0.15,
+  });
+  const { isReducedMotion } = useReducedMotion();
+
+  return (
+    <section id="graveyard" className={styles.section}>
+      <div
+        ref={containerRef}
+        className={`${styles.container} ${isVisible ? styles.visible : ""}`}
+      >
+        <header className={styles.header}>
+          <h2 className={styles.title}>
+            <span className={styles.titleAccent}>$</span> git reflog
+          </h2>
+          <p className={styles.subtitle}>
+            Where ideas go to rest in peace. Failed experiments, abandoned
+            dreams, and lessons learned the hard way.
+          </p>
+        </header>
+
+        <div className={styles.graveyard}>
+          <div className={styles.fog} />
+
+          {graveyardProjects.map((project, index) => (
+            <TombstoneCard
+              key={project.id}
+              project={project}
+              isVisible={isVisible}
+              index={index}
+            />
+          ))}
+        </div>
+
+        <footer className={styles.footer}>
+          <p className={styles.footerText}>
+            "The only real mistake is the one from which we learn nothing."
+          </p>
+          <p className={styles.footerAuthor}>— Henry Ford</p>
+        </footer>
+      </div>
+
+      <div className={styles.grainOverlay} />
+    </section>
+  );
+});
+
+export default Graveyard;
