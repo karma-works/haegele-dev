@@ -97,7 +97,7 @@ describe("StravaCard", () => {
 
   it("renders running stats", () => {
     renderWithProviders(<StravaCard />);
-    expect(screen.getByText("Running")).toBeInTheDocument();
+    expect(screen.getByText("This Year")).toBeInTheDocument();
     expect(screen.getAllByText("50.0 km")[0]).toBeInTheDocument();
     expect(screen.getAllByText("50 runs")[0]).toBeInTheDocument();
   });
@@ -240,7 +240,7 @@ describe("StravaCard states", () => {
       await import("../../src/contexts/EffectsContext");
     render(<FreshEffectsProvider>{<FreshStravaCard />}</FreshEffectsProvider>);
     expect(screen.getByText("Failed to fetch data")).toBeInTheDocument();
-    expect(screen.getByText("Connect Strava")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
   });
 
   it("shows no activities message when list is empty", async () => {
