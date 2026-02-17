@@ -1,14 +1,86 @@
 {
   "stats": {
-    "totalDistance": 0,
-    "totalRuns": 0,
-    "totalTime": 0,
-    "ytdDistance": 0,
-    "ytdRuns": 0,
+    "totalDistance": 7204,
+    "totalRuns": 1,
+    "totalTime": 3031,
+    "ytdDistance": 7204,
+    "ytdRuns": 1,
     "recentDistance": 0,
     "recentRuns": 0
   },
-  "recentActivities": [],
-  "lastUpdated": "2026-02-17T06:56:41.697Z",
-  "expiresAt": "2026-02-17T12:56:41.697Z"
+  "recentActivities": [
+    {
+      "resource_state": 2,
+      "athlete": {
+        "id": 204384807,
+        "resource_state": 1
+      },
+      "name": "Lunch Trail Run",
+      "distance": 7204,
+      "moving_time": 3031,
+      "elapsed_time": 3068,
+      "total_elevation_gain": 178,
+      "type": "Run",
+      "sport_type": "TrailRun",
+      "workout_type": null,
+      "device_name": "Garmin Forerunner 255",
+      "id": 17426118764,
+      "start_date": "2026-02-17T10:44:57Z",
+      "start_date_local": "2026-02-17T11:44:57Z",
+      "timezone": "(GMT+01:00) Europe/Zurich",
+      "utc_offset": 3600,
+      "location_city": null,
+      "location_state": null,
+      "location_country": null,
+      "achievement_count": 0,
+      "kudos_count": 0,
+      "comment_count": 0,
+      "athlete_count": 1,
+      "photo_count": 0,
+      "map": {
+        "id": "a17426118764",
+        "summary_polyline": "ilbaHwccs@?XDZARHdAAJwATOEGKAUEcBGsAAcAG{@F[?_@Km@Gy@ImFA_AGWGCOAeBHeA@sBC_AEe@@UAs@Dm@?SB{@@eAJIAGGa@eAc@aA]oA_@iAe@eAGYBUFKPIXAx@BTEL?PG`@WXg@Ts@D_@Pu@l@qBT_AFYFQXc@d@g@f@y@Zo@f@m@Pc@b@u@xAwCJo@\\uD?e@RgEEoAGe@GkACEOHIHYHo@?YIK@MBCBEP?FHTEHKMEWDc@DMvAqCRi@B[@iAGuC@k@Jg@b@aA@QCqAEc@gAcDO]Kg@Bg@Pc@?IIOw@B[KO?M?QH_@HG?]Bq@AEAEG?Mf@sAf@}@v@s@z@e@t@_A|AoAz@{@`@YTI\\YPW^[JO@ICGqBcDCg@Fs@lA}FNiADsAL]NKdAkAbA}@LGVGV?f@El@?x@QRB\\L|@h@t@j@b@Vb@Rt@NH@VCHI^m@Rk@Hq@?g@Cm@]mBA[B[Vk@b@y@Jq@Bk@FQBADDNh@LLL?HGLOJYDELd@Gb@?VM`AMbBLtAf@|CPrA@v@EVA`ACNAn@Mr@MZ?FCLMXi@dAWXa@\\IRKNIZORo@DIFAJDHXRj@XZVx@|A^dAh@|B\\|@Lh@Jz@d@|BBVBnAHnADhAA\\B\\ZZNV@JFJ\\fAt@zAFD\\ED@H|@^pANbBJRRDfACZH`@b@BPEHSN{Aj@CFH`@Rb@d@tABLGPEDm@\\]XcBbA]^eBfCy@`BW|@a@b@KNCd@?t@MRRVFJAj@CFKLI@ULKPCF?LDPTX\\r@j@xBVr@@RIZIHgBx@QLG?g@RWNg@N_ADODO?q@Tw@FGF@RFTNtARjAKb@m@p@OXKVAPHhARlADt@RxAARGRE@aAEGBSPSBm@@a@CQ@GFCJ^nII`ANlCDlBLtB?\\AJGFW@iAKg@?KBc@A[BGGCKCm@E]",
+        "resource_state": 2
+      },
+      "trainer": false,
+      "commute": false,
+      "manual": false,
+      "private": false,
+      "visibility": "everyone",
+      "flagged": false,
+      "gear_id": null,
+      "start_latlng": [
+        47.53,
+        8.54
+      ],
+      "end_latlng": [
+        47.53,
+        8.54
+      ],
+      "average_speed": 2.377,
+      "max_speed": 4.16,
+      "average_cadence": 90.5,
+      "average_watts": 290.2,
+      "max_watts": 486,
+      "weighted_average_watts": 299,
+      "device_watts": true,
+      "kilojoules": 879.9,
+      "has_heartrate": true,
+      "average_heartrate": 154.8,
+      "max_heartrate": 174,
+      "heartrate_opt_out": false,
+      "display_hide_heartrate_option": true,
+      "elev_high": 535.8,
+      "elev_low": 435.6,
+      "upload_id": 18523188816,
+      "upload_id_str": "18523188816",
+      "external_id": "garmin_ping_536392090614",
+      "from_accepted_tag": false,
+      "pr_count": 0,
+      "total_photo_count": 0,
+      "has_kudoed": false
+    }
+  ],
+  "lastUpdated": "2026-02-17T12:59:39.730Z",
+  "expiresAt": "2026-02-17T18:59:39.730Z"
 }
