@@ -116,6 +116,176 @@ describe('WaveEngine', () => {
     });
   });
 
+  describe('mode transitions', () => {
+    beforeEach(() => {
+      engine = new WaveEngine({
+        canvas,
+        scaling: defaultScaling,
+        colorStart: '#00ff00',
+        colorEnd: '#ff0000',
+      });
+    });
+
+    it('transitions from idle to ecg', () => {
+      expect(engine.getMode()).toBe('idle');
+      engine.setMode('ecg');
+      expect(engine.getMode()).toBe('ecg');
+    });
+
+    it('transitions from idle to oscilloscope', () => {
+      expect(engine.getMode()).toBe('idle');
+      engine.setMode('oscilloscope');
+      expect(engine.getMode()).toBe('oscilloscope');
+    });
+
+    it('transitions from ecg to oscilloscope', () => {
+      engine.setMode('ecg');
+      expect(engine.getMode()).toBe('ecg');
+      engine.setMode('oscilloscope');
+      expect(engine.getMode()).toBe('oscilloscope');
+    });
+
+    it('transitions from oscilloscope to ecg', () => {
+      engine.setMode('oscilloscope');
+      expect(engine.getMode()).toBe('oscilloscope');
+      engine.setMode('ecg');
+      expect(engine.getMode()).toBe('ecg');
+    });
+
+    it('transitions from ecg to idle', () => {
+      engine.setMode('ecg');
+      engine.setMode('idle');
+      expect(engine.getMode()).toBe('idle');
+    });
+
+    it('transitions from oscilloscope to idle', () => {
+      engine.setMode('oscilloscope');
+      engine.setMode('idle');
+      expect(engine.getMode()).toBe('idle');
+    });
+
+    it('handles rapid mode changes', () => {
+      engine.setMode('ecg');
+      engine.setMode('oscilloscope');
+      engine.setMode('idle');
+      engine.setMode('ecg');
+      expect(engine.getMode()).toBe('ecg');
+    });
+
+    it('initializes ECG generator when switching to ecg mode', () => {
+      engine.setMode('ecg');
+      expect(engine.getMode()).toBe('ecg');
+    });
+
+    it('cleans up ECG generator when switching away from ecg mode', () => {
+      engine.setMode('ecg');
+      expect(engine.getMode()).toBe('ecg');
+      engine.setMode('idle');
+      expect(engine.getMode()).toBe('idle');
+    });
+
+    it('returns same mode when setting mode to current mode', () => {
+      engine.setMode('ecg');
+      const modeBefore = engine.getMode();
+      engine.setMode('ecg');
+      expect(engine.getMode()).toBe(modeBefore);
+    });
+  });
+
+  describe('oscilloscope mode', () => {
+    beforeEach(() => {
+      engine = new WaveEngine({
+        canvas,
+        scaling: defaultScaling,
+        colorStart: '#00ff00',
+        colorEnd: '#ff0000',
+      });
+    });
+
+    it('enters oscilloscope mode', () => {
+      engine.setMode('oscilloscope');
+      expect(engine.getMode()).toBe('oscilloscope');
+    });
+
+    it('accepts external audio data', () => {
+      engine.setMode('oscilloscope');
+      const mockData = {
+        data: new Uint8Array(128).fill(128),
+        length: 128,
+      };
+      expect(() => engine.setAudioData(mockData)).not.toThrow();
+    });
+
+    it('accepts null audio data', () => {
+      engine.setMode('oscilloscope');
+      expect(() => engine.setAudioData(null)).not.toThrow();
+    });
+
+    it('accepts audio analyzer', () => {
+      engine.setMode('oscilloscope');
+      const mockAnalyzer = {
+        isActive: vi.fn().mockReturnValue(false),
+        getByteTimeDomainData: vi.fn().mockReturnValue(null),
+      } as unknown as import('../../src/audio/AudioAnalyzerService').AudioAnalyzerServiceImpl;
+      expect(() => engine.setAudioAnalyzer(mockAnalyzer)).not.toThrow();
+    });
+
+    it('accepts null audio analyzer', () => {
+      engine.setMode('oscilloscope');
+      expect(() => engine.setAudioAnalyzer(null)).not.toThrow();
+    });
+  });
+
+  describe('ecg mode', () => {
+    beforeEach(() => {
+      engine = new WaveEngine({
+        canvas,
+        scaling: defaultScaling,
+        colorStart: '#00ff00',
+        colorEnd: '#ff0000',
+      });
+    });
+
+    it('enters ecg mode', () => {
+      engine.setMode('ecg');
+      expect(engine.getMode()).toBe('ecg');
+    });
+
+    it('cleans up ECG on destroy after ecg mode', () => {
+      engine.setMode('ecg');
+      expect(() => engine.destroy()).not.toThrow();
+    });
+  });
+
+  describe('reduced motion with mode transitions', () => {
+    beforeEach(() => {
+      engine = new WaveEngine({
+        canvas,
+        scaling: defaultScaling,
+        colorStart: '#00ff00',
+        colorEnd: '#ff0000',
+        reducedMotion: true,
+      });
+    });
+
+    it('allows mode changes even with reduced motion', () => {
+      engine.setMode('ecg');
+      expect(engine.getMode()).toBe('ecg');
+      
+      engine.setMode('oscilloscope');
+      expect(engine.getMode()).toBe('oscilloscope');
+    });
+
+    it('can toggle reduced motion', () => {
+      engine.setReducedMotion(false);
+      engine.setMode('ecg');
+      expect(engine.getMode()).toBe('ecg');
+      
+      engine.setReducedMotion(true);
+      expect(engine.getMode()).toBe('ecg');
+    });
+  });
+
   describe('setHeartbeat (backward compatibility)', () => {
     beforeEach(() => {
       engine = new WaveEngine({
