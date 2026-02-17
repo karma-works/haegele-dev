@@ -1,8 +1,11 @@
-import type { WavePoint, WaveConfig } from '../../utils/waveMath.ts';
-import { sineWave, lerpColor, lerp } from '../../utils/waveMath.ts';
-import type { WaveScaling, WaveState, WaveMode } from '../../types/index.ts';
-import { ECGWaveGenerator } from '../../utils/ECGWaveGenerator.ts';
-import type { AudioAnalyzerServiceImpl, TimeDomainData } from '../../audio/AudioAnalyzerService.ts';
+import type { WavePoint, WaveConfig } from "../../utils/waveMath.ts";
+import { sineWave, lerpColor, lerp } from "../../utils/waveMath.ts";
+import type { WaveScaling, WaveState, WaveMode } from "../../types/index.ts";
+import { ECGWaveGenerator } from "../../utils/ECGWaveGenerator.ts";
+import type {
+  AudioAnalyzerServiceImpl,
+  TimeDomainData,
+} from "../../audio/AudioAnalyzerService.ts";
 
 interface WaveEngineConfig {
   canvas: HTMLCanvasElement;
@@ -23,8 +26,8 @@ export class WaveEngine {
   private currentColor: string;
   private colorProgress: number = 0;
   private targetColorProgress: number = 0;
-  private state: WaveState = 'idle';
-  private mode: WaveMode = 'idle';
+  private state: WaveState = "idle";
+  private mode: WaveMode = "idle";
   private animationId: number | null = null;
   private lastTime: number = 0;
   private pluckIntensity: number = 0;
@@ -41,8 +44,8 @@ export class WaveEngine {
 
   constructor(options: WaveEngineConfig) {
     this.canvas = options.canvas;
-    const ctx = this.canvas.getContext('2d');
-    if (!ctx) throw new Error('Could not get 2d context');
+    const ctx = this.canvas.getContext("2d");
+    if (!ctx) throw new Error("Could not get 2d context");
     this.ctx = ctx;
     this.scaling = options.scaling;
     this.colorStart = options.colorStart;
@@ -65,26 +68,26 @@ export class WaveEngine {
   pluck(intensity: number): void {
     if (this.reducedMotion) return;
     this.pluckIntensity = Math.min(1, Math.max(0, intensity));
-    this.state = 'plucked';
+    this.state = "plucked";
   }
 
   setHeartbeat(active: boolean): void {
-    this.setMode(active ? 'ecg' : 'idle');
+    this.setMode(active ? "ecg" : "idle");
   }
 
   setMode(mode: WaveMode): void {
     if (this.mode === mode) return;
-    
+
     this.mode = mode;
     this.state = mode;
 
-    if (mode === 'ecg') {
+    if (mode === "ecg") {
       this.initECG();
     } else {
       this.destroyECG();
     }
 
-    if (mode === 'oscilloscope') {
+    if (mode === "oscilloscope") {
       this.oscilloscopePhase = 0;
     }
   }
@@ -168,7 +171,7 @@ export class WaveEngine {
     this.lastTime = now;
 
     this.update(deltaTime);
-    
+
     if (this.isVisible) {
       this.render();
     }
@@ -180,14 +183,26 @@ export class WaveEngine {
   private update(deltaTime: number): void {
     this.config.phase += this.config.speed;
 
-    this.colorProgress = lerp(this.colorProgress, this.targetColorProgress, 0.05);
-    this.mouseProximity = lerp(this.mouseProximity, this.targetMouseProximity, 0.1);
+    this.colorProgress = lerp(
+      this.colorProgress,
+      this.targetColorProgress,
+      0.05,
+    );
+    this.mouseProximity = lerp(
+      this.mouseProximity,
+      this.targetMouseProximity,
+      0.1,
+    );
 
     if (Math.abs(this.colorProgress) > 0.001) {
-      this.currentColor = lerpColor(this.colorStart, this.colorEnd, this.colorProgress);
+      this.currentColor = lerpColor(
+        this.colorStart,
+        this.colorEnd,
+        this.colorProgress,
+      );
     }
 
-    if (this.state === 'plucked' && !this.reducedMotion) {
+    if (this.state === "plucked" && !this.reducedMotion) {
       this.pluckIntensity *= 0.95;
       if (this.pluckIntensity < 0.01) {
         this.pluckIntensity = 0;
@@ -195,11 +210,11 @@ export class WaveEngine {
       }
     }
 
-    if (this.mode === 'ecg' && this.ecgGenerator && !this.reducedMotion) {
+    if (this.mode === "ecg" && this.ecgGenerator && !this.reducedMotion) {
       this.ecgGenerator.update(deltaTime);
     }
 
-    if (this.mode === 'oscilloscope' && !this.reducedMotion) {
+    if (this.mode === "oscilloscope" && !this.reducedMotion) {
       this.oscilloscopePhase += deltaTime * 2;
     }
   }
@@ -208,9 +223,9 @@ export class WaveEngine {
     const { width, height } = this.canvas;
     this.ctx.clearRect(0, 0, width, height);
 
-    if (this.mode === 'ecg') {
+    if (this.mode === "ecg") {
       this.renderECG();
-    } else if (this.mode === 'oscilloscope') {
+    } else if (this.mode === "oscilloscope") {
       this.renderOscilloscope();
     } else {
       const points = this.generatePoints();
@@ -228,23 +243,25 @@ export class WaveEngine {
     const { width, height } = this.canvas;
     const centerY = height / 2;
     const amplitude = this.scaling.amplitude * (1 + this.mouseProximity * 0.2);
-    
+
     const pointsPerBeat = 150;
     const beatDuration = this.ecgGenerator.getBeatDuration();
     const currentPhase = this.ecgGenerator.getPhase();
-    
+
     this.ecgPoints = [];
-    
+
     for (let i = 0; i < pointsPerBeat; i++) {
       const phaseOffset = (i / pointsPerBeat) * beatDuration;
       const time = currentPhase + phaseOffset - beatDuration;
-      const value = this.ecgGenerator.getValueAtTime(time % (beatDuration * 10));
-      
+      const value = this.ecgGenerator.getValueAtTime(
+        time % (beatDuration * 10),
+      );
+
       const x = (i / pointsPerBeat) * width;
       const y = centerY - value * amplitude;
       this.ecgPoints.push({ x, y });
     }
-    
+
     this.drawWavePoints(this.ecgPoints);
   }
 
@@ -252,14 +269,17 @@ export class WaveEngine {
     const { width, height } = this.canvas;
     const centerY = height / 2;
     const amplitude = this.scaling.amplitude * (1 + this.mouseProximity * 0.3);
-    
+
     const points: { x: number; y: number }[] = [];
 
     if (this.externalAudioData && this.externalAudioData.data) {
       const data = this.externalAudioData.data;
-      const pointCount = Math.min(data.length, Math.max(50, Math.round(width / 3)));
+      const pointCount = Math.min(
+        data.length,
+        Math.max(50, Math.round(width / 3)),
+      );
       const step = data.length / pointCount;
-      
+
       for (let i = 0; i < pointCount; i++) {
         const dataIndex = Math.floor(i * step);
         const sample = data[dataIndex] ?? 128;
@@ -268,7 +288,7 @@ export class WaveEngine {
         const y = centerY - normalized * amplitude;
         points.push({ x, y });
       }
-      
+
       this.drawWavePoints(points);
       return;
     }
@@ -277,38 +297,41 @@ export class WaveEngine {
       const timeData = this.audioAnalyzer.getByteTimeDomainData();
       if (timeData) {
         const data = timeData.data;
-        const pointCount = Math.min(data.length, Math.max(50, Math.round(width / 3)));
+        const pointCount = Math.min(
+          data.length,
+          Math.max(50, Math.round(width / 3)),
+        );
         const step = data.length / pointCount;
-        
+
         for (let i = 0; i < pointCount; i++) {
           const dataIndex = Math.floor(i * step);
           const sample = data[dataIndex] ?? 128;
           const x = (i / pointCount) * width;
           const normalized = (sample - 128) / 128;
-          const y = centerY - normalized * amplitude;
+          const y = centerY - normalized * amplitude * 4;
           points.push({ x, y });
         }
-        
+
         this.drawWavePoints(points);
         return;
       }
     }
 
     const pointCount = Math.max(50, Math.round(width / 3));
-    
+
     for (let i = 0; i < pointCount; i++) {
       const x = (i / pointCount) * width;
       const t = (i / pointCount) * Math.PI * 4 + this.oscilloscopePhase;
-      
+
       const freq1 = Math.sin(t);
       const freq2 = Math.sin(t * 2.3 + this.oscilloscopePhase * 0.5) * 0.3;
       const freq3 = Math.sin(t * 0.7 - this.oscilloscopePhase * 0.3) * 0.2;
       const value = (freq1 + freq2 + freq3) / 1.5;
-      
+
       const y = centerY - value * amplitude;
       points.push({ x, y });
     }
-    
+
     this.drawWavePoints(points);
   }
 
@@ -319,7 +342,7 @@ export class WaveEngine {
     let effectiveAmplitude = this.config.amplitude;
 
     if (!this.reducedMotion) {
-      if (this.state === 'plucked') {
+      if (this.state === "plucked") {
         effectiveAmplitude *= 1 + this.pluckIntensity * 0.5;
       }
 
@@ -342,12 +365,13 @@ export class WaveEngine {
 
     this.ctx.strokeStyle = this.currentColor;
     this.ctx.lineWidth = this.scaling.strokeWidth;
-    this.ctx.lineCap = 'round';
-    this.ctx.lineJoin = 'round';
+    this.ctx.lineCap = "round";
+    this.ctx.lineJoin = "round";
 
     if (!this.reducedMotion) {
       this.ctx.shadowColor = this.currentColor;
-      this.ctx.shadowBlur = this.scaling.glowRadius * (1 + this.mouseProximity * 0.5);
+      this.ctx.shadowBlur =
+        this.scaling.glowRadius * (1 + this.mouseProximity * 0.5);
     }
 
     this.ctx.beginPath();
@@ -382,12 +406,13 @@ export class WaveEngine {
 
     this.ctx.strokeStyle = this.currentColor;
     this.ctx.lineWidth = this.scaling.strokeWidth;
-    this.ctx.lineCap = 'round';
-    this.ctx.lineJoin = 'round';
+    this.ctx.lineCap = "round";
+    this.ctx.lineJoin = "round";
 
     if (!this.reducedMotion) {
       this.ctx.shadowColor = this.currentColor;
-      this.ctx.shadowBlur = this.scaling.glowRadius * (1 + this.mouseProximity * 0.5);
+      this.ctx.shadowBlur =
+        this.scaling.glowRadius * (1 + this.mouseProximity * 0.5);
     }
 
     this.ctx.beginPath();
