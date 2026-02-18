@@ -5,8 +5,8 @@
     "totalTime": 3031,
     "ytdDistance": 7204,
     "ytdRuns": 1,
-    "recentDistance": 0,
-    "recentRuns": 0
+    "recentDistance": 7204,
+    "recentRuns": 1
   },
   "recentActivities": [
     {
@@ -81,6 +81,6 @@
       "has_kudoed": false
     }
   ],
-  "lastUpdated": "2026-02-17T20:29:46.912Z",
-  "expiresAt": "2026-02-18T02:29:46.912Z"
+  "lastUpdated": "2026-02-18T02:01:38.384Z",
+  "expiresAt": "2026-02-18T08:01:38.385Z"
 }
