@@ -1,5 +1,5 @@
-import { useCallback, useRef, memo } from 'react';
-import styles from './Piano.module.css';
+import { useCallback, useRef, memo } from "react";
+import styles from "./Piano.module.css";
 
 export interface PianoKeyProps {
   note: string;
@@ -26,55 +26,55 @@ function PianoKeyComponent({
     (e: React.PointerEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      
+
       if (isPressedRef.current) return;
       isPressedRef.current = true;
-      
+
       const target = e.target as HTMLElement;
       if (target.setPointerCapture) {
         target.setPointerCapture(e.pointerId);
       }
-      
+
       onNoteStart(note, velocity);
     },
-    [note, velocity, onNoteStart]
+    [note, velocity, onNoteStart],
   );
 
   const handlePointerUp = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault();
-      
+
       if (!isPressedRef.current) return;
       isPressedRef.current = false;
-      
+
       onNoteEnd(note);
     },
-    [note, onNoteEnd]
+    [note, onNoteEnd],
   );
 
   const handlePointerLeave = useCallback(
-    (e: React.PointerEvent) => {
+    (_e: React.PointerEvent) => {
       if (isPressedRef.current) {
         isPressedRef.current = false;
         onNoteEnd(note);
       }
     },
-    [note, onNoteEnd]
+    [note, onNoteEnd],
   );
 
   const handlePointerCancel = useCallback(
-    (e: React.PointerEvent) => {
+    (_e: React.PointerEvent) => {
       if (isPressedRef.current) {
         isPressedRef.current = false;
         onNoteEnd(note);
       }
     },
-    [note, onNoteEnd]
+    [note, onNoteEnd],
   );
 
   const className = isSharp
-    ? `${styles.blackKey} ${isActive ? styles.blackKeyActive : ''}`
-    : `${styles.whiteKey} ${isActive ? styles.whiteKeyActive : ''}`;
+    ? `${styles.blackKey} ${isActive ? styles.blackKeyActive : ""}`
+    : `${styles.whiteKey} ${isActive ? styles.whiteKeyActive : ""}`;
 
   return (
     <button
@@ -84,7 +84,7 @@ function PianoKeyComponent({
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerLeave}
       onPointerCancel={handlePointerCancel}
-      aria-label={`${note} key${label ? ` (${label})` : ''}`}
+      aria-label={`${note} key${label ? ` (${label})` : ""}`}
       aria-pressed={isActive}
       data-note={note}
       data-sharp={isSharp}

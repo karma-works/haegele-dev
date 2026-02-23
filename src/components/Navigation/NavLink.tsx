@@ -1,5 +1,5 @@
-import type { ReactNode, MouseEvent, MouseEventHandler } from 'react';
-import styles from './Navigation.module.css';
+import type { ReactNode, MouseEvent, MouseEventHandler } from "react";
+import styles from "./Navigation.module.css";
 
 interface NavLinkProps {
   href: string;
@@ -14,7 +14,7 @@ interface NavLinkProps {
 export default function NavLink({
   href,
   isActive,
-  isHovered,
+  isHovered: _isHovered,
   children,
   onMouseEnter,
   onMouseLeave,

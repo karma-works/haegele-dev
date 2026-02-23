@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { WaveEngine } from "./WaveEngine.ts";
 import { useWaveScaling, getPointCount } from "./useWaveScaling.ts";
 import { useViewport } from "../../utils/responsive.ts";

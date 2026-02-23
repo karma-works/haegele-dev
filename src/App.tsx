@@ -1,8 +1,7 @@
-import { useState, useEffect, lazy, Suspense, type ComponentType } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { PulseBackground } from "./components/PulseBackground";
 import { Navigation } from "./components/Navigation";
 import { Hero } from "./components/Hero";
-import { useViewport } from "./utils/responsive";
 
 const About = lazy(() => import("./components/About"));
 const Skills = lazy(() => import("./components/Skills"));
@@ -37,7 +36,6 @@ function LazySection({ children }: LazySectionProps) {
 
 function App() {
   const [activeSection, setActiveSection] = useState("hero");
-  const { width, breakpoint } = useViewport();
 
   useEffect(() => {
     const sections = [

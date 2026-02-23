@@ -1,6 +1,5 @@
 import { memo } from "react";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
-import { useReducedMotion } from "../../contexts/ReduceMotionContext";
 import { TombstoneCard } from "./TombstoneCard";
 import { graveyardProjects } from "./graveyardData";
 import styles from "./Graveyard.module.css";
@@ -9,7 +8,6 @@ export const Graveyard = memo(function Graveyard() {
   const [containerRef, isVisible] = useScrollAnimation<HTMLDivElement>({
     threshold: 0.15,
   });
-  const { isReducedMotion } = useReducedMotion();
 
   return (
     <section id="graveyard" className={styles.section}>

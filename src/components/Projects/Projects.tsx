@@ -1,6 +1,5 @@
-import { memo, useRef, useState, useEffect } from "react";
+import { memo, useRef, useState } from "react";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
-import { useReducedMotion } from "../../contexts/ReduceMotionContext";
 import styles from "./Projects.module.css";
 
 interface Project {
@@ -94,10 +93,9 @@ const ProjectCard = memo(function ProjectCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const [tiltStyle, setTiltStyle] = useState<React.CSSProperties>({});
   const [isHovering, setIsHovering] = useState(false);
-  const { disableNonCritical, isReducedMotion } = useReducedMotion();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (disableNonCritical || !cardRef.current) return;
+    if (!cardRef.current) return;
 
     const rect = cardRef.current.getBoundingClientRect();
     const centerX = rect.width / 2;
@@ -114,7 +112,6 @@ const ProjectCard = memo(function ProjectCard({
   };
 
   const handleMouseLeave = () => {
-    if (disableNonCritical) return;
     setTiltStyle({
       transform: "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)",
     });
@@ -122,7 +119,6 @@ const ProjectCard = memo(function ProjectCard({
   };
 
   const handleMouseEnter = () => {
-    if (disableNonCritical) return;
     setIsHovering(true);
   };
 
@@ -244,7 +240,6 @@ export const Projects = memo(function Projects() {
   const [containerRef, isVisible] = useScrollAnimation<HTMLDivElement>({
     threshold: 0.1,
   });
-  const { isReducedMotion } = useReducedMotion();
 
   return (
     <section id="projects" className={styles.section}>

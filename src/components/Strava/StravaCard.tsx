@@ -16,14 +16,6 @@ function formatDistance(meters: number): string {
   return km.toFixed(1);
 }
 
-function formatTime(seconds: number): string {
-  const hours = Math.floor(seconds / 3600);
-  if (hours >= 1) {
-    return `${hours}h ${Math.floor((seconds % 3600) / 60)}m`;
-  }
-  return `${Math.floor(seconds / 60)}m`;
-}
-
 function formatRelativeDate(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
@@ -190,7 +182,6 @@ function StravaCardBase({ className }: StravaCardProps) {
       aria-label="Running Statistics from Strava"
       aria-busy={isLoading}
     >
-
       {isLoading ? (
         <div className={styles.loading}>
           <div className={styles.loadingSpinner} />

@@ -72,7 +72,7 @@ function generateKeyLayout(range: PianoKeyRange): {
 function PianoComponent({
   keyRange,
   activeNotesFromKeyboard,
-  showLabels = true,
+  showLabels: _showLabels = true,
   className,
 }: PianoProps) {
   const effects = useEffects();

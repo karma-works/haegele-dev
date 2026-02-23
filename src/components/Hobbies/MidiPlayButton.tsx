@@ -8,7 +8,6 @@ const KEEP_ALIVE_INTERVAL = 1000;
 
 export const MidiPlayButton = memo(function MidiPlayButton() {
   const [playerState, setPlayerState] = useState<MidiPlayerState>("idle");
-  const [isReady, setIsReady] = useState(false);
   const effects = useEffects();
   const keepAliveRef = useRef<number | null>(null);
 
@@ -31,10 +30,6 @@ export const MidiPlayButton = memo(function MidiPlayButton() {
         }
       },
     });
-
-    if (midiPlayer.isLoaded()) {
-      setIsReady(true);
-    }
 
     return () => {
       midiPlayer.setCallbacks({});
@@ -59,7 +54,6 @@ export const MidiPlayButton = memo(function MidiPlayButton() {
         setPlayerState("loading");
         try {
           await midiPlayer.load(MIDI_URL);
-          setIsReady(true);
         } catch (error) {
           console.error("Failed to load MIDI:", error);
           setPlayerState("idle");

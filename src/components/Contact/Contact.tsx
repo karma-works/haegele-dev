@@ -328,7 +328,7 @@ export const Contact = memo(function Contact() {
         if (!response.ok) {
           throw new Error("Failed to send message");
         }
-      } catch (error) {
+      } catch {
         setIsSubmitting(false);
         setErrors({ message: "Failed to send message. Please try again." });
         return;

@@ -222,24 +222,6 @@ export class PianoEngineImpl implements PianoEngine {
           "PianoEngine.setAudioAnalyzer: connecting volume to analyser",
         );
 
-        const context = Tone.getContext().rawContext as
-          | AudioContext
-          | { native: AudioContext };
-        const audioContext = "native" in context ? context.native : context;
-
-        const volumeNative = (
-          this.volume as unknown as {
-            output: { context: { native: AudioContext } | AudioContext };
-          }
-        ).output;
-        const volumeNode =
-          volumeNative &&
-          "native" in
-            (volumeNative as unknown as { context: { native: AudioContext } })
-            ? (volumeNative as unknown as { context: { native: AudioContext } })
-                .context.native
-            : audioContext;
-
         this.volume.connect(analyserNode as unknown as Tone.ToneAudioNode);
         analyzer.connect();
         this.audioAnalyzer = analyzer;

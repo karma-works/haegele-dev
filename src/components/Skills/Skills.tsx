@@ -1,4 +1,4 @@
-import { memo, useRef, useCallback } from "react";
+import { memo } from "react";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { useMagneticHover } from "../../hooks/useMagneticHover";
 import styles from "./Skills.module.css";
