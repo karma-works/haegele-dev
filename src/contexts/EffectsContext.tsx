@@ -9,6 +9,7 @@ import {
   type MutableRefObject,
 } from "react";
 import { getPianoEngine } from "../audio/PianoEngine";
+import { getAudioAnalyzer } from "../audio/AudioAnalyzerService";
 import type {
   AudioAnalyzerServiceImpl,
   TimeDomainData,
@@ -126,11 +127,21 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
     try {
       const engine = await getPianoEngine();
       pianoEngineRef.current = engine;
+
+      engine.onNoteTrigger((freq: number) => {
+        wavePluck(freq / 1000);
+      });
+
+      const analyzer = await getAudioAnalyzer({
+        fftSize: 2048,
+        smoothingTimeConstant: 0.5,
+      });
+      engine.setAudioAnalyzer(analyzer);
     } catch (error) {
       console.error("Failed to initialize piano engine:", error);
       pianoInitRef.current = false;
     }
-  }, []);
+  }, [wavePluck]);
 
   useEffect(() => {
     const handleFirstInteraction = () => {

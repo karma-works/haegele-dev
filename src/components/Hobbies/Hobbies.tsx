@@ -1,15 +1,8 @@
-import { memo, useState, useCallback, useRef, useEffect } from "react";
+import { memo } from "react";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { useMagneticHover } from "../../hooks/useMagneticHover";
 import { StravaCard } from "../Strava";
-import { Piano } from "../Piano";
-import { useEffects } from "../../contexts/EffectsContext";
-import {
-  WHITE_KEY_NOTES,
-  BLACK_KEY_NOTES,
-  noteToFrequency,
-  type PianoKeyRange,
-} from "../../utils/pianoKeyboard";
+import { MidiPlayButton } from "./MidiPlayButton";
 import styles from "./Hobbies.module.css";
 
 interface Language {
@@ -25,11 +18,6 @@ const languages: Language[] = [
   { name: "French", level: 80, flag: "🇫🇷" },
   { name: "Chinese (Mandarin)", level: 60, flag: "🇨🇳" },
 ];
-
-const MINI_PIANO_RANGE: PianoKeyRange = {
-  startOctave: 4,
-  whiteKeyCount: 8,
-};
 
 interface HobbyCardProps {
   title: string;
@@ -73,199 +61,6 @@ const HobbyCard = memo(function HobbyCard({
     </div>
   );
 });
-
-interface MiniPianoKeyProps {
-  note: string;
-  isSharp: boolean;
-  isActive: boolean;
-  onNoteStart: (note: string) => void;
-  onNoteEnd: (note: string) => void;
-}
-
-const MiniPianoKey = memo(function MiniPianoKey({
-  note,
-  isSharp,
-  isActive,
-  onNoteStart,
-  onNoteEnd,
-}: MiniPianoKeyProps) {
-  const handlePointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      e.preventDefault();
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
-      onNoteStart(note);
-    },
-    [note, onNoteStart],
-  );
-
-  const handlePointerUp = useCallback(
-    (e: React.PointerEvent) => {
-      e.preventDefault();
-      onNoteEnd(note);
-    },
-    [note, onNoteEnd],
-  );
-
-  const handlePointerLeave = useCallback(
-    (e: React.PointerEvent) => {
-      if (e.buttons > 0) {
-        onNoteEnd(note);
-      }
-    },
-    [note, onNoteEnd],
-  );
-
-  return (
-    <button
-      type="button"
-      className={`${isSharp ? styles.miniBlackKey : styles.miniWhiteKey} ${isActive ? styles.active : ""}`}
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-      onPointerLeave={handlePointerLeave}
-      onPointerCancel={handlePointerUp}
-      aria-label={`Play note ${note}`}
-    />
-  );
-});
-
-interface MiniPianoProps {
-  className?: string;
-}
-
-const MiniPiano = memo(function MiniPiano({ className }: MiniPianoProps) {
-  const effects = useEffects();
-  const [activeNotes, setActiveNotes] = useState<Set<string>>(new Set());
-  const activeNotesRef = useRef<Set<string>>(activeNotes);
-
-  useEffect(() => {
-    activeNotesRef.current = activeNotes;
-  }, [activeNotes]);
-
-  const handleNoteStart = useCallback(
-    (note: string) => {
-      setActiveNotes((prev) => {
-        const next = new Set(prev);
-        next.add(note);
-        return next;
-      });
-
-      const frequency = noteToFrequency(note);
-
-      if (!effects.isMuted) {
-        effects.pianoEngineRef.current?.play(note, 0.7);
-      }
-
-      effects.onPianoActivity();
-      effects.wavePluck(frequency / 1000);
-    },
-    [effects],
-  );
-
-  const handleNoteEnd = useCallback(
-    (note: string) => {
-      setActiveNotes((prev) => {
-        const next = new Set(prev);
-        next.delete(note);
-        return next;
-      });
-
-      if (!effects.isMuted) {
-        effects.pianoEngineRef.current?.stop(note);
-      }
-    },
-    [effects],
-  );
-
-  const { whiteKeys, blackKeyMap } = generateMiniKeyLayout(MINI_PIANO_RANGE);
-
-  return (
-    <div
-      className={`${styles.miniPiano} ${className || ""}`}
-      role="application"
-      aria-label="Mini piano keyboard"
-    >
-      <div className={styles.miniKeyboard}>
-        {whiteKeys.map((keyInfo) => {
-          const blackKey = blackKeyMap.get(keyInfo.note);
-
-          return (
-            <div key={keyInfo.note} className={styles.miniWhiteKeyWrapper}>
-              <MiniPianoKey
-                note={keyInfo.note}
-                isSharp={false}
-                isActive={activeNotes.has(keyInfo.note)}
-                onNoteStart={handleNoteStart}
-                onNoteEnd={handleNoteEnd}
-              />
-              {blackKey && (
-                <MiniPianoKey
-                  note={blackKey.note}
-                  isSharp={true}
-                  isActive={activeNotes.has(blackKey.note)}
-                  onNoteStart={handleNoteStart}
-                  onNoteEnd={handleNoteEnd}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-});
-
-interface KeyInfo {
-  note: string;
-  isSharp: boolean;
-}
-
-function generateMiniKeyLayout(range: PianoKeyRange): {
-  whiteKeys: KeyInfo[];
-  blackKeyMap: Map<string, KeyInfo>;
-} {
-  const whiteKeys: KeyInfo[] = [];
-  const blackKeyMap = new Map<string, KeyInfo>();
-
-  const { startOctave, whiteKeyCount } = range;
-  let keyIndex = 0;
-
-  for (
-    let octaveOffset = 0;
-    octaveOffset < Math.ceil(whiteKeyCount / 7);
-    octaveOffset++
-  ) {
-    const currentOctave = startOctave + octaveOffset;
-
-    for (
-      let noteIndex = 0;
-      noteIndex < 7 && keyIndex < whiteKeyCount;
-      noteIndex++
-    ) {
-      const whiteNote = WHITE_KEY_NOTES[noteIndex];
-
-      if (whiteNote) {
-        whiteKeys.push({
-          note: `${whiteNote}${currentOctave}`,
-          isSharp: false,
-        });
-      }
-
-      const blackNote = BLACK_KEY_NOTES[noteIndex];
-
-      if (blackNote) {
-        const blackKeyInfo: KeyInfo = {
-          note: `${blackNote}${currentOctave}`,
-          isSharp: true,
-        };
-        blackKeyMap.set(`${whiteNote}${currentOctave}`, blackKeyInfo);
-      }
-
-      keyIndex++;
-    }
-  }
-
-  return { whiteKeys, blackKeyMap };
-}
 
 function LanguageProgress({
   languages: langs,
@@ -353,10 +148,9 @@ export const Hobbies = memo(function Hobbies() {
           >
             <div className={styles.pianoWrapper}>
               <p className={styles.pianoDescription}>
-                I enjoy playing piano in my free time. Try it out below!
+                I enjoy playing piano in my free time.
               </p>
-              <MiniPiano />
-              <p className={styles.pianoHint}>Click or tap keys to play</p>
+              <MidiPlayButton />
             </div>
           </HobbyCard>
 
