@@ -73,11 +73,9 @@ function LanguageProgress({
     <div className={styles.languageList}>
       {langs.map((lang, index) => (
         <div key={lang.name} className={styles.languageItem}>
-          <div className={styles.languageHeader}>
-            <span className={styles.languageFlag}>{lang.flag}</span>
-            <span className={styles.languageName}>{lang.name}</span>
-            <span className={styles.languageLevel}>{lang.level}%</span>
-          </div>
+          <span className={styles.languageName}>
+            {lang.flag} {lang.name}
+          </span>
           <div className={styles.languageBar}>
             <div
               className={styles.languageProgress}

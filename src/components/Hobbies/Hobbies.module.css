@@ -270,27 +270,9 @@
   gap: var(--spacing-xs);
 }
 
-.languageHeader {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.languageFlag {
-  font-size: 1.25rem;
-}
-
 .languageName {
   font-size: 0.875rem;
   color: var(--color-text-muted);
-  flex: 1;
-}
-
-.languageLevel {
-  font-size: 0.75rem;
-  color: var(--color-accent-mint);
-  font-weight: 600;
-  font-family: var(--font-mono);
 }
 
 .languageBar {

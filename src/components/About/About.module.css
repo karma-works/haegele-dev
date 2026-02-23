@@ -115,50 +115,6 @@
 .visualContent {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
-}
-
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-md);
-}
-
-.statCard {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-xs);
-  opacity: 0;
-  transform: translateY(20px) scale(0.95);
-  transition: opacity 0.5s ease, transform 0.5s ease, background 0.3s ease;
-}
-
-.container.visible .statCard {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.statCard:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.statValue {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--color-accent-mint);
-}
-
-.statLabel {
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 .codeBlock {
@@ -178,6 +134,10 @@
   transform: translateX(0);
 }
 
+.codeBlock[data-state='minimized'] .codeHeader {
+  border-bottom: none;
+}
+
 .codeHeader {
   display: flex;
   gap: var(--spacing-sm);
@@ -190,18 +150,35 @@
   width: 10px;
   height: 10px;
   border-radius: var(--radius-full);
-  background: var(--color-text-muted);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
-.codeDot:nth-child(1) {
+.codeDot:hover {
+  opacity: 0.8;
+  transform: scale(1.2);
+}
+
+.codeDot:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.codeDot:active {
+  transform: scale(0.95);
+}
+
+.codeDotClose {
   background: #ff5f57;
 }
 
-.codeDot:nth-child(2) {
+.codeDotMinimize {
   background: #ffbd2e;
 }
 
-.codeDot:nth-child(3) {
+.codeDotMaximize {
   background: #28c840;
 }
 
@@ -222,7 +199,6 @@
   }
 
   .paragraph,
-  .statCard,
   .codeBlock {
     opacity: 1;
     transform: none;
@@ -248,15 +224,6 @@
 @media (max-width: 640px) {
   .section {
     padding: var(--spacing-lg);
-  }
-
-  .statsGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .statCard {
-    flex-direction: row;
-    justify-content: space-between;
   }
 
   .codeContent {

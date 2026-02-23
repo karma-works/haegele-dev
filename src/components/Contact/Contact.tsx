@@ -481,8 +481,6 @@ export const Contact = memo(function Contact() {
             </div>
           </form>
         )}
-
-        <div className={styles.socialLinks}></div>
       </div>
 
       <ParticleBurst

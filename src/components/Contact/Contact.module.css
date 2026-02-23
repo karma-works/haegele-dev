@@ -336,36 +336,7 @@ textarea.input {
   outline-offset: 2px;
 }
 
-.socialLinks {
-  display: flex;
-  gap: var(--spacing-lg);
-  margin-top: var(--spacing-2xl);
-}
 
-.socialLink {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text-muted);
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
-  transition: all 0.3s ease;
-}
-
-.socialLink svg {
-  width: 20px;
-  height: 20px;
-}
-
-.socialLink:hover {
-  color: var(--color-text);
-  border-color: var(--color-accent-mint);
-  background: rgba(16, 185, 129, 0.1);
-  transform: translateY(-3px);
-}
 
 .particleCanvas {
   position: fixed;

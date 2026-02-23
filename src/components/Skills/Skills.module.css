@@ -110,22 +110,27 @@
   gap: var(--spacing-xs);
 }
 
-.skillHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .skillName {
   font-size: 0.875rem;
   color: var(--color-text-muted);
 }
 
-.skillLevel {
+.softSkillBadge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+}
+
+.levelBadge {
   font-size: 0.75rem;
+  font-weight: 500;
   color: var(--color-accent-mint);
-  font-weight: 600;
-  font-family: var(--font-mono);
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .skillBar {
