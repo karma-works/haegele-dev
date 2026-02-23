@@ -63,6 +63,7 @@ const SALAMANDER_BASE_URL = "https://tonejs.github.io/audio/salamander/";
 
 export class PianoEngineImpl implements PianoEngine {
   private sampler: Tone.Sampler | null = null;
+  private reverb: Tone.Reverb | null = null;
   private activeNotes: Set<string> = new Set();
   private noteTriggerCallback: ((freq: number) => void) | null = null;
   private isInitialized = false;
@@ -92,7 +93,11 @@ export class PianoEngineImpl implements PianoEngine {
   private async initSampler(): Promise<void> {
     await Tone.start();
 
+    this.reverb = new Tone.Reverb({ decay: 3.5, wet: 0.3 });
+    await this.reverb.ready;
+
     this.volume = new Tone.Volume(-6).toDestination();
+    this.reverb.connect(this.volume);
 
     this.sampler = new Tone.Sampler({
       urls: {
@@ -126,7 +131,7 @@ export class PianoEngineImpl implements PianoEngine {
       onload: () => {
         this.isInitialized = true;
       },
-    }).connect(this.volume!);
+    }).connect(this.reverb!);
 
     await Tone.loaded();
     this.isInitialized = true;
@@ -203,16 +208,45 @@ export class PianoEngineImpl implements PianoEngine {
   }
 
   setAudioAnalyzer(analyzer: AudioAnalyzerServiceImpl | null): void {
-    if (!this.volume) return;
+    if (!this.volume) {
+      console.log("PianoEngine.setAudioAnalyzer: no volume, skipping");
+      return;
+    }
 
     this.volume.disconnect();
 
     if (analyzer) {
       const analyserNode = analyzer.getAnalyserNode();
       if (analyserNode) {
+        console.log(
+          "PianoEngine.setAudioAnalyzer: connecting volume to analyser",
+        );
+
+        const context = Tone.getContext().rawContext as
+          | AudioContext
+          | { native: AudioContext };
+        const audioContext = "native" in context ? context.native : context;
+
+        const volumeNative = (
+          this.volume as unknown as {
+            output: { context: { native: AudioContext } | AudioContext };
+          }
+        ).output;
+        const volumeNode =
+          volumeNative &&
+          "native" in
+            (volumeNative as unknown as { context: { native: AudioContext } })
+            ? (volumeNative as unknown as { context: { native: AudioContext } })
+                .context.native
+            : audioContext;
+
         this.volume.connect(analyserNode as unknown as Tone.ToneAudioNode);
         analyzer.connect();
         this.audioAnalyzer = analyzer;
+        console.log(
+          "PianoEngine.setAudioAnalyzer: connected, analyzer isActive:",
+          analyzer.isActive(),
+        );
       }
     } else {
       this.volume.toDestination();
@@ -226,6 +260,11 @@ export class PianoEngineImpl implements PianoEngine {
     if (this.sampler) {
       this.sampler.dispose();
       this.sampler = null;
+    }
+
+    if (this.reverb) {
+      this.reverb.dispose();
+      this.reverb = null;
     }
 
     if (this.volume) {

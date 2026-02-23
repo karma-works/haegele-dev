@@ -1,14 +1,16 @@
-import { memo, useState, useCallback, useEffect } from "react";
+import { memo, useState, useCallback, useEffect, useRef } from "react";
 import { getMidiPlayer, type MidiPlayerState } from "../../audio/MidiPlayer";
 import { useEffects } from "../../contexts/EffectsContext";
 import styles from "./MidiPlayButton.module.css";
 
 const MIDI_URL = "/data/The-Lark-(Glinka-Balakirev).mid";
+const KEEP_ALIVE_INTERVAL = 1000;
 
 export const MidiPlayButton = memo(function MidiPlayButton() {
   const [playerState, setPlayerState] = useState<MidiPlayerState>("idle");
   const [isReady, setIsReady] = useState(false);
   const effects = useEffects();
+  const keepAliveRef = useRef<number | null>(null);
 
   useEffect(() => {
     const midiPlayer = getMidiPlayer();
@@ -18,6 +20,14 @@ export const MidiPlayButton = memo(function MidiPlayButton() {
         setPlayerState(state);
         if (state === "playing") {
           effects.onPianoActivity();
+          keepAliveRef.current = window.setInterval(() => {
+            effects.onPianoActivity();
+          }, KEEP_ALIVE_INTERVAL);
+        } else {
+          if (keepAliveRef.current) {
+            clearInterval(keepAliveRef.current);
+            keepAliveRef.current = null;
+          }
         }
       },
     });
@@ -28,6 +38,10 @@ export const MidiPlayButton = memo(function MidiPlayButton() {
 
     return () => {
       midiPlayer.setCallbacks({});
+      if (keepAliveRef.current) {
+        clearInterval(keepAliveRef.current);
+        keepAliveRef.current = null;
+      }
     };
   }, [effects]);
 

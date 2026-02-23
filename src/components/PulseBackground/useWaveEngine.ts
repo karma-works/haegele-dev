@@ -1,17 +1,23 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { WaveEngine } from './WaveEngine.ts';
-import { useWaveScaling, getPointCount } from './useWaveScaling.ts';
-import { useViewport } from '../../utils/responsive.ts';
-import { useEffects } from '../../contexts/EffectsContext.tsx';
-import { useShouldAnimate } from '../../contexts/ReduceMotionContext.tsx';
-import { getAudioAnalyzer, destroyAudioAnalyzer } from '../../audio/AudioAnalyzerService.ts';
-import type { WaveScaling } from '../../types/index.ts';
+import { useEffect, useRef, useCallback } from "react";
+import { WaveEngine } from "./WaveEngine.ts";
+import { useWaveScaling, getPointCount } from "./useWaveScaling.ts";
+import { useViewport } from "../../utils/responsive.ts";
+import { useEffects } from "../../contexts/EffectsContext.tsx";
+import { useShouldAnimate } from "../../contexts/ReduceMotionContext.tsx";
+import {
+  getAudioAnalyzer,
+  destroyAudioAnalyzer,
+} from "../../audio/AudioAnalyzerService.ts";
+import type { WaveScaling } from "../../types/index.ts";
 
-const COLOR_MINT = '#10b981';
-const COLOR_PINK = '#ec4899';
+const COLOR_MINT = "#10b981";
+const COLOR_PINK = "#ec4899";
 const SCROLL_COLOR_THRESHOLD = 1000;
 
-export function useWaveEngine(canvasRef: React.RefObject<HTMLCanvasElement | null>, isVisible: boolean = true) {
+export function useWaveEngine(
+  canvasRef: React.RefObject<HTMLCanvasElement | null>,
+  isVisible: boolean = true,
+) {
   const engineRef = useRef<WaveEngine | null>(null);
   const { width, height, breakpoint } = useViewport();
   const scaling = useWaveScaling(width, height, breakpoint);
@@ -44,7 +50,7 @@ export function useWaveEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
         }
       })
       .catch((error) => {
-        console.warn('Failed to initialize audio analyzer:', error);
+        console.warn("Failed to initialize audio analyzer:", error);
       });
 
     return () => {
@@ -80,8 +86,8 @@ export function useWaveEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       engineRef.current?.setColorProgress(progress);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -105,8 +111,8 @@ export function useWaveEngine(canvasRef: React.RefObject<HTMLCanvasElement | nul
       engineRef.current?.setMouseProximity(proximity);
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [shouldAnimate]);
 
   return { engineRef, scaling };

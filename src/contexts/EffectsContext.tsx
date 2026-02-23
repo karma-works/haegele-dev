@@ -126,6 +126,7 @@ export function EffectsProvider({ children }: EffectsProviderProps) {
 
     try {
       const engine = await getPianoEngine();
+      await engine.ensureInitialized();
       pianoEngineRef.current = engine;
 
       engine.onNoteTrigger((freq: number) => {

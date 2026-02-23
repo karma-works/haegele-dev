@@ -1,4 +1,4 @@
-import * as Tone from 'tone';
+import * as Tone from "tone";
 
 export interface AudioAnalyzerConfig {
   fftSize?: number;
@@ -60,8 +60,10 @@ export class AudioAnalyzerServiceImpl {
 
     if (this.analyser) return;
 
-    const context = Tone.getContext().rawContext as AudioContext | { native: AudioContext };
-    const audioContext = 'native' in context ? context.native : context;
+    const context = Tone.getContext().rawContext as
+      | AudioContext
+      | { native: AudioContext };
+    const audioContext = "native" in context ? context.native : context;
 
     this.analyser = audioContext.createAnalyser();
     this.analyser.fftSize = this.config.fftSize;
@@ -86,8 +88,10 @@ export class AudioAnalyzerServiceImpl {
   connect(): void {
     if (!this.analyser || this.isConnected) return;
 
-    const context = Tone.getContext().rawContext as AudioContext | { native: AudioContext };
-    const audioContext = 'native' in context ? context.native : context;
+    const context = Tone.getContext().rawContext as
+      | AudioContext
+      | { native: AudioContext };
+    const audioContext = "native" in context ? context.native : context;
     const destination = audioContext.destination;
 
     this.analyser.connect(destination);
@@ -111,10 +115,14 @@ export class AudioAnalyzerServiceImpl {
   getByteFrequencyData(): FrequencyData | null {
     if (!this.analyser || !this.byteFrequencyData) return null;
 
-    this.analyser.getByteFrequencyData(this.byteFrequencyData as Uint8Array<ArrayBuffer>);
+    this.analyser.getByteFrequencyData(
+      this.byteFrequencyData as Uint8Array<ArrayBuffer>,
+    );
 
-    const context = Tone.getContext().rawContext as AudioContext | { native: AudioContext };
-    const audioContext = 'native' in context ? context.native : context;
+    const context = Tone.getContext().rawContext as
+      | AudioContext
+      | { native: AudioContext };
+    const audioContext = "native" in context ? context.native : context;
     const sampleRate = audioContext.sampleRate;
 
     return {
@@ -128,7 +136,9 @@ export class AudioAnalyzerServiceImpl {
   getByteTimeDomainData(): TimeDomainData | null {
     if (!this.analyser || !this.byteTimeDomainData) return null;
 
-    this.analyser.getByteTimeDomainData(this.byteTimeDomainData as Uint8Array<ArrayBuffer>);
+    this.analyser.getByteTimeDomainData(
+      this.byteTimeDomainData as Uint8Array<ArrayBuffer>,
+    );
 
     return {
       data: this.byteTimeDomainData,
@@ -139,10 +149,14 @@ export class AudioAnalyzerServiceImpl {
   getFloatFrequencyData(): FloatFrequencyData | null {
     if (!this.analyser || !this.floatFrequencyData) return null;
 
-    this.analyser.getFloatFrequencyData(this.floatFrequencyData as Float32Array<ArrayBuffer>);
+    this.analyser.getFloatFrequencyData(
+      this.floatFrequencyData as Float32Array<ArrayBuffer>,
+    );
 
-    const context = Tone.getContext().rawContext as AudioContext | { native: AudioContext };
-    const audioContext = 'native' in context ? context.native : context;
+    const context = Tone.getContext().rawContext as
+      | AudioContext
+      | { native: AudioContext };
+    const audioContext = "native" in context ? context.native : context;
     const sampleRate = audioContext.sampleRate;
 
     return {
@@ -156,7 +170,9 @@ export class AudioAnalyzerServiceImpl {
   getFloatTimeDomainData(): FloatTimeDomainData | null {
     if (!this.analyser || !this.floatTimeDomainData) return null;
 
-    this.analyser.getFloatTimeDomainData(this.floatTimeDomainData as Float32Array<ArrayBuffer>);
+    this.analyser.getFloatTimeDomainData(
+      this.floatTimeDomainData as Float32Array<ArrayBuffer>,
+    );
 
     return {
       data: this.floatTimeDomainData,
@@ -167,9 +183,13 @@ export class AudioAnalyzerServiceImpl {
   setFFTSize(size: number): void {
     if (!this.analyser) return;
 
-    const validSizes = [32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768];
+    const validSizes = [
+      32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768,
+    ];
     if (!validSizes.includes(size)) {
-      console.warn(`Invalid FFT size: ${size}. Must be a power of 2 between 32 and 32768.`);
+      console.warn(
+        `Invalid FFT size: ${size}. Must be a power of 2 between 32 and 32768.`,
+      );
       return;
     }
 
@@ -191,7 +211,9 @@ export class AudioAnalyzerServiceImpl {
   }
 
   getSmoothingTimeConstant(): number {
-    return this.analyser?.smoothingTimeConstant ?? this.config.smoothingTimeConstant;
+    return (
+      this.analyser?.smoothingTimeConstant ?? this.config.smoothingTimeConstant
+    );
   }
 
   setMinDecibels(value: number): void {
@@ -223,8 +245,10 @@ export class AudioAnalyzerServiceImpl {
   getFrequencyForBin(binIndex: number): number | null {
     if (!this.analyser) return null;
 
-    const context = Tone.getContext().rawContext as AudioContext | { native: AudioContext };
-    const audioContext = 'native' in context ? context.native : context;
+    const context = Tone.getContext().rawContext as
+      | AudioContext
+      | { native: AudioContext };
+    const audioContext = "native" in context ? context.native : context;
     const sampleRate = audioContext.sampleRate;
     const binCount = this.analyser.frequencyBinCount;
 
@@ -234,8 +258,10 @@ export class AudioAnalyzerServiceImpl {
   getBinForFrequency(frequency: number): number | null {
     if (!this.analyser) return null;
 
-    const context = Tone.getContext().rawContext as AudioContext | { native: AudioContext };
-    const audioContext = 'native' in context ? context.native : context;
+    const context = Tone.getContext().rawContext as
+      | AudioContext
+      | { native: AudioContext };
+    const audioContext = "native" in context ? context.native : context;
     const sampleRate = audioContext.sampleRate;
     const binCount = this.analyser.frequencyBinCount;
 
@@ -272,7 +298,7 @@ let analyzerInstance: AudioAnalyzerServiceImpl | null = null;
 let getAnalyzerPromise: Promise<AudioAnalyzerServiceImpl> | null = null;
 
 export async function getAudioAnalyzer(
-  config?: Partial<AudioAnalyzerConfig>
+  config?: Partial<AudioAnalyzerConfig>,
 ): Promise<AudioAnalyzerServiceImpl> {
   if (analyzerInstance) {
     return analyzerInstance;

@@ -115,6 +115,7 @@ export class WaveEngine {
   }
 
   setAudioAnalyzer(analyzer: AudioAnalyzerServiceImpl | null): void {
+    console.log("WaveEngine.setAudioAnalyzer called, analyzer:", !!analyzer);
     this.audioAnalyzer = analyzer;
   }
 
@@ -300,6 +301,7 @@ export class WaveEngine {
       const timeData = this.audioAnalyzer.getByteTimeDomainData();
       if (timeData) {
         const data = timeData.data;
+
         const pointCount = Math.min(
           data.length,
           Math.max(50, Math.round(width / 3)),
@@ -311,7 +313,7 @@ export class WaveEngine {
           const sample = data[dataIndex] ?? 128;
           const x = (i / pointCount) * width;
           const normalized = (sample - 128) / 128;
-          const y = centerY - normalized * amplitude * 4;
+          const y = centerY - normalized * amplitude * 10;
           points.push({ x, y });
         }
 
@@ -319,6 +321,15 @@ export class WaveEngine {
         return;
       }
     }
+
+    console.log(
+      "renderOscilloscope: falling back to sine wave, mode:",
+      this.mode,
+      "analyzer:",
+      !!this.audioAnalyzer,
+      "active:",
+      this.audioAnalyzer?.isActive(),
+    );
 
     const pointCount = Math.max(50, Math.round(width / 3));
 
