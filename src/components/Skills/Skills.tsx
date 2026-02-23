@@ -46,7 +46,7 @@ const skillCategories: SkillCategory[] = [
       { name: 'Quarkus', level: 90 },
       { name: 'Go', level: 85 },
       { name: 'Wildfly', level: 75 },
-      { name: 'MSSQL', level: 85 },
+      { name: 'ChromaDB', level: 85 },
     ],
   },
   {
@@ -76,7 +76,7 @@ const skillCategories: SkillCategory[] = [
     ),
     skills: [
       { name: 'VSCode', level: 95 },
-      { name: 'Git', level: 80 },
+      { name: 'Langchain', level: 80 },
       { name: 'OpenCode', level: 70 },
       { name: 'Linux', level: 85 },
     ],
