@@ -1,5 +1,6 @@
-import { memo, useRef, useState } from "react";
+import { memo, useRef, useState, useCallback } from "react";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+import { DemoModal } from "./DemoModal";
 import styles from "./Projects.module.css";
 
 interface Project {
@@ -10,6 +11,7 @@ interface Project {
   tags: string[];
   date: string;
   link?: string;
+  demoUrl?: string;
   status: "active" | "archived" | "wip";
   image: string;
 }
@@ -52,6 +54,19 @@ const projects: Project[] = [
     image: "/assets/projects/claudine-skills.webp",
   },
   {
+    id: "proj-6",
+    hash: "3spr1t",
+    title: "Esprit Racer",
+    description:
+      "Retro arcade racing game inspired by Lotus Challenge III and Outrun. Features pseudo-3D graphics, 2-player split-screen, and dynamic music system.",
+    tags: ["TypeScript", "Canvas 2D", "Game Dev"],
+    date: "2026-02",
+    link: "https://github.com/karma-works/esprit-racer",
+    demoUrl: "https://karma-works.github.io/esprit-racer/",
+    status: "active",
+    image: "/assets/projects/esprit-racer.webp",
+  },
+  {
     id: "proj-4",
     hash: "f0l10",
     title: "Portfolio Website",
@@ -82,6 +97,7 @@ interface ProjectCardProps {
   index: number;
   isVisible: boolean;
   side: "left" | "right";
+  onOpenDemo: (project: Project) => void;
 }
 
 const ProjectCard = memo(function ProjectCard({
@@ -89,6 +105,7 @@ const ProjectCard = memo(function ProjectCard({
   index,
   isVisible,
   side,
+  onOpenDemo,
 }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tiltStyle, setTiltStyle] = useState<React.CSSProperties>({});
@@ -120,6 +137,12 @@ const ProjectCard = memo(function ProjectCard({
 
   const handleMouseEnter = () => {
     setIsHovering(true);
+  };
+
+  const handleOpenDemo = () => {
+    if (project.demoUrl) {
+      onOpenDemo(project);
+    }
   };
 
   const getStatusClass = (status: string): string => {
@@ -190,22 +213,41 @@ const ProjectCard = memo(function ProjectCard({
             {formatDate(project.date)}
           </time>
 
-          {project.link && (
-            <a
-              href={project.link}
-              className={styles.projectLink}
-              aria-label={`View ${project.title}`}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
+          <div className={styles.cardActions}>
+            {project.demoUrl && (
+              <button
+                className={styles.demoButton}
+                onClick={handleOpenDemo}
+                aria-label={`Play ${project.title} demo`}
               >
-                <path d="M7 17L17 7M17 7H7M17 7V17" />
-              </svg>
-            </a>
-          )}
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <polygon points="5 3 19 12 5 21 5 3" />
+                </svg>
+              </button>
+            )}
+
+            {project.link && (
+              <a
+                href={project.link}
+                className={styles.projectLink}
+                aria-label={`View ${project.title}`}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </a>
+            )}
+          </div>
         </div>
 
         <div className={styles.cardGlare} data-hovering={isHovering} />
@@ -241,6 +283,19 @@ export const Projects = memo(function Projects() {
     threshold: 0.1,
   });
 
+  const [demoModalState, setDemoModalState] = useState<{
+    isOpen: boolean;
+    project: Project | null;
+  }>({ isOpen: false, project: null });
+
+  const handleOpenDemo = useCallback((project: Project) => {
+    setDemoModalState({ isOpen: true, project });
+  }, []);
+
+  const handleCloseDemo = useCallback(() => {
+    setDemoModalState({ isOpen: false, project: null });
+  }, []);
+
   return (
     <section id="projects" className={styles.section}>
       <div
@@ -253,8 +308,8 @@ export const Projects = memo(function Projects() {
             projects
           </h2>
           <p className={styles.subtitle}>
-            A selection of projects I've worked on. Each represents a commit to
-            learning and building.
+            A selection of projects I&apos;ve worked on. Each represents a
+            commit to learning and building.
           </p>
         </header>
 
@@ -276,6 +331,7 @@ export const Projects = memo(function Projects() {
                       index={index}
                       isVisible={isVisible}
                       side={side}
+                      onOpenDemo={handleOpenDemo}
                     />
                   </div>
                 </div>
@@ -291,6 +347,13 @@ export const Projects = memo(function Projects() {
           </div>
         </div>
       </div>
+
+      <DemoModal
+        isOpen={demoModalState.isOpen}
+        onClose={handleCloseDemo}
+        demoUrl={demoModalState.project?.demoUrl ?? ""}
+        title={demoModalState.project?.title ?? ""}
+      />
     </section>
   );
 });

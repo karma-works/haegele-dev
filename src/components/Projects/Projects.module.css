@@ -270,6 +270,12 @@
   border-top: 1px solid var(--glass-border);
 }
 
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
 .date {
   display: flex;
   align-items: center;
@@ -303,6 +309,32 @@
 .projectLink svg {
   width: 16px;
   height: 16px;
+}
+
+.demoButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--color-accent-mint);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.demoButton:hover {
+  background: var(--color-accent-mint);
+  color: var(--color-bg);
+  border-color: var(--color-accent-mint);
+}
+
+.demoButton svg {
+  width: 14px;
+  height: 14px;
+  margin-left: 2px;
 }
 
 .cardGlare {
