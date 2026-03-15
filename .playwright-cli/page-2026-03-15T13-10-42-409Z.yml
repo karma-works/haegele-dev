@@ -1,0 +1,822 @@
+- generic [ref=e2]:
+  - region
+  - generic [ref=e3]:
+    - link "Skip to content" [ref=e4] [cursor=pointer]:
+      - /url: "#start-of-content"
+    - banner [ref=e6]:
+      - heading "Navigation Menu" [level=2] [ref=e7]
+      - generic [ref=e8]:
+        - link "Homepage" [ref=e10] [cursor=pointer]:
+          - /url: /
+          - img [ref=e11]
+        - generic [ref=e13]:
+          - navigation "Global" [ref=e16]:
+            - list [ref=e17]:
+              - listitem [ref=e18]:
+                - button "Platform" [ref=e20] [cursor=pointer]:
+                  - text: Platform
+                  - img [ref=e21]
+              - listitem [ref=e23]:
+                - button "Solutions" [ref=e25] [cursor=pointer]:
+                  - text: Solutions
+                  - img [ref=e26]
+              - listitem [ref=e28]:
+                - button "Resources" [ref=e30] [cursor=pointer]:
+                  - text: Resources
+                  - img [ref=e31]
+              - listitem [ref=e33]:
+                - button "Open Source" [ref=e35] [cursor=pointer]:
+                  - text: Open Source
+                  - img [ref=e36]
+              - listitem [ref=e38]:
+                - button "Enterprise" [ref=e40] [cursor=pointer]:
+                  - text: Enterprise
+                  - img [ref=e41]
+              - listitem [ref=e43]:
+                - link "Pricing" [ref=e44] [cursor=pointer]:
+                  - /url: https://github.com/pricing
+                  - generic [ref=e45]: Pricing
+          - generic [ref=e46]:
+            - button "Search or jump to…" [ref=e49] [cursor=pointer]:
+              - img [ref=e51]
+            - link "Sign in" [ref=e54] [cursor=pointer]:
+              - /url: /login?return_to=https%3A%2F%2Fgithub.com%2Fkarma-works%2Fcandy-apocalypse
+            - link "Sign up" [ref=e55] [cursor=pointer]:
+              - /url: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=karma-works%2Fcandy-apocalypse
+            - button "Appearance settings" [ref=e58] [cursor=pointer]:
+              - img
+  - main [ref=e62]:
+    - generic [ref=e63]:
+      - generic [ref=e64]:
+        - generic [ref=e66]:
+          - img [ref=e67]
+          - link "karma-works" [ref=e70] [cursor=pointer]:
+            - /url: /karma-works
+          - generic [ref=e71]: /
+          - strong [ref=e72]:
+            - link "candy-apocalypse" [ref=e73] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse
+          - generic [ref=e74]: Public
+        - generic [ref=e75]:
+          - list:
+            - listitem [ref=e76]:
+              - link "You must be signed in to change notification settings" [ref=e77] [cursor=pointer]:
+                - /url: /login?return_to=%2Fkarma-works%2Fcandy-apocalypse
+                - img [ref=e78]
+                - text: Notifications
+            - listitem [ref=e80]:
+              - link "Fork 0" [ref=e81] [cursor=pointer]:
+                - /url: /login?return_to=%2Fkarma-works%2Fcandy-apocalypse
+                - img [ref=e82]
+                - text: Fork
+                - generic "0" [ref=e84]
+            - listitem [ref=e85]:
+              - link "You must be signed in to star a repository" [ref=e87] [cursor=pointer]:
+                - /url: /login?return_to=%2Fkarma-works%2Fcandy-apocalypse
+                - img [ref=e88]
+                - text: Star
+                - generic "0 users starred this repository" [ref=e90]: "0"
+      - navigation "Repository" [ref=e91]:
+        - list [ref=e92]:
+          - listitem [ref=e93]:
+            - link "Code" [ref=e94] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse
+              - img [ref=e95]
+              - generic [ref=e97]: Code
+          - listitem [ref=e98]:
+            - link "Issues" [ref=e99] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse/issues
+              - img [ref=e100]
+              - generic [ref=e103]: Issues
+          - listitem [ref=e104]:
+            - link "Pull requests" [ref=e105] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse/pulls
+              - img [ref=e106]
+              - generic [ref=e108]: Pull requests
+          - listitem [ref=e109]:
+            - link "Actions" [ref=e110] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse/actions
+              - img [ref=e111]
+              - generic [ref=e113]: Actions
+          - listitem [ref=e114]:
+            - link "Projects" [ref=e115] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse/projects
+              - img [ref=e116]
+              - generic [ref=e118]: Projects
+          - listitem [ref=e119]:
+            - link "Security" [ref=e120] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse/security
+              - img [ref=e121]
+              - generic [ref=e123]: Security
+          - listitem [ref=e124]:
+            - link "Insights" [ref=e125] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse/pulse
+              - img [ref=e126]
+              - generic [ref=e128]: Insights
+    - generic [ref=e141]:
+      - heading "karma-works/candy-apocalypse" [level=1] [ref=e143]
+      - generic [ref=e144]:
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - button "master branch" [ref=e151] [cursor=pointer]:
+                - generic [ref=e152]:
+                  - generic [ref=e154]:
+                    - img [ref=e156]
+                    - generic [ref=e159]: master
+                  - generic:
+                    - img
+              - generic [ref=e160]:
+                - link "2 Branches" [ref=e161] [cursor=pointer]:
+                  - /url: /karma-works/candy-apocalypse/branches
+                  - generic [ref=e162]:
+                    - generic:
+                      - img
+                    - generic [ref=e164]:
+                      - strong [ref=e165]: "2"
+                      - text: Branches
+                - link "0 Tags" [ref=e166] [cursor=pointer]:
+                  - /url: /karma-works/candy-apocalypse/tags
+                  - generic [ref=e167]:
+                    - generic:
+                      - img
+                    - generic [ref=e169]:
+                      - strong [ref=e170]: "0"
+                      - text: Tags
+            - generic [ref=e171]:
+              - generic [ref=e175]:
+                - img [ref=e177]
+                - combobox "Go to file" [ref=e179]
+              - button "Code" [ref=e180] [cursor=pointer]:
+                - generic [ref=e181]:
+                  - generic:
+                    - img
+                  - generic [ref=e182]: Code
+                  - generic:
+                    - img
+          - generic [ref=e183]:
+            - generic [ref=e184]:
+              - heading "Folders and files" [level=2] [ref=e185]
+              - table "Folders and files" [ref=e186]:
+                - rowgroup:
+                  - row "Name Last commit message Last commit date":
+                    - columnheader "Name"
+                    - columnheader "Last commit message":
+                      - generic "Last commit message"
+                    - columnheader "Last commit date":
+                      - generic "Last commit date"
+                - rowgroup [ref=e187]:
+                  - row "Latest commit karma-works commits by karma-works scroll weel support failure Commit e8f9f49 · Mar 15, 202635 minutes ago History 461 Commits" [ref=e188]:
+                    - cell "Latest commit karma-works commits by karma-works scroll weel support failure Commit e8f9f49 · Mar 15, 202635 minutes ago History 461 Commits" [ref=e189]:
+                      - generic [ref=e190]:
+                        - heading "Latest commit" [level=2] [ref=e191]
+                        - generic [ref=e192]:
+                          - generic [ref=e194]:
+                            - link "karma-works" [ref=e195] [cursor=pointer]:
+                              - /url: /karma-works
+                              - img "karma-works" [ref=e196]
+                            - link "commits by karma-works" [ref=e197] [cursor=pointer]:
+                              - /url: /karma-works/candy-apocalypse/commits?author=karma-works
+                              - text: karma-works
+                          - generic [ref=e198]:
+                            - link "scroll weel support" [ref=e201] [cursor=pointer]:
+                              - /url: /karma-works/candy-apocalypse/commit/e8f9f49dc0968349b47b2fc9767bff4b0cb9e23b
+                            - button "failure" [ref=e202] [cursor=pointer]:
+                              - img [ref=e203]
+                        - generic [ref=e205]:
+                          - generic [ref=e207]:
+                            - link "Commit e8f9f49" [ref=e208] [cursor=pointer]:
+                              - /url: /karma-works/candy-apocalypse/commit/e8f9f49dc0968349b47b2fc9767bff4b0cb9e23b
+                              - text: e8f9f49
+                            - text: ·
+                            - generic "Mar 15, 2026, 1:35 PM GMT+1" [ref=e209]: Mar 15, 202635 minutes ago
+                          - generic [ref=e210]:
+                            - heading "History" [level=2] [ref=e211]
+                            - link "461 Commits" [ref=e212] [cursor=pointer]:
+                              - /url: /karma-works/candy-apocalypse/commits/master/
+                              - generic [ref=e213]:
+                                - generic:
+                                  - img
+                                - generic [ref=e214]: 461 Commits
+                  - row ".github/workflows, (Directory) Add GitHub Actions CI/CD and playable demo link Mar 14, 202619 hours ago" [ref=e858]:
+                    - cell ".github/workflows, (Directory)" [ref=e216]:
+                      - generic [ref=e217]:
+                        - img [ref=e218]
+                        - link ".github/workflows, (Directory)" [ref=e223] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/tree/master/.github/workflows
+                          - text: .github/workflows
+                    - cell "Add GitHub Actions CI/CD and playable demo link" [ref=e859]:
+                      - link "Add GitHub Actions CI/CD and playable demo link" [ref=e862] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/cc28b17881f1b99946f9606c1140f308a5109480
+                    - cell "Mar 14, 202619 hours ago" [ref=e863]:
+                      - generic [ref=e864]: Mar 14, 202619 hours ago
+                  - row ".vscode, (Directory) Add level selector Feb 28, 20242 years ago" [ref=e865]:
+                    - cell ".vscode, (Directory)" [ref=e229]:
+                      - generic [ref=e230]:
+                        - img [ref=e231]
+                        - link ".vscode, (Directory)" [ref=e236] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/tree/master/.vscode
+                          - text: .vscode
+                    - cell "Add level selector" [ref=e866]:
+                      - link "Add level selector" [ref=e869] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/61295e5ca1e513c0fc67aa62d519068133bb59d7
+                    - cell "Feb 28, 20242 years ago" [ref=e870]:
+                      - generic [ref=e871]: Feb 28, 20242 years ago
+                  - row "assets, (Directory) colored floors Mar 14, 202617 hours ago" [ref=e872]:
+                    - cell "assets, (Directory)" [ref=e242]:
+                      - generic [ref=e243]:
+                        - img [ref=e244]
+                        - link "assets, (Directory)" [ref=e249] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/tree/master/assets
+                          - text: assets
+                    - cell "colored floors" [ref=e873]:
+                      - link "colored floors" [ref=e876] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/05a1aca63b7bd86b9e7d7d621a757e89e26f0f06
+                    - cell "Mar 14, 202617 hours ago" [ref=e877]:
+                      - generic [ref=e878]: Mar 14, 202617 hours ago
+                  - row "docs, (Directory) implement more bugfixes Mar 14, 202617 hours ago" [ref=e879]:
+                    - cell "docs, (Directory)" [ref=e255]:
+                      - generic [ref=e256]:
+                        - img [ref=e257]
+                        - link "docs, (Directory)" [ref=e262] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/tree/master/docs
+                          - text: docs
+                    - cell "implement more bugfixes" [ref=e880]:
+                      - link "implement more bugfixes" [ref=e883] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/3c4e359c5a04ba236cd6aa38e5e292f75e0990c8
+                    - cell "Mar 14, 202617 hours ago" [ref=e884]:
+                      - generic [ref=e885]: Mar 14, 202617 hours ago
+                  - row "public, (Directory) implement more bugfixes Mar 14, 202617 hours ago" [ref=e886]:
+                    - cell "public, (Directory)" [ref=e268]:
+                      - generic [ref=e269]:
+                        - img [ref=e270]
+                        - link "public, (Directory)" [ref=e275] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/tree/master/public
+                          - text: public
+                    - cell "implement more bugfixes" [ref=e887]:
+                      - link "implement more bugfixes" [ref=e890] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/3c4e359c5a04ba236cd6aa38e5e292f75e0990c8
+                    - cell "Mar 14, 202617 hours ago" [ref=e891]:
+                      - generic [ref=e892]: Mar 14, 202617 hours ago
+                  - row "scripts, (Directory) phase 3 completed Mar 3, 20262 weeks ago" [ref=e893]:
+                    - cell "scripts, (Directory)" [ref=e281]:
+                      - generic [ref=e282]:
+                        - img [ref=e283]
+                        - link "scripts, (Directory)" [ref=e288] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/tree/master/scripts
+                          - text: scripts
+                    - cell "phase 3 completed" [ref=e894]:
+                      - link "phase 3 completed" [ref=e897] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/88e6ab43b9c96a6e47f1534a4efbb9f080158e76
+                    - cell "Mar 3, 20262 weeks ago" [ref=e898]:
+                      - generic [ref=e899]: Mar 3, 20262 weeks ago
+                  - row "src, (Directory) scroll weel support Mar 15, 202635 minutes ago" [ref=e900]:
+                    - cell "src, (Directory)" [ref=e294]:
+                      - generic [ref=e295]:
+                        - img [ref=e296]
+                        - link "src, (Directory)" [ref=e301] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/tree/master/src
+                          - text: src
+                    - cell "scroll weel support" [ref=e901]:
+                      - link "scroll weel support" [ref=e904] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/e8f9f49dc0968349b47b2fc9767bff4b0cb9e23b
+                    - cell "Mar 15, 202635 minutes ago" [ref=e905]:
+                      - generic [ref=e906]: Mar 15, 202635 minutes ago
+                  - row "tests, (Directory) Fix linting issues for CI compatibility Mar 14, 202618 hours ago" [ref=e907]:
+                    - cell "tests, (Directory)" [ref=e307]:
+                      - generic [ref=e308]:
+                        - img [ref=e309]
+                        - link "tests, (Directory)" [ref=e314] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/tree/master/tests
+                          - text: tests
+                    - cell "Fix linting issues for CI compatibility" [ref=e908]:
+                      - link "Fix linting issues for CI compatibility" [ref=e911] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/6d5aee0b76555655684a80dc6eb9d20c5825a103
+                    - cell "Mar 14, 202618 hours ago" [ref=e912]:
+                      - generic [ref=e913]: Mar 14, 202618 hours ago
+                  - row ".DS_Store, (File) fix gravity bug Mar 15, 20264 hours ago" [ref=e914]:
+                    - cell ".DS_Store, (File)" [ref=e320]:
+                      - generic [ref=e321]:
+                        - img [ref=e322]
+                        - link ".DS_Store, (File)" [ref=e327] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/.DS_Store
+                          - text: .DS_Store
+                    - cell "fix gravity bug" [ref=e915]:
+                      - link "fix gravity bug" [ref=e918] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/f643a98cce1de7c8b2bb9d7cefc3456f852f60a8
+                    - cell "Mar 15, 20264 hours ago" [ref=e919]:
+                      - generic [ref=e920]: Mar 15, 20264 hours ago
+                  - row ".eslintrc.cjs, (File) Fix linting issues for CI compatibility Mar 14, 202618 hours ago" [ref=e921]:
+                    - cell ".eslintrc.cjs, (File)" [ref=e333]:
+                      - generic [ref=e334]:
+                        - img [ref=e335]
+                        - link ".eslintrc.cjs, (File)" [ref=e340] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/.eslintrc.cjs
+                          - text: .eslintrc.cjs
+                    - cell "Fix linting issues for CI compatibility" [ref=e922]:
+                      - link "Fix linting issues for CI compatibility" [ref=e925] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/6d5aee0b76555655684a80dc6eb9d20c5825a103
+                    - cell "Mar 14, 202618 hours ago" [ref=e926]:
+                      - generic [ref=e927]: Mar 14, 202618 hours ago
+                  - row ".gitignore, (File) phase 3 completed Mar 3, 20262 weeks ago" [ref=e928]:
+                    - cell ".gitignore, (File)" [ref=e346]:
+                      - generic [ref=e347]:
+                        - img [ref=e348]
+                        - link ".gitignore, (File)" [ref=e353] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/.gitignore
+                          - text: .gitignore
+                    - cell "phase 3 completed" [ref=e929]:
+                      - link "phase 3 completed" [ref=e932] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/88e6ab43b9c96a6e47f1534a4efbb9f080158e76
+                    - cell "Mar 3, 20262 weeks ago" [ref=e933]:
+                      - generic [ref=e934]: Mar 3, 20262 weeks ago
+                  - row ".gitlab-ci.yml, (File) Handle 404 as a catch all, to be handled by react router Feb 19, 20242 years ago" [ref=e935]:
+                    - cell ".gitlab-ci.yml, (File)" [ref=e359]:
+                      - generic [ref=e360]:
+                        - img [ref=e361]
+                        - link ".gitlab-ci.yml, (File)" [ref=e366] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/.gitlab-ci.yml
+                          - text: .gitlab-ci.yml
+                    - cell "Handle 404 as a catch all, to be handled by react router" [ref=e936]:
+                      - link "Handle 404 as a catch all, to be handled by react router" [ref=e939] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/88c11016b371179debfd9fe333f1ec1fcc238050
+                    - cell "Feb 19, 20242 years ago" [ref=e940]:
+                      - generic [ref=e941]: Feb 19, 20242 years ago
+                  - row ".tool-versions, (File) Fix nodejs version Feb 13, 20242 years ago" [ref=e942]:
+                    - cell ".tool-versions, (File)" [ref=e372]:
+                      - generic [ref=e373]:
+                        - img [ref=e374]
+                        - link ".tool-versions, (File)" [ref=e379] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/.tool-versions
+                          - text: .tool-versions
+                    - cell "Fix nodejs version" [ref=e943]:
+                      - link "Fix nodejs version" [ref=e946] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/4436cb64449a8601e187d5db5cb633a794ac2fd1
+                    - cell "Feb 13, 20242 years ago" [ref=e947]:
+                      - generic [ref=e948]: Feb 13, 20242 years ago
+                  - row "COPYING, (File) Add GNU GPL license Aug 2, 20206 years ago" [ref=e949]:
+                    - cell "COPYING, (File)" [ref=e385]:
+                      - generic [ref=e386]:
+                        - img [ref=e387]
+                        - link "COPYING, (File)" [ref=e392] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/COPYING
+                          - text: COPYING
+                    - cell "Add GNU GPL license" [ref=e950]:
+                      - link "Add GNU GPL license" [ref=e953] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/f296762ec3607a869c11245f482a987b3753b2cb
+                    - cell "Aug 2, 20206 years ago" [ref=e954]:
+                      - generic [ref=e955]: Aug 2, 20206 years ago
+                  - row "LICENSE, (File) Fix linting issues for CI compatibility Mar 14, 202618 hours ago" [ref=e956]:
+                    - cell "LICENSE, (File)" [ref=e398]:
+                      - generic [ref=e399]:
+                        - img [ref=e400]
+                        - link "LICENSE, (File)" [ref=e405] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/LICENSE
+                          - text: LICENSE
+                    - cell "Fix linting issues for CI compatibility" [ref=e957]:
+                      - link "Fix linting issues for CI compatibility" [ref=e960] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/6d5aee0b76555655684a80dc6eb9d20c5825a103
+                    - cell "Mar 14, 202618 hours ago" [ref=e961]:
+                      - generic [ref=e962]: Mar 14, 202618 hours ago
+                  - row "README.md, (File) Add GitHub Actions CI/CD and playable demo link Mar 14, 202619 hours ago" [ref=e963]:
+                    - cell "README.md, (File)" [ref=e411]:
+                      - generic [ref=e412]:
+                        - img [ref=e413]
+                        - link "README.md, (File)" [ref=e418] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/README.md
+                          - text: README.md
+                    - cell "Add GitHub Actions CI/CD and playable demo link" [ref=e964]:
+                      - link "Add GitHub Actions CI/CD and playable demo link" [ref=e967] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/cc28b17881f1b99946f9606c1140f308a5109480
+                    - cell "Mar 14, 202619 hours ago" [ref=e968]:
+                      - generic [ref=e969]: Mar 14, 202619 hours ago
+                  - row "index.html, (File) Fix linting issues for CI compatibility Mar 14, 202618 hours ago" [ref=e970]:
+                    - cell "index.html, (File)" [ref=e424]:
+                      - generic [ref=e425]:
+                        - img [ref=e426]
+                        - link "index.html, (File)" [ref=e431] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/index.html
+                          - text: index.html
+                    - cell "Fix linting issues for CI compatibility" [ref=e971]:
+                      - link "Fix linting issues for CI compatibility" [ref=e974] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/6d5aee0b76555655684a80dc6eb9d20c5825a103
+                    - cell "Mar 14, 202618 hours ago" [ref=e975]:
+                      - generic [ref=e976]: Mar 14, 202618 hours ago
+                  - row "package-lock.json, (File) phase 3 completed Mar 3, 20262 weeks ago" [ref=e977]:
+                    - cell "package-lock.json, (File)" [ref=e437]:
+                      - generic [ref=e438]:
+                        - img [ref=e439]
+                        - link "package-lock.json, (File)" [ref=e444] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/package-lock.json
+                          - text: package-lock.json
+                    - cell "phase 3 completed" [ref=e978]:
+                      - link "phase 3 completed" [ref=e981] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/88e6ab43b9c96a6e47f1534a4efbb9f080158e76
+                    - cell "Mar 3, 20262 weeks ago" [ref=e982]:
+                      - generic [ref=e983]: Mar 3, 20262 weeks ago
+                  - row "package.json, (File) Fix linting issues for CI compatibility Mar 14, 202618 hours ago" [ref=e984]:
+                    - cell "package.json, (File)" [ref=e450]:
+                      - generic [ref=e451]:
+                        - img [ref=e452]
+                        - link "package.json, (File)" [ref=e457] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/package.json
+                          - text: package.json
+                    - cell "Fix linting issues for CI compatibility" [ref=e985]:
+                      - link "Fix linting issues for CI compatibility" [ref=e988] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/6d5aee0b76555655684a80dc6eb9d20c5825a103
+                    - cell "Mar 14, 202618 hours ago" [ref=e989]:
+                      - generic [ref=e990]: Mar 14, 202618 hours ago
+                  - row "playwright.config.ts, (File) Fix linting issues for CI compatibility Mar 14, 202618 hours ago" [ref=e991]:
+                    - cell "playwright.config.ts, (File)" [ref=e463]:
+                      - generic [ref=e464]:
+                        - img [ref=e465]
+                        - link "playwright.config.ts, (File)" [ref=e470] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/playwright.config.ts
+                          - text: playwright.config.ts
+                    - cell "Fix linting issues for CI compatibility" [ref=e992]:
+                      - link "Fix linting issues for CI compatibility" [ref=e995] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/6d5aee0b76555655684a80dc6eb9d20c5825a103
+                    - cell "Mar 14, 202618 hours ago" [ref=e996]:
+                      - generic [ref=e997]: Mar 14, 202618 hours ago
+                  - row "pnpm-lock.yaml, (File) candy apocalpyse based on babylon Mar 8, 2026last week" [ref=e998]:
+                    - cell "pnpm-lock.yaml, (File)" [ref=e476]:
+                      - generic [ref=e477]:
+                        - img [ref=e478]
+                        - link "pnpm-lock.yaml, (File)" [ref=e483] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/pnpm-lock.yaml
+                          - text: pnpm-lock.yaml
+                    - cell "candy apocalpyse based on babylon" [ref=e999]:
+                      - link "candy apocalpyse based on babylon" [ref=e1002] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/eefe53dbed29f035d7313e32a779a98c81c8a1a6
+                    - cell "Mar 8, 2026last week" [ref=e1003]:
+                      - generic [ref=e1004]: Mar 8, 2026last week
+                  - row "tmp_svg_dump.svg, (File) candy apocalpyse based on babylon Mar 8, 2026last week" [ref=e1005]:
+                    - cell "tmp_svg_dump.svg, (File)" [ref=e489]:
+                      - generic [ref=e490]:
+                        - img [ref=e491]
+                        - link "tmp_svg_dump.svg, (File)" [ref=e496] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/tmp_svg_dump.svg
+                          - text: tmp_svg_dump.svg
+                    - cell "candy apocalpyse based on babylon" [ref=e1006]:
+                      - link "candy apocalpyse based on babylon" [ref=e1009] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/eefe53dbed29f035d7313e32a779a98c81c8a1a6
+                    - cell "Mar 8, 2026last week" [ref=e1010]:
+                      - generic [ref=e1011]: Mar 8, 2026last week
+                  - row "tsconfig.json, (File) candy apocalpyse based on babylon Mar 8, 2026last week" [ref=e1012]:
+                    - cell "tsconfig.json, (File)" [ref=e502]:
+                      - generic [ref=e503]:
+                        - img [ref=e504]
+                        - link "tsconfig.json, (File)" [ref=e509] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/tsconfig.json
+                          - text: tsconfig.json
+                    - cell "candy apocalpyse based on babylon" [ref=e1013]:
+                      - link "candy apocalpyse based on babylon" [ref=e1016] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/eefe53dbed29f035d7313e32a779a98c81c8a1a6
+                    - cell "Mar 8, 2026last week" [ref=e1017]:
+                      - generic [ref=e1018]: Mar 8, 2026last week
+                  - row "tsconfig.node.json, (File) Basic conversion to react Feb 13, 20242 years ago" [ref=e1019]:
+                    - cell "tsconfig.node.json, (File)" [ref=e515]:
+                      - generic [ref=e516]:
+                        - img [ref=e517]
+                        - link "tsconfig.node.json, (File)" [ref=e522] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/tsconfig.node.json
+                          - text: tsconfig.node.json
+                    - cell "Basic conversion to react" [ref=e1020]:
+                      - link "Basic conversion to react" [ref=e1023] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/7736d967fbf1fd41962d444babeea352887b804e
+                    - cell "Feb 13, 20242 years ago" [ref=e1024]:
+                      - generic [ref=e1025]: Feb 13, 20242 years ago
+                  - row "vite.config.ts, (File) Fix linting issues for CI compatibility Mar 14, 202618 hours ago" [ref=e1026]:
+                    - cell "vite.config.ts, (File)" [ref=e528]:
+                      - generic [ref=e529]:
+                        - img [ref=e530]
+                        - link "vite.config.ts, (File)" [ref=e535] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/vite.config.ts
+                          - text: vite.config.ts
+                    - cell "Fix linting issues for CI compatibility" [ref=e1027]:
+                      - link "Fix linting issues for CI compatibility" [ref=e1030] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/6d5aee0b76555655684a80dc6eb9d20c5825a103
+                    - cell "Mar 14, 202618 hours ago" [ref=e1031]:
+                      - generic [ref=e1032]: Mar 14, 202618 hours ago
+                  - row "vitest.config.ts, (File) Fix linting issues for CI compatibility Mar 14, 202618 hours ago" [ref=e1033]:
+                    - cell "vitest.config.ts, (File)" [ref=e541]:
+                      - generic [ref=e542]:
+                        - img [ref=e543]
+                        - link "vitest.config.ts, (File)" [ref=e548] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/vitest.config.ts
+                          - text: vitest.config.ts
+                    - cell "Fix linting issues for CI compatibility" [ref=e1034]:
+                      - link "Fix linting issues for CI compatibility" [ref=e1037] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/6d5aee0b76555655684a80dc6eb9d20c5825a103
+                    - cell "Mar 14, 202618 hours ago" [ref=e1038]:
+                      - generic [ref=e1039]: Mar 14, 202618 hours ago
+                  - row "yarn.lock, (File) phase 3 completed Mar 3, 20262 weeks ago" [ref=e1040]:
+                    - cell "yarn.lock, (File)" [ref=e554]:
+                      - generic [ref=e555]:
+                        - img [ref=e556]
+                        - link "yarn.lock, (File)" [ref=e561] [cursor=pointer]:
+                          - /url: /karma-works/candy-apocalypse/blob/master/yarn.lock
+                          - text: yarn.lock
+                    - cell "phase 3 completed" [ref=e1041]:
+                      - link "phase 3 completed" [ref=e1044] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/commit/88e6ab43b9c96a6e47f1534a4efbb9f080158e76
+                    - cell "Mar 3, 20262 weeks ago" [ref=e1045]:
+                      - generic [ref=e1046]: Mar 3, 20262 weeks ago
+            - generic [ref=e567]:
+              - generic [ref=e568]:
+                - heading "Repository files navigation" [level=2] [ref=e569]
+                - navigation "Repository files" [ref=e570]:
+                  - list [ref=e571]:
+                    - listitem [ref=e572]:
+                      - link "README" [ref=e573] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e575]
+                        - generic [ref=e577]: README
+                    - listitem [ref=e578]:
+                      - link "MIT license" [ref=e579] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e581]
+                        - generic [ref=e583]: MIT license
+                    - listitem [ref=e584]:
+                      - link "GPL-3.0 license" [ref=e585] [cursor=pointer]:
+                        - /url: "#"
+                        - img [ref=e587]
+                        - generic [ref=e589]: GPL-3.0 license
+                - button "Outline" [ref=e590] [cursor=pointer]:
+                  - img [ref=e591]
+              - article [ref=e594]:
+                - paragraph [ref=e595]:
+                  - link "Candy Apocalypse Logo" [ref=e596] [cursor=pointer]:
+                    - /url: /karma-works/candy-apocalypse/blob/master/assets/logo.svg
+                    - img "Candy Apocalypse Logo" [ref=e597]
+                - generic [ref=e598]:
+                  - heading "Candy Apocalypse" [level=1] [ref=e599]
+                  - 'link "Permalink: Candy Apocalypse" [ref=e600] [cursor=pointer]':
+                    - /url: "#candy-apocalypse"
+                    - img [ref=e601]
+                - paragraph [ref=e603]:
+                  - emphasis [ref=e604]: "\"Sugar, spice, and everything dies.\""
+                - paragraph [ref=e605]:
+                  - text: 🎮
+                  - strong [ref=e606]: "Play it now:"
+                  - link "https://karma-works.github.io/candy-apocalypse/" [ref=e607] [cursor=pointer]:
+                    - /url: https://karma-works.github.io/candy-apocalypse/
+                - paragraph [ref=e608]:
+                  - link "Candy Apocalypse Screenshot" [ref=e609] [cursor=pointer]:
+                    - /url: /karma-works/candy-apocalypse/blob/master/docs/candy-apocalypse.png
+                    - img "Candy Apocalypse Screenshot" [ref=e610]
+                - paragraph [ref=e611]: A delightfully chaotic browser game built with Babylon.js, featuring first-person gameplay with cartoon-style visuals.
+                - generic [ref=e612]:
+                  - heading "Tech Stack" [level=2] [ref=e613]
+                  - 'link "Permalink: Tech Stack" [ref=e614] [cursor=pointer]':
+                    - /url: "#tech-stack"
+                    - img [ref=e615]
+                - list [ref=e617]:
+                  - listitem [ref=e618]:
+                    - strong [ref=e619]: Engine
+                    - text: ": Babylon.js"
+                  - listitem [ref=e620]:
+                    - strong [ref=e621]: UI
+                    - text: ": React + TypeScript"
+                  - listitem [ref=e622]:
+                    - strong [ref=e623]: State
+                    - text: ": Zustand"
+                  - listitem [ref=e624]:
+                    - strong [ref=e625]: Build
+                    - text: ": Vite"
+                  - listitem [ref=e626]:
+                    - strong [ref=e627]: Testing
+                    - text: ": Vitest + Playwright"
+                - generic [ref=e628]:
+                  - heading "Getting Started" [level=2] [ref=e629]
+                  - 'link "Permalink: Getting Started" [ref=e630] [cursor=pointer]':
+                    - /url: "#getting-started"
+                    - img [ref=e631]
+                - generic [ref=e633]:
+                  - heading "Prerequisites" [level=3] [ref=e634]
+                  - 'link "Permalink: Prerequisites" [ref=e635] [cursor=pointer]':
+                    - /url: "#prerequisites"
+                    - img [ref=e636]
+                - list [ref=e638]:
+                  - listitem [ref=e639]: Node.js 18+
+                  - listitem [ref=e640]: pnpm (package manager)
+                - generic [ref=e641]:
+                  - heading "Installation" [level=3] [ref=e642]
+                  - 'link "Permalink: Installation" [ref=e643] [cursor=pointer]':
+                    - /url: "#installation"
+                    - img [ref=e644]
+                - generic [ref=e646]:
+                  - generic [ref=e647]:
+                    - generic [ref=e648]: "# Install dependencies"
+                    - text: pnpm install
+                    - generic [ref=e649]: "# Start development server"
+                    - text: pnpm dev
+                    - generic [ref=e650]: "# Build for production"
+                    - text: pnpm build
+                    - generic [ref=e651]: "# Run tests"
+                    - text: pnpm test
+                  - button "Copy" [ref=e653] [cursor=pointer]:
+                    - img [ref=e654]
+                - generic [ref=e657]:
+                  - heading "Project Structure" [level=2] [ref=e658]
+                  - 'link "Permalink: Project Structure" [ref=e659] [cursor=pointer]':
+                    - /url: "#project-structure"
+                    - img [ref=e660]
+                - generic [ref=e662]:
+                  - code [ref=e664]: "src/ ├── engine/ # Engine layer (rendering, input, audio) ├── game/ # Game layer (entities, state, levels) └── ui/ # React UI components"
+                  - button "Copy" [ref=e666] [cursor=pointer]:
+                    - img [ref=e667]
+                - generic [ref=e670]:
+                  - heading "Controls" [level=2] [ref=e671]
+                  - 'link "Permalink: Controls" [ref=e672] [cursor=pointer]':
+                    - /url: "#controls"
+                    - img [ref=e673]
+                - list [ref=e675]:
+                  - listitem [ref=e676]:
+                    - strong [ref=e677]: WASD
+                    - text: ": Move"
+                  - listitem [ref=e678]:
+                    - strong [ref=e679]: Mouse
+                    - text: ": Look around"
+                  - listitem [ref=e680]:
+                    - strong [ref=e681]: Click
+                    - text: ": Lock pointer"
+                  - listitem [ref=e682]:
+                    - strong [ref=e683]: ESC
+                    - text: ": Unlock pointer"
+                - generic [ref=e684]:
+                  - heading "Development Status" [level=2] [ref=e685]
+                  - 'link "Permalink: Development Status" [ref=e686] [cursor=pointer]':
+                    - /url: "#development-status"
+                    - img [ref=e687]
+                - paragraph [ref=e689]:
+                  - text: See
+                  - link "REWRITE_PROGRESS.md" [ref=e690] [cursor=pointer]:
+                    - /url: /karma-works/candy-apocalypse/blob/master/docs/REWRITE_PROGRESS.md
+                  - text: for current status.
+                - generic [ref=e691]:
+                  - heading "Key Design Documents" [level=2] [ref=e692]
+                  - 'link "Permalink: Key Design Documents" [ref=e693] [cursor=pointer]':
+                    - /url: "#key-design-documents"
+                    - img [ref=e694]
+                - list [ref=e696]:
+                  - listitem [ref=e697]:
+                    - strong [ref=e698]:
+                      - link "Rewrite Plan" [ref=e699] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/blob/master/docs/REWRITE_PLAN.md
+                    - text: "- Architecture and implementation plan"
+                  - listitem [ref=e700]:
+                    - strong [ref=e701]:
+                      - link "Product Design" [ref=e702] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/blob/master/docs/product_design.md
+                    - text: "- Creative vision & style guide"
+                  - listitem [ref=e703]:
+                    - strong [ref=e704]:
+                      - link "Requirements" [ref=e705] [cursor=pointer]:
+                        - /url: /karma-works/candy-apocalypse/blob/master/docs/requirements.md
+                    - text: "- Technical requirements"
+                - generic [ref=e706]:
+                  - heading "License" [level=2] [ref=e707]
+                  - 'link "Permalink: License" [ref=e708] [cursor=pointer]':
+                    - /url: "#license"
+                    - img [ref=e709]
+                - paragraph [ref=e711]: GPL 3
+        - generic [ref=e715]:
+          - generic [ref=e718]:
+            - heading "About" [level=2] [ref=e719]
+            - paragraph [ref=e720]: A delightfully chaotic browser game built with Babylon.js
+            - heading "Resources" [level=3] [ref=e721]
+            - link "Readme" [ref=e723] [cursor=pointer]:
+              - /url: "#readme-ov-file"
+              - img [ref=e724]
+              - text: Readme
+            - heading "License" [level=3] [ref=e726]
+            - group [ref=e727]:
+              - button "MIT, GPL-3.0 licenses found" [ref=e728] [cursor=pointer]:
+                - img [ref=e729]
+                - text: MIT, GPL-3.0 licenses found
+            - link "Activity" [ref=e732] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse/activity
+              - img [ref=e733]
+              - text: Activity
+            - heading "Stars" [level=3] [ref=e735]
+            - link "0 stars" [ref=e737] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse/stargazers
+              - img [ref=e738]
+              - strong [ref=e740]: "0"
+              - text: stars
+            - heading "Watchers" [level=3] [ref=e741]
+            - link "0 watching" [ref=e743] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse/watchers
+              - img [ref=e744]
+              - strong [ref=e746]: "0"
+              - text: watching
+            - heading "Forks" [level=3] [ref=e747]
+            - link "0 forks" [ref=e749] [cursor=pointer]:
+              - /url: /karma-works/candy-apocalypse/forks
+              - img [ref=e750]
+              - strong [ref=e752]: "0"
+              - text: forks
+            - link "Report repository" [ref=e754] [cursor=pointer]:
+              - /url: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fkarma-works%2Fcandy-apocalypse&report=karma-works+%28user%29
+          - generic [ref=e756]:
+            - heading "Releases" [level=2] [ref=e757]:
+              - link "Releases" [ref=e758] [cursor=pointer]:
+                - /url: /karma-works/candy-apocalypse/releases
+            - generic [ref=e759]: No releases published
+          - generic [ref=e761]:
+            - heading "Packages" [level=2] [ref=e762]:
+              - link "Packages" [ref=e763] [cursor=pointer]:
+                - /url: /users/karma-works/packages?repo_name=candy-apocalypse
+            - generic [ref=e764]: No packages published
+          - generic [ref=e766]:
+            - heading "Contributors 2" [level=2] [ref=e767]:
+              - link "Contributors 2" [ref=e768] [cursor=pointer]:
+                - /url: /karma-works/candy-apocalypse/graphs/contributors
+                - text: Contributors
+                - generic "2" [ref=e769]
+            - list [ref=e770]:
+              - listitem [ref=e771]:
+                - link "@tchandelle" [ref=e772] [cursor=pointer]:
+                  - /url: https://github.com/tchandelle
+                  - img "@tchandelle" [ref=e773]
+                - link "tchandelle Thomas Chandelle" [ref=e775] [cursor=pointer]:
+                  - /url: https://github.com/tchandelle
+                  - strong [ref=e776]: tchandelle
+                  - text: Thomas Chandelle
+              - listitem [ref=e777]:
+                - link "@karma-works" [ref=e778] [cursor=pointer]:
+                  - /url: https://github.com/karma-works
+                  - img "@karma-works" [ref=e779]
+                - link "karma-works" [ref=e781] [cursor=pointer]:
+                  - /url: https://github.com/karma-works
+                  - strong [ref=e782]: karma-works
+          - generic [ref=e784]:
+            - heading "Languages" [level=2] [ref=e785]
+            - list [ref=e793]:
+              - listitem [ref=e794]:
+                - link "TypeScript 85.9%" [ref=e795] [cursor=pointer]:
+                  - /url: /karma-works/candy-apocalypse/search?l=typescript
+                  - img [ref=e796]
+                  - generic [ref=e798]: TypeScript
+                  - generic [ref=e799]: 85.9%
+              - listitem [ref=e800]:
+                - link "CSS 9.1%" [ref=e801] [cursor=pointer]:
+                  - /url: /karma-works/candy-apocalypse/search?l=css
+                  - img [ref=e802]
+                  - generic [ref=e804]: CSS
+                  - generic [ref=e805]: 9.1%
+              - listitem [ref=e806]:
+                - link "JavaScript 2.9%" [ref=e807] [cursor=pointer]:
+                  - /url: /karma-works/candy-apocalypse/search?l=javascript
+                  - img [ref=e808]
+                  - generic [ref=e810]: JavaScript
+                  - generic [ref=e811]: 2.9%
+              - listitem [ref=e812]:
+                - link "Python 1.8%" [ref=e813] [cursor=pointer]:
+                  - /url: /karma-works/candy-apocalypse/search?l=python
+                  - img [ref=e814]
+                  - generic [ref=e816]: Python
+                  - generic [ref=e817]: 1.8%
+              - listitem [ref=e818]:
+                - link "HTML 0.3%" [ref=e819] [cursor=pointer]:
+                  - /url: /karma-works/candy-apocalypse/search?l=html
+                  - img [ref=e820]
+                  - generic [ref=e822]: HTML
+                  - generic [ref=e823]: 0.3%
+  - contentinfo [ref=e825]:
+    - heading "Footer" [level=2] [ref=e826]
+    - generic [ref=e827]:
+      - generic [ref=e828]:
+        - link "GitHub Homepage" [ref=e829] [cursor=pointer]:
+          - /url: https://github.com
+          - img [ref=e830]
+        - generic [ref=e832]: © 2026 GitHub, Inc.
+      - navigation "Footer" [ref=e833]:
+        - heading "Footer navigation" [level=3] [ref=e834]
+        - list "Footer navigation" [ref=e835]:
+          - listitem [ref=e836]:
+            - link "Terms" [ref=e837] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
+          - listitem [ref=e838]:
+            - link "Privacy" [ref=e839] [cursor=pointer]:
+              - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
+          - listitem [ref=e840]:
+            - link "Security" [ref=e841] [cursor=pointer]:
+              - /url: https://github.com/security
+          - listitem [ref=e842]:
+            - link "Status" [ref=e843] [cursor=pointer]:
+              - /url: https://www.githubstatus.com/
+          - listitem [ref=e844]:
+            - link "Community" [ref=e845] [cursor=pointer]:
+              - /url: https://github.community/
+          - listitem [ref=e846]:
+            - link "Docs" [ref=e847] [cursor=pointer]:
+              - /url: https://docs.github.com/
+          - listitem [ref=e848]:
+            - link "Contact" [ref=e849] [cursor=pointer]:
+              - /url: https://support.github.com?tags=dotcom-footer
+          - listitem [ref=e850]:
+            - button "Manage cookies" [ref=e852] [cursor=pointer]
+          - listitem [ref=e853]:
+            - button "Do not share my personal information" [ref=e855] [cursor=pointer]
