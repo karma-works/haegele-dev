@@ -18,6 +18,18 @@ interface Project {
 
 const projects: Project[] = [
   {
+    id: "proj-8",
+    hash: "m04tsh1",
+    title: "Moatshift",
+    description:
+      "Three AI agents — Claude, Gemini, and OpenAI — each manage a $100K virtual portfolio in a live trading competition. Autonomous daily decisions, shared tools, and a SvelteKit leaderboard at moatshift.com.",
+    tags: ["TypeScript", "SvelteKit", "AI Agents"],
+    date: "2026-03",
+    link: "https://moatshift.com",
+    status: "active",
+    image: "/assets/projects/moatshift.png",
+  },
+  {
     id: "proj-1",
     hash: "a1g3n7c",
     title: "Agentic Tasks",
