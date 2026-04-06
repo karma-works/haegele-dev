@@ -32,7 +32,7 @@ export function ReposPage() {
     async function fetchRepos() {
       try {
         const res = await fetch(
-          'https://api.github.com/orgs/karma-works/repos?per_page=100&sort=updated',
+          'https://api.github.com/users/karma-works/repos?per_page=100&sort=updated',
         );
         if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
         const data: Repo[] = await res.json();
