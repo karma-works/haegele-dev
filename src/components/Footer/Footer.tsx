@@ -266,6 +266,17 @@ export const Footer = memo(function Footer() {
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
             </a>
+            <a
+              href="https://huggingface.co/karma-works"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialLink}
+              aria-label="Hugging Face"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm-3.5 6a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm7 0a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-7.25 5.5c-.138 0-.25.112-.25.25 0 2.347 1.97 4.25 4.75 4.25s4.75-1.903 4.75-4.25c0-.138-.112-.25-.25-.25H8.25zm1.363 1h4.774C13.98 15.473 13.07 16 12 16s-1.98-.527-2.387-1.5z"/>
+              </svg>
+            </a>
           </div>
 
           <div className={styles.themeIndicator}>
