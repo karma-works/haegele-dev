@@ -256,7 +256,7 @@ export const Footer = memo(function Footer() {
               </svg>
             </a>
             <a
-              href="https://x.com/symbian2111"
+              href="https://x.com/moatshift"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialLink}
