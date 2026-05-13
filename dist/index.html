@@ -13,10 +13,39 @@
       rel="stylesheet"
     />
     <title>Haegele.dev - Developer Portfolio</title>
-    <script type="module" crossorigin src="/assets/index-YC_VEgHn.js"></script>
+    <script>
+      (function clearLegacyClientCaches() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker
+            .getRegistrations()
+            .then(function (registrations) {
+              registrations.forEach(function (registration) {
+                registration.unregister();
+              });
+            })
+            .catch(function () {});
+        }
+
+        if ('caches' in window) {
+          caches
+            .keys()
+            .then(function (keys) {
+              return Promise.all(
+                keys.map(function (key) {
+                  return caches.delete(key);
+                })
+              );
+            })
+            .catch(function () {});
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/main-CpayaS3p.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-react-D5TkvlSF.js">
+    <link rel="modulepreload" crossorigin href="/assets/global-C4XQUkML.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-tone-D7Bg9Mhb.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-CfDSoRGF.css">
+    <link rel="stylesheet" crossorigin href="/assets/global-D7xl5bKV.css">
+    <link rel="stylesheet" crossorigin href="/assets/main-BbMb9UVe.css">
   </head>
   <body>
     <div id="root"></div>
