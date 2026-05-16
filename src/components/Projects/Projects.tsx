@@ -18,6 +18,18 @@ interface Project {
 
 const projects: Project[] = [
   {
+    id: "proj-9",
+    hash: "g4phnt",
+    title: "GapHunter",
+    description:
+      "AI-assisted market gap research for founder idea generation. Analyzes markets, identifies underserved niches, and surfaces opportunities using multi-agent pipelines.",
+    tags: ["Python", "AI Agents", "Docker"],
+    date: "2026-05",
+    link: "https://github.com/karma-works/gaphunter",
+    status: "active",
+    image: "/assets/projects/gaphunter.webp",
+  },
+  {
     id: "proj-8",
     hash: "m04tsh1",
     title: "Moatshift",
