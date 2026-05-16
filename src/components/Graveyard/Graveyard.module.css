@@ -285,6 +285,49 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
+@media (prefers-color-scheme: light) {
+  /* Graveyard stays intentionally dark in light mode — tombstones are always dark stone.
+     Override the CSS variable-driven text colors back to light values so they read
+     correctly against the dark stone backgrounds. */
+
+  .section {
+    background: linear-gradient(
+      180deg,
+      #1a1a2e 0%,
+      #0a0a12 50%,
+      #0d0d18 100%
+    );
+  }
+
+  .title {
+    color: #ffffff;
+  }
+
+  .titleAccent {
+    color: #f472b6;
+  }
+
+  .subtitle {
+    color: #c4c6cc;
+  }
+
+  .projectName {
+    color: #ffffff;
+  }
+
+  .epitaph {
+    color: #b8bcc6;
+  }
+
+  .dates {
+    color: #9ca3af;
+  }
+
+  .footerText {
+    color: #c4c6cc;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .container,
   .tombstone,
