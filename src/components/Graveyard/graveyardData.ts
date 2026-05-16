@@ -13,7 +13,7 @@ export const graveyardProjects: GraveyardProject[] = [
     id: "grave-2",
     title: "Descend Into Darkness",
     epitaph:
-      "A blind-first audio platformer where Rex and Dr. Mara Voss navigate a cave that grows darker with every level. The concept was genuinely compelling — killed by scope. When the cave swallowed the developer too, the lights went out for good.",
+      "Built blind-first from the wrong direction: a sighted platformer with sounds bolted on, not a game designed from audio principles up. WCAG AAA turned out to be the wrong compass — built for static pages, not real-time spatial navigation under pressure. Stereo wasn't enough for spatial understanding, AI wasn't a real sparring partner for blind UX, and Rex is still down there waiting for the real users who never came.",
     bornDate: "2026-05",
     deathDate: "2026-05",
     techStack: ["TypeScript", "HTML"],
