@@ -6,6 +6,8 @@
   justify-content: center;
   padding: var(--spacing-2xl);
   overflow: hidden;
+  background: var(--color-bg);
+  isolation: isolate;
 }
 
 .container {
