@@ -283,6 +283,11 @@ export const Contact = memo(function Contact() {
   const [showParticles, setShowParticles] = useState(false);
   const [particleOrigin, setParticleOrigin] = useState({ x: 0, y: 0 });
   const submitRef = useRef<HTMLButtonElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isSuccess) successRef.current?.focus();
+  }, [isSuccess]);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -378,7 +383,13 @@ export const Contact = memo(function Contact() {
         </p>
 
         {isSuccess ? (
-          <div className={styles.successMessage}>
+          <div
+            ref={successRef}
+            className={styles.successMessage}
+            role="status"
+            aria-live="polite"
+            tabIndex={-1}
+          >
             <div className={styles.successIcon}>
               <svg
                 viewBox="0 0 24 24"
@@ -449,6 +460,8 @@ export const Contact = memo(function Contact() {
                 type="submit"
                 className={styles.submitButton}
                 disabled={isSubmitting}
+                aria-busy={isSubmitting}
+                aria-label={isSubmitting ? "Sending message, please wait" : undefined}
               >
                 {isSubmitting ? (
                   <span className={styles.spinner}>

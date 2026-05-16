@@ -8,6 +8,7 @@ const Skills = lazy(() => import("./components/Skills"));
 const Projects = lazy(() => import("./components/Projects"));
 const Graveyard = lazy(() => import("./components/Graveyard"));
 const Hobbies = lazy(() => import("./components/Hobbies"));
+const AIFeed = lazy(() => import("./components/AIFeed"));
 const Contact = lazy(() => import("./components/Contact"));
 const Footer = lazy(() => import("./components/Footer"));
 
@@ -90,6 +91,9 @@ function App() {
         </LazySection>
         <LazySection>
           <Hobbies />
+        </LazySection>
+        <LazySection>
+          <AIFeed />
         </LazySection>
         <LazySection>
           <Contact />

@@ -10,8 +10,13 @@ import {
 } from "../../audio/AudioAnalyzerService.ts";
 import type { WaveScaling } from "../../types/index.ts";
 
-const COLOR_MINT = "#10b981";
-const COLOR_PINK = "#ec4899";
+function getWaveColors(): { colorStart: string; colorEnd: string } {
+  const style = getComputedStyle(document.documentElement);
+  return {
+    colorStart: style.getPropertyValue('--wave-color-start').trim() || '#10b981',
+    colorEnd:   style.getPropertyValue('--wave-color-end').trim()   || '#ec4899',
+  };
+}
 const SCROLL_COLOR_THRESHOLD = 1000;
 
 export function useWaveEngine(
@@ -31,11 +36,12 @@ export function useWaveEngine(
     canvas.width = width;
     canvas.height = height;
 
+    const { colorStart, colorEnd } = getWaveColors();
     const engine = new WaveEngine({
       canvas,
       scaling,
-      colorStart: COLOR_MINT,
-      colorEnd: COLOR_PINK,
+      colorStart,
+      colorEnd,
       reducedMotion: !shouldAnimate,
     });
 

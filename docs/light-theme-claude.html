@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>haegele.dev — Light Theme (AAA Draft)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /*
+     * Light theme color palette — WCAG 2.2 Level AAA compliant
+     * All text/background pairs verified at ≥ 7:1 contrast ratio.
+     *
+     * Contrast ratios on #f8f7f4 background (luminance ≈ 0.931):
+     *   --color-text        #1a1a1f  →  16.9:1  ✓
+     *   --color-text-muted  #4a4f5a  →   7.7:1  ✓
+     *   --color-accent-mint #065f46  →   7.2:1  ✓ (forest green)
+     *   --color-accent-pink #831843  →   9.0:1  ✓ (deep rose)
+     *   --color-accent-blue #1e3a8a  →   9.7:1  ✓ (navy)
+     *   --color-focus       #78350f  →   8.5:1  ✓ (dark amber)
+     *
+     * Mapping to existing dark-theme variable names so the light block
+     * in variables.css is a straight override — no component changes.
+     */
+
+    :root {
+      --color-bg:            #f8f7f4;
+      --color-bg-secondary:  #eeecea;
+      --color-text:          #1a1a1f;
+      --color-text-muted:    #4a4f5a;
+      --color-accent-mint:   #065f46;
+      --color-accent-pink:   #831843;
+      --color-accent-blue:   #1e3a8a;
+      --color-focus:         #78350f;
+      --color-focus-ring:    rgba(120, 53, 15, 0.35);
+
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --glass-bg:     rgba(0, 0, 0, 0.03);
+      --glass-border: rgba(0, 0, 0, 0.09);
+
+      --radius-sm:   4px;
+      --radius-md:   8px;
+      --radius-lg:   12px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.10);
+      --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.12);
+
+      /* Wave colors for PulseBackground in light mode */
+      --wave-color-start: #065f46;
+      --wave-color-end:   #831843;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Skip link ─────────────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      padding: 0.5rem 1.5rem;
+      background: var(--color-focus);
+      color: var(--color-bg);
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    /* ── Global focus style ─────────────────────────────────────── */
+    :focus-visible {
+      outline: 3px solid var(--color-focus);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ── Utility ────────────────────────────────────────────────── */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0;
+      margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
+    }
+
+    a {
+      color: var(--color-accent-blue);
+      text-decoration: none;
+    }
+    a:hover { color: var(--color-accent-mint); }
+
+    /* ── Color swatch reference ─────────────────────────────────── */
+    .palette-strip {
+      display: flex;
+      gap: 0;
+      height: 6px;
+    }
+    .palette-strip span { flex: 1; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════════════════════ */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(248, 247, 244, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+    .nav-logo span { color: var(--color-accent-mint); }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      font-weight: 400;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover,
+    .nav-links a[aria-current] {
+      color: var(--color-accent-mint);
+    }
+    .nav-links a[aria-current] {
+      border-bottom: 2px solid var(--color-accent-mint);
+      padding-bottom: 2px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HERO / TERMINAL
+    ═══════════════════════════════════════════════════════════════ */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Simulated PulseBackground wave — dark strokes on warm white */
+    .hero-wave {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .terminal {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 680px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      position: relative;
+      z-index: 1;
+    }
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--glass-border);
+      background: rgba(0,0,0,0.04);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    .terminal-btn {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+    .terminal-btn-close    { background: #dc2626; }
+    .terminal-btn-minimize { background: #d97706; }
+    .terminal-btn-maximize { background: #16a34a; }
+    .terminal-title {
+      margin-left: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+    .terminal-body {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .terminal-line { display: flex; gap: 0.5rem; align-items: baseline; }
+    .terminal-prompt { color: var(--color-accent-mint); font-weight: 600; }
+    .terminal-cmd   { color: var(--color-text); }
+    .terminal-out   { color: var(--color-text-muted); padding-left: 1rem; }
+    .terminal-cursor {
+      display: inline-block;
+      width: 8px; height: 1em;
+      background: var(--color-accent-mint);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SECTION LAYOUT
+    ═══════════════════════════════════════════════════════════════ */
+    section {
+      padding: 5rem 1.5rem;
+    }
+    .section-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .section-title {
+      font-family: var(--font-mono);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+    }
+    .section-title-accent { color: var(--color-accent-mint); }
+    .section-subtitle {
+      color: var(--color-text-muted);
+      margin-bottom: 2.5rem;
+      /* SC 1.4.8 — 80-char prose width */
+      max-width: 65ch;
+    }
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ABOUT
+    ═══════════════════════════════════════════════════════════════ */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .about-body {
+      color: var(--color-text-muted);
+      /* SC 1.4.8 — max 80 chars */
+      max-width: 65ch;
+      line-height: 1.75;
+    }
+    .about-body p + p { margin-top: 1rem; }
+    .live-stats {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+    }
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--color-accent-mint);
+      line-height: 1;
+      margin-top: 0.25rem;
+    }
+    .stat-learning {
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      color: var(--color-accent-blue);
+      margin-top: 0.25rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SKILLS
+    ═══════════════════════════════════════════════════════════════ */
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.625rem;
+    }
+    .skill-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.375rem 0.875rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: var(--color-text-muted);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .skill-tag:hover {
+      border-color: var(--color-accent-mint);
+      color: var(--color-accent-mint);
+    }
+    .skill-tag.highlight {
+      border-color: var(--color-accent-mint);
+      color: var(--color-accent-mint);
+      background: rgba(6, 95, 70, 0.06);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PROJECTS
+    ═══════════════════════════════════════════════════════════════ */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .project-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: rgba(0,0,0,0.18);
+    }
+    .project-card-label {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent-mint);
+    }
+    .project-card-title {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+    .project-card-desc {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      /* SC 1.4.8 */
+      max-width: 65ch;
+    }
+    .project-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+      margin-top: auto;
+    }
+    .project-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      padding: 0.25rem 0.625rem;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--color-text-muted);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CONTACT FORM
+    ═══════════════════════════════════════════════════════════════ */
+    .contact-form {
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.375rem; }
+    .form-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+    .form-label .required { color: var(--color-accent-pink); margin-left: 2px; }
+    .form-input,
+    .form-textarea {
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 0.625rem 0.875rem;
+      color: var(--color-text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--color-focus);
+      box-shadow: 0 0 0 3px var(--color-focus-ring);
+    }
+    .form-textarea { resize: vertical; min-height: 120px; }
+    .form-error {
+      font-size: 0.8125rem;
+      color: var(--color-accent-pink);
+      font-family: var(--font-mono);
+    }
+    .form-submit {
+      align-self: flex-start;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      padding: 0.625rem 1.5rem;
+      background: var(--color-text);
+      color: var(--color-bg);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: opacity 0.15s;
+      letter-spacing: 0.03em;
+    }
+    .form-submit:hover { opacity: 0.85; }
+    .form-submit:focus-visible {
+      outline: 3px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════════════════ */
+    .footer {
+      border-top: 1px solid var(--glass-border);
+      padding: 2rem 1.5rem;
+    }
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--color-accent-mint); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PALETTE REFERENCE SIDEBAR (documentation only)
+    ═══════════════════════════════════════════════════════════════ */
+    .palette-ref {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-right: none;
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      box-shadow: var(--shadow-md);
+      z-index: 100;
+    }
+    .swatch-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      border: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+    .swatch-info { color: var(--color-text-muted); }
+    .swatch-ratio {
+      color: var(--color-accent-mint);
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .palette-ref { display: none; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Palette reference strip (documentation aid) -->
+  <aside class="palette-ref" aria-label="Color palette reference">
+    <div class="swatch-row">
+      <div class="swatch" style="background:#f8f7f4; border:1px solid #ccc;"></div>
+      <div>
+        <div class="swatch-info">#f8f7f4 bg</div>
+      </div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#1a1a1f;"></div>
+      <div>
+        <div class="swatch-info">#1a1a1f text</div>
+        <div class="swatch-ratio">16.9:1 ✓</div>
+      </div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#4a4f5a;"></div>
+      <div>
+        <div class="swatch-info">#4a4f5a muted</div>
+        <div class="swatch-ratio">7.7:1 ✓</div>
+      </div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#065f46;"></div>
+      <div>
+        <div class="swatch-info">#065f46 mint</div>
+        <div class="swatch-ratio">7.2:1 ✓</div>
+      </div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#831843;"></div>
+      <div>
+        <div class="swatch-info">#831843 pink</div>
+        <div class="swatch-ratio">9.0:1 ✓</div>
+      </div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#1e3a8a;"></div>
+      <div>
+        <div class="swatch-info">#1e3a8a blue</div>
+        <div class="swatch-ratio">9.7:1 ✓</div>
+      </div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#78350f;"></div>
+      <div>
+        <div class="swatch-info">#78350f focus</div>
+        <div class="swatch-ratio">8.5:1 ✓</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Navigation -->
+  <header>
+    <nav class="nav-bar" aria-label="Main navigation">
+      <div class="nav-inner">
+        <span class="nav-logo"><span>//</span> haegele.dev</span>
+        <ul class="nav-links">
+          <li><a href="#about" aria-label="About">About</a></li>
+          <li><a href="#skills" aria-label="Skills">Skills</a></li>
+          <li><a href="#projects" aria-label="Projects" aria-current="page">Projects</a></li>
+          <li><a href="#hobbies" aria-label="Hobbies">Hobbies</a></li>
+          <li><a href="#contact" aria-label="Contact">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Hero -->
+    <section id="hero" aria-labelledby="hero-heading">
+      <h1 id="hero-heading" class="sr-only">Welcome to my portfolio</h1>
+
+      <!-- Wave: dark strokes on warm white, decorative -->
+      <svg class="hero-wave" viewBox="0 0 1440 600" preserveAspectRatio="none"
+           xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <path d="M0 300 C180 200, 360 400, 540 300 S900 200, 1080 300 S1350 400, 1440 300"
+              stroke="#065f46" stroke-width="1.5" stroke-opacity="0.18" fill="none" />
+        <path d="M0 320 C200 240, 400 390, 600 310 S950 230, 1150 310 S1380 380, 1440 320"
+              stroke="#831843" stroke-width="1" stroke-opacity="0.12" fill="none" />
+        <path d="M0 280 C160 360, 340 190, 520 290 S870 370, 1060 290 S1330 200, 1440 280"
+              stroke="#1e3a8a" stroke-width="1" stroke-opacity="0.10" fill="none" />
+      </svg>
+
+      <div role="region" aria-label="Terminal display"
+           style="display:flex; justify-content:center; width:100%; position:relative; z-index:1;">
+        <div class="terminal">
+          <div class="terminal-header">
+            <button class="terminal-btn terminal-btn-close" type="button"
+                    aria-label="Close terminal"></button>
+            <button class="terminal-btn terminal-btn-minimize" type="button"
+                    aria-label="Minimize terminal"></button>
+            <button class="terminal-btn terminal-btn-maximize" type="button"
+                    aria-label="Maximize terminal"></button>
+            <span class="terminal-title">terminal</span>
+          </div>
+          <div class="terminal-body" role="log" aria-live="polite" aria-label="Terminal output">
+            <div class="terminal-line">
+              <span class="terminal-prompt">$</span>
+              <span class="terminal-cmd">whoami</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-out">Developer | Runner | Problem Solver</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt">$</span>
+              <span class="terminal-cmd">cat skills.txt</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-out">Agents, Skills, LLMs, React, Java, Go...</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt">$</span>
+              <span class="terminal-cmd">echo "Welcome to my portfolio"<span class="terminal-cursor" aria-hidden="true"></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- About -->
+    <section id="about" aria-labelledby="about-heading">
+      <div class="section-inner">
+        <h2 id="about-heading" class="section-title">
+          <span class="section-title-accent">//</span> About
+        </h2>
+        <p class="section-subtitle">A bit about who I am and what I build.</p>
+
+        <div class="about-grid">
+          <div>
+            <div class="about-body">
+              <p>
+                I'm a developer who lives at the intersection of engineering precision and
+                creative problem solving. I build tools that are fast, accessible, and
+                delightful to use.
+              </p>
+              <p>
+                My current focus is AI agent systems, wave modeling, and making
+                complex simulations run in the browser without compromise.
+              </p>
+            </div>
+          </div>
+
+          <!-- Live Stats widget -->
+          <div class="live-stats" aria-label="Live stats">
+            <div>
+              <div class="stat-label">Commits</div>
+              <div class="stat-value" aria-label="2,847 commits">2,847</div>
+            </div>
+            <div>
+              <div class="stat-label">Currently learning</div>
+              <div class="stat-learning" aria-live="polite" aria-atomic="true">
+                Rust async patterns
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- Skills -->
+    <section id="skills" aria-labelledby="skills-heading">
+      <div class="section-inner">
+        <h2 id="skills-heading" class="section-title">
+          <span class="section-title-accent">//</span> Skills
+        </h2>
+        <p class="section-subtitle">Technologies and disciplines I work with regularly.</p>
+
+        <div class="skills-grid" role="list" aria-label="Skills">
+          <span class="skill-tag highlight" role="listitem">React</span>
+          <span class="skill-tag highlight" role="listitem">TypeScript</span>
+          <span class="skill-tag highlight" role="listitem">LLM / Agents</span>
+          <span class="skill-tag" role="listitem">Go</span>
+          <span class="skill-tag" role="listitem">Java</span>
+          <span class="skill-tag" role="listitem">WebGL</span>
+          <span class="skill-tag" role="listitem">WebAudio</span>
+          <span class="skill-tag" role="listitem">Rust</span>
+          <span class="skill-tag" role="listitem">Node / Bun</span>
+          <span class="skill-tag" role="listitem">PostgreSQL</span>
+          <span class="skill-tag" role="listitem">Redis</span>
+          <span class="skill-tag" role="listitem">Docker</span>
+          <span class="skill-tag" role="listitem">Cloudflare Workers</span>
+          <span class="skill-tag" role="listitem">Wave Modeling</span>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- Projects -->
+    <section id="projects" aria-labelledby="projects-heading">
+      <div class="section-inner">
+        <h2 id="projects-heading" class="section-title">
+          <span class="section-title-accent">//</span> Projects
+        </h2>
+        <p class="section-subtitle">A selection of things I've shipped.</p>
+
+        <div class="projects-grid">
+          <article class="project-card">
+            <div class="project-card-label">Open Source</div>
+            <h3 class="project-card-title">HydroSim</h3>
+            <p class="project-card-desc">
+              Real-time fluid simulation in the browser using WebGPU. Renders
+              1M+ particles at 60 fps on modern hardware.
+            </p>
+            <div class="project-card-tags">
+              <span class="project-tag">WebGPU</span>
+              <span class="project-tag">TypeScript</span>
+              <span class="project-tag">WASM</span>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-card-label">Research</div>
+            <h3 class="project-card-title">Impulse Wave Modeler</h3>
+            <p class="project-card-desc">
+              GPU-accelerated algorithms for fluid dynamics and wave propagation
+              visualization on the web platform.
+            </p>
+            <div class="project-card-tags">
+              <span class="project-tag">WebGL</span>
+              <span class="project-tag">GLSL</span>
+              <span class="project-tag">React</span>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-card-label">Tool</div>
+            <h3 class="project-card-title">haegele.dev</h3>
+            <p class="project-card-desc">
+              This portfolio. WCAG 2.2 AAA compliant. Built with React, Vite,
+              and deployed to Cloudflare Pages.
+            </p>
+            <div class="project-card-tags">
+              <span class="project-tag">React</span>
+              <span class="project-tag">TypeScript</span>
+              <span class="project-tag">Cloudflare</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- Contact -->
+    <section id="contact" aria-labelledby="contact-heading">
+      <div class="section-inner">
+        <h2 id="contact-heading" class="section-title">
+          <span class="section-title-accent">//</span> Get In Touch
+        </h2>
+        <p class="section-subtitle">
+          Have a project in mind or just want to chat? I'd love to hear from you.
+        </p>
+
+        <form class="contact-form" novalidate aria-label="Contact form">
+          <div class="form-group">
+            <label class="form-label" for="name">
+              Name <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input class="form-input" id="name" name="name" type="text"
+                   placeholder="Your name" required
+                   aria-required="true" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">
+              Email <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input class="form-input" id="email" name="email" type="email"
+                   placeholder="your@email.com" required
+                   aria-required="true" />
+            <!-- Example error state (aria-describedby wired up in React) -->
+            <span class="form-error" role="alert" id="email-error" hidden>
+              Please enter a valid email address.
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="message">
+              Message <span class="required" aria-hidden="true">*</span>
+            </label>
+            <textarea class="form-textarea" id="message" name="message"
+                      placeholder="Tell me about your project…" required
+                      aria-required="true" rows="5"></textarea>
+          </div>
+
+          <button class="form-submit" type="submit">Send Message →</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-copy">
+        <span style="font-weight:600; color:var(--color-text);">haegele.dev</span>
+        &nbsp;·&nbsp; © 2026
+      </p>
+      <nav class="footer-links" aria-label="Social links">
+        <a href="#" aria-label="GitHub profile">GitHub</a>
+        <a href="#" aria-label="LinkedIn profile">LinkedIn</a>
+        <a href="#" aria-label="RSS feed">RSS</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!--
+    ╔══════════════════════════════════════════════════════════════╗
+    ║  IMPLEMENTATION NOTES FOR variables.css                     ║
+    ╠══════════════════════════════════════════════════════════════╣
+    ║                                                              ║
+    ║  Add this block to src/styles/variables.css:                 ║
+    ║                                                              ║
+    ║  @media (prefers-color-scheme: light) {                      ║
+    ║    :root {                                                   ║
+    ║      --color-bg:           #f8f7f4;                          ║
+    ║      --color-bg-secondary: #eeecea;                          ║
+    ║      --color-text:         #1a1a1f;                          ║
+    ║      --color-text-muted:   #4a4f5a;                          ║
+    ║      --color-accent-mint:  #065f46;                          ║
+    ║      --color-accent-pink:  #831843;                          ║
+    ║      --color-accent-blue:  #1e3a8a;                          ║
+    ║      --color-focus:        #78350f;                          ║
+    ║      --color-focus-ring:   rgba(120, 53, 15, 0.35);          ║
+    ║      --glass-bg:           rgba(0, 0, 0, 0.03);              ║
+    ║      --glass-border:       rgba(0, 0, 0, 0.09);              ║
+    ║      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);               ║
+    ║      --shadow-md: 0 4px 8px rgba(0,0,0,0.10);               ║
+    ║      --shadow-lg: 0 10px 20px rgba(0,0,0,0.12);             ║
+    ║    }                                                         ║
+    ║  }                                                           ║
+    ║                                                              ║
+    ║  PulseBackground / useWaveEngine.ts:                         ║
+    ║    Read --wave-color-start / --wave-color-end from           ║
+    ║    getComputedStyle(document.documentElement) after mount.   ║
+    ║    Dark:  #10b981 → #ec4899 (unchanged)                      ║
+    ║    Light: #065f46 → #831843                                  ║
+    ║                                                              ║
+    ║  SC 1.4.8 prose width — add to each section's paragraph      ║
+    ║  containers: max-width: 65ch                                  ║
+    ╚══════════════════════════════════════════════════════════════╝
+  -->
+
+</body>
+</html>

@@ -10,6 +10,8 @@
   --color-accent-blue: #60a5fa;
   --color-focus: #fbbf24;
   --color-focus-ring: rgba(251, 191, 36, 0.4);
+  --wave-color-start: #10b981;
+  --wave-color-end:   #ec4899;
 
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -47,5 +49,26 @@
 @media (prefers-reduced-motion: reduce) {
   :root {
     --animation-duration-multiplier: 0;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg:            #f8f7f4;
+    --color-bg-secondary:  #eeecea;
+    --color-text:          #1a1a1f;
+    --color-text-muted:    #4a4f5a;
+    --color-accent-mint:   #065f46;
+    --color-accent-pink:   #831843;
+    --color-accent-blue:   #1e3a8a;
+    --color-focus:         #78350f;
+    --color-focus-ring:    rgba(120, 53, 15, 0.35);
+    --glass-bg:            rgba(0, 0, 0, 0.03);
+    --glass-border:        rgba(0, 0, 0, 0.09);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.10);
+    --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.12);
+    --wave-color-start:    #065f46;
+    --wave-color-end:      #831843;
   }
 }

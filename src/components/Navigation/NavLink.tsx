@@ -5,6 +5,7 @@ interface NavLinkProps {
   href: string;
   isActive: boolean;
   isHovered: boolean;
+  accessibleLabel: string;
   children: ReactNode;
   onMouseEnter: MouseEventHandler;
   onMouseLeave: MouseEventHandler;
@@ -15,6 +16,7 @@ export default function NavLink({
   href,
   isActive,
   isHovered: _isHovered,
+  accessibleLabel,
   children,
   onMouseEnter,
   onMouseLeave,
@@ -29,7 +31,7 @@ export default function NavLink({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onClick={onClick}
-        role="menuitem"
+        aria-label={accessibleLabel}
       >
         <span className={styles.glow} aria-hidden="true" />
         {children}

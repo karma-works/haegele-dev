@@ -237,6 +237,7 @@
   line-height: 1.6;
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-lg);
+  max-width: 65ch;
 }
 
 .tags {

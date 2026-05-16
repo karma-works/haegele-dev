@@ -90,7 +90,7 @@ export function LiveStats({
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>Currently learning</span>
-        <span className={styles.learning} key={currentLearning}>
+        <span className={styles.learning} key={currentLearning} aria-live="polite" aria-atomic="true">
           {currentLearning}
         </span>
       </div>

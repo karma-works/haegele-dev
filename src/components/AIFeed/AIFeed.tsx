@@ -48,6 +48,22 @@ export const AIFeed = memo(function AIFeed() {
     };
   }, [isVisible]);
 
+  useEffect(() => {
+    const wrapper = timelineRef.current;
+    if (!wrapper) return;
+
+    const observer = new MutationObserver(() => {
+      const iframe = wrapper.querySelector('iframe');
+      if (iframe && !iframe.getAttribute('title')) {
+        iframe.setAttribute('title', 'AI research feed — tweets by @symbian2111');
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(wrapper, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section id="ai-feed" className={styles.section}>
       <div
@@ -61,7 +77,7 @@ export const AIFeed = memo(function AIFeed() {
           AI research and developments I&apos;m following
         </p>
 
-        <div ref={timelineRef} className={styles.timelineWrapper}>
+        <div ref={timelineRef} className={styles.timelineWrapper} aria-label="Embedded X/Twitter feed">
           <a
             className="twitter-timeline"
             data-lang="en"
@@ -71,9 +87,19 @@ export const AIFeed = memo(function AIFeed() {
             data-chrome="noheader nofooter noborders transparent"
             href="https://twitter.com/symbian2111?ref_src=twsrc%5Etfw"
           >
-            Tweets by symbian2111
+            View AI research feed by @symbian2111 on X (Twitter)
           </a>
         </div>
+        <p className={styles.fallbackLink}>
+          <a
+            href="https://twitter.com/symbian2111"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View AI research feed by @symbian2111 on X, opens in new tab"
+          >
+            View full feed on X ↗
+          </a>
+        </p>
       </div>
     </section>
   );

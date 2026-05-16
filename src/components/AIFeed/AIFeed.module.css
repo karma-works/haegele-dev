@@ -92,3 +92,20 @@
     font-size: 0.875rem;
   }
 }
+
+.fallbackLink {
+  margin-top: var(--spacing-md);
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.fallbackLink a {
+  color: var(--color-accent-mint);
+  font-family: var(--font-mono);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.fallbackLink a:hover {
+  color: var(--color-accent-blue);
+}

@@ -86,12 +86,10 @@ function NavigationComponent({ activeSection = 'hero' }: NavigationProps) {
       >
         {mobileOpen ? '✕' : '☰'}
       </button>
-      <ul 
+      <ul
         id="nav-menu"
-        className={styles.nav} 
-        data-open={mobileOpen} 
-        role="menubar"
-        aria-label="Site navigation"
+        className={styles.nav}
+        data-open={mobileOpen}
       >
         {navItems.map((key) => (
           <NavLink
@@ -99,6 +97,7 @@ function NavigationComponent({ activeSection = 'hero' }: NavigationProps) {
             href={`#${key}`}
             isActive={activeSection === key}
             isHovered={hoveredKey === key}
+            accessibleLabel={translations[key]['en']}
             onMouseEnter={() => handleMouseEnter(key)}
             onMouseLeave={handleMouseLeave}
             onClick={(e) => handleClick(key, e)}
