@@ -27,7 +27,7 @@ const projects: Project[] = [
     date: "2026-05",
     link: "https://github.com/karma-works/gaphunter",
     status: "active",
-    image: "/assets/projects/gaphunter.webp",
+    image: "/assets/projects/gaphunter.png",
   },
   {
     id: "proj-8",
