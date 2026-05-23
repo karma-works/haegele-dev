@@ -41,17 +41,21 @@
   margin-bottom: var(--spacing-xl);
 }
 
-.timelineWrapper {
+.feedWrapper {
   position: relative;
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
+  display: grid;
+  gap: var(--spacing-md);
+  max-height: 460px;
   overflow: hidden;
+  overflow-y: auto;
+  padding: var(--spacing-lg);
 }
 
-.timelineWrapper::before {
+.feedWrapper::before {
   content: "";
   position: absolute;
   top: 0;
@@ -67,8 +71,74 @@
   );
 }
 
-.timelineWrapper :global(.twitter-timeline) {
-  width: 100% !important;
+.feedState {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  margin: 0;
+  padding: var(--spacing-xl) var(--spacing-md);
+  text-align: center;
+}
+
+.postCard {
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  padding: var(--spacing-md);
+}
+
+.postHeader {
+  align-items: center;
+  display: grid;
+  gap: var(--spacing-sm);
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  margin-bottom: var(--spacing-sm);
+}
+
+.avatar {
+  border-radius: 50%;
+  height: 40px;
+  object-fit: cover;
+  width: 40px;
+}
+
+.authorName,
+.authorHandle,
+.postText {
+  margin: 0;
+}
+
+.authorName {
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.authorHandle,
+.postDate {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.postText {
+  color: var(--color-text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.postLink {
+  color: var(--color-accent-mint);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  margin-top: var(--spacing-sm);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.postLink:hover {
+  color: var(--color-accent-blue);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -84,8 +154,21 @@
     padding: var(--spacing-lg);
   }
 
-  .timelineWrapper {
+  .feedWrapper {
     padding: var(--spacing-md);
+  }
+
+  .postHeader {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .avatar {
+    height: 36px;
+    width: 36px;
+  }
+
+  .postDate {
+    grid-column: 2;
   }
 
   .subtitle {

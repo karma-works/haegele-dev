@@ -1,72 +1,91 @@
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useState } from "react";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import styles from "./AIFeed.module.css";
 
-const AI_FEED_HANDLE = "moatshfit";
-const AI_FEED_URL = `https://twitter.com/${AI_FEED_HANDLE}`;
-const AI_FEED_LABEL = `AI research feed by @${AI_FEED_HANDLE}`;
+const BLUESKY_HANDLE = "moatshift.bsky.social";
+const BLUESKY_PROFILE_URL = `https://bsky.app/profile/${BLUESKY_HANDLE}`;
+const BLUESKY_FEED_URL = `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${BLUESKY_HANDLE}&limit=5`;
 
-declare global {
-  interface Window {
-    twttr?: {
-      widgets: {
-        load: (element?: HTMLElement) => void;
-      };
-    };
-  }
+interface BlueskyPost {
+  uri: string;
+  cid: string;
+  record: {
+    text?: string;
+    createdAt?: string;
+  };
+  author: {
+    handle: string;
+    displayName?: string;
+    avatar?: string;
+  };
+  likeCount?: number;
+  repostCount?: number;
+  replyCount?: number;
+}
+
+interface BlueskyFeedItem {
+  post: BlueskyPost;
+}
+
+interface BlueskyFeedResponse {
+  feed?: BlueskyFeedItem[];
 }
 
 export const AIFeed = memo(function AIFeed() {
   const [containerRef, isVisible] = useScrollAnimation<HTMLDivElement>({
     threshold: 0.1,
   });
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const scriptLoadedRef = useRef(false);
+  const [posts, setPosts] = useState<BlueskyPost[]>([]);
+  const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">(
+    "idle",
+  );
 
   useEffect(() => {
-    if (!isVisible || scriptLoadedRef.current) return;
+    if (!isVisible || status !== "idle") return;
 
-    const loadTwitterWidget = () => {
-      if (window.twttr?.widgets && timelineRef.current) {
-        window.twttr.widgets.load(timelineRef.current);
-        scriptLoadedRef.current = true;
+    const controller = new AbortController();
+
+    const loadFeed = async () => {
+      setStatus("loading");
+
+      try {
+        const response = await fetch(BLUESKY_FEED_URL, {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Bluesky feed request failed: ${response.status}`);
+        }
+
+        const data = (await response.json()) as BlueskyFeedResponse;
+        setPosts(data.feed?.map((item) => item.post) ?? []);
+        setStatus("ready");
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error(error);
+          setStatus("error");
+        }
       }
     };
 
-    if (window.twttr) {
-      loadTwitterWidget();
-      return;
-    }
+    void loadFeed();
 
-    const script = document.createElement("script");
-    script.src = "https://platform.twitter.com/widgets.js";
-    script.async = true;
-    script.charset = "utf-8";
-    script.onload = loadTwitterWidget;
-    document.body.appendChild(script);
+    return () => controller.abort();
+  }, [isVisible, status]);
 
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-  }, [isVisible]);
+  const getPostUrl = (post: BlueskyPost) => {
+    const postId = post.uri.split("/").pop();
+    return `${BLUESKY_PROFILE_URL}/post/${postId}`;
+  };
 
-  useEffect(() => {
-    const wrapper = timelineRef.current;
-    if (!wrapper) return;
+  const formatDate = (value?: string) => {
+    if (!value) return "";
 
-    const observer = new MutationObserver(() => {
-      const iframe = wrapper.querySelector('iframe');
-      if (iframe && !iframe.getAttribute('title')) {
-        iframe.setAttribute('title', `${AI_FEED_LABEL} on X`);
-        observer.disconnect();
-      }
-    });
-
-    observer.observe(wrapper, { childList: true, subtree: true });
-    return () => observer.disconnect();
-  }, []);
+    return new Intl.DateTimeFormat("en", {
+      month: "short",
+      day: "numeric",
+    }).format(new Date(value));
+  };
 
   return (
     <section id="ai-feed" className={styles.section}>
@@ -81,27 +100,64 @@ export const AIFeed = memo(function AIFeed() {
           AI research and developments I&apos;m following
         </p>
 
-        <div ref={timelineRef} className={styles.timelineWrapper} aria-label="Embedded X/Twitter feed">
-          <a
-            className="twitter-timeline"
-            data-lang="en"
-            data-dnt="true"
-            data-theme="dark"
-            data-height="400"
-            data-chrome="noheader nofooter noborders transparent"
-            href={`${AI_FEED_URL}?ref_src=twsrc%5Etfw`}
-          >
-            View {AI_FEED_LABEL} on X (Twitter)
-          </a>
+        <div className={styles.feedWrapper} aria-live="polite">
+          {status === "loading" && (
+            <p className={styles.feedState}>Loading Bluesky feed...</p>
+          )}
+
+          {status === "error" && (
+            <p className={styles.feedState}>
+              Bluesky feed is unavailable right now.
+            </p>
+          )}
+
+          {status === "ready" &&
+            posts.map((post) => (
+              <article key={post.cid} className={styles.postCard}>
+                <header className={styles.postHeader}>
+                  {post.author.avatar && (
+                    <img
+                      src={post.author.avatar}
+                      alt=""
+                      className={styles.avatar}
+                      loading="lazy"
+                    />
+                  )}
+                  <div>
+                    <p className={styles.authorName}>
+                      {post.author.displayName || post.author.handle}
+                    </p>
+                    <p className={styles.authorHandle}>@{post.author.handle}</p>
+                  </div>
+                  <time
+                    className={styles.postDate}
+                    dateTime={post.record.createdAt}
+                  >
+                    {formatDate(post.record.createdAt)}
+                  </time>
+                </header>
+
+                <p className={styles.postText}>{post.record.text}</p>
+
+                <a
+                  className={styles.postLink}
+                  href={getPostUrl(post)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open post
+                </a>
+              </article>
+            ))}
         </div>
         <p className={styles.fallbackLink}>
           <a
-            href={AI_FEED_URL}
+            href={BLUESKY_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`View ${AI_FEED_LABEL} on X, opens in new tab`}
+            aria-label={`View @${BLUESKY_HANDLE} on Bluesky, opens in new tab`}
           >
-            View full feed on X ↗
+            View full feed on Bluesky ↗
           </a>
         </p>
       </div>
