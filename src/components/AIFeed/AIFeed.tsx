@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import styles from "./AIFeed.module.css";
 
@@ -39,11 +39,13 @@ export const AIFeed = memo(function AIFeed() {
   const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">(
     "idle",
   );
+  const hasRequestedFeed = useRef(false);
 
   useEffect(() => {
-    if (!isVisible || status !== "idle") return;
+    if (!isVisible || hasRequestedFeed.current) return;
 
     const controller = new AbortController();
+    hasRequestedFeed.current = true;
 
     const loadFeed = async () => {
       setStatus("loading");
@@ -71,7 +73,7 @@ export const AIFeed = memo(function AIFeed() {
     void loadFeed();
 
     return () => controller.abort();
-  }, [isVisible, status]);
+  }, [isVisible]);
 
   const getPostUrl = (post: BlueskyPost) => {
     const postId = post.uri.split("/").pop();
