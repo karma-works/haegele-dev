@@ -2,6 +2,10 @@ import { memo, useEffect, useRef } from "react";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import styles from "./AIFeed.module.css";
 
+const AI_FEED_HANDLE = "moatshfit";
+const AI_FEED_URL = `https://twitter.com/${AI_FEED_HANDLE}`;
+const AI_FEED_LABEL = `AI research feed by @${AI_FEED_HANDLE}`;
+
 declare global {
   interface Window {
     twttr?: {
@@ -55,7 +59,7 @@ export const AIFeed = memo(function AIFeed() {
     const observer = new MutationObserver(() => {
       const iframe = wrapper.querySelector('iframe');
       if (iframe && !iframe.getAttribute('title')) {
-        iframe.setAttribute('title', 'AI research feed — tweets by @symbian2111');
+        iframe.setAttribute('title', `${AI_FEED_LABEL} on X`);
         observer.disconnect();
       }
     });
@@ -85,17 +89,17 @@ export const AIFeed = memo(function AIFeed() {
             data-theme="dark"
             data-height="400"
             data-chrome="noheader nofooter noborders transparent"
-            href="https://twitter.com/symbian2111?ref_src=twsrc%5Etfw"
+            href={`${AI_FEED_URL}?ref_src=twsrc%5Etfw`}
           >
-            View AI research feed by @symbian2111 on X (Twitter)
+            View {AI_FEED_LABEL} on X (Twitter)
           </a>
         </div>
         <p className={styles.fallbackLink}>
           <a
-            href="https://twitter.com/symbian2111"
+            href={AI_FEED_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="View AI research feed by @symbian2111 on X, opens in new tab"
+            aria-label={`View ${AI_FEED_LABEL} on X, opens in new tab`}
           >
             View full feed on X ↗
           </a>
