@@ -2,7 +2,7 @@ import type { StravaTokenResponse, StravaCredentials, StravaAthleteStats, Strava
 import { STRAVA_SCOPES } from './types.js';
 
 const STRAVA_OAUTH_BASE = 'https://www.strava.com/oauth';
-const STRAVA_API_BASE = 'https://www.api-v3.strava.com';
+const STRAVA_API_BASE = 'https://www.strava.com/api/v3';
 
 function getCredentials(): StravaCredentials {
   const clientId = process.env.STRAVA_CLIENT_ID;
