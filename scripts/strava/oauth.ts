@@ -36,15 +36,15 @@ export function generateOAuthUrl(
 
 export async function exchangeCodeForTokens(code: string): Promise<StravaTokenResponse> {
   const { clientId, clientSecret } = getCredentials();
-  const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
   const response = await fetch(`${STRAVA_OAUTH_BASE}/token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': `Basic ${basicAuth}`,
     },
     body: new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
       code,
       grant_type: 'authorization_code',
     }).toString(),
@@ -66,15 +66,14 @@ export async function refreshAccessToken(refreshToken?: string): Promise<StravaT
     throw new Error('STRAVA_REFRESH_TOKEN must be set or provided');
   }
 
-  const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
-
   const response = await fetch(`${STRAVA_OAUTH_BASE}/token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': `Basic ${basicAuth}`,
     },
     body: new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
       refresh_token: token,
       grant_type: 'refresh_token',
     }).toString(),
