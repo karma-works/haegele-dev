@@ -180,103 +180,108 @@ const ProjectCard = memo(function ProjectCard({
   };
 
   return (
-    <article
+    <div
       ref={cardRef}
-      className={`${styles.projectCard} ${isVisible ? styles.visible : ""} ${side === "right" ? styles.cardRight : styles.cardLeft}`}
-      style={{
-        transitionDelay: `${index * 150}ms`,
-      }}
+      className={styles.cardHoverTarget}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
     >
-      <div className={styles.cardInner} style={tiltStyle}>
-        <div className={styles.cardImageWrapper}>
-          <img
-            src={project.image}
-            alt={project.title}
-            className={styles.cardImage}
-            loading="lazy"
-          />
-        </div>
-        <div className={styles.cardHeader}>
-          <code className={styles.commitHash}>{project.hash}</code>
-          <span
-            className={`${styles.status} ${getStatusClass(project.status)}`}
-          >
-            {project.status === "wip" ? "WIP" : project.status}
-          </span>
-        </div>
-
-        <h3 className={styles.projectTitle}>{project.title}</h3>
-
-        <p className={styles.projectDescription}>{project.description}</p>
-
-        <div className={styles.tags}>
-          {project.tags.map((tag) => (
-            <span key={tag} className={styles.tag}>
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <div className={styles.cardFooter}>
-          <time className={styles.date} dateTime={project.date}>
-            <svg
-              className={styles.dateIcon}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-            {formatDate(project.date)}
-          </time>
-
-          <div className={styles.cardActions}>
-            {project.demoUrl && (
-              <button
-                className={styles.demoButton}
-                onClick={handleOpenDemo}
-                aria-label={`Play ${project.title} demo`}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <polygon points="5 3 19 12 5 21 5 3" />
-                </svg>
-              </button>
-            )}
-
-            {project.link && (
-              <a
-                href={project.link}
-                className={styles.projectLink}
-                aria-label={`View ${project.title}`}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
-              </a>
-            )}
+      <article
+        className={`${styles.projectCard} ${isVisible ? styles.visible : ""} ${isHovering ? styles.hovering : ""} ${side === "right" ? styles.cardRight : styles.cardLeft}`}
+        style={{
+          ...tiltStyle,
+          transitionDelay: `${index * 150}ms`,
+        }}
+      >
+        <div className={styles.cardInner}>
+          <div className={styles.cardImageWrapper}>
+            <img
+              src={project.image}
+              alt={project.title}
+              className={styles.cardImage}
+              loading="lazy"
+            />
           </div>
-        </div>
+          <div className={styles.cardHeader}>
+            <code className={styles.commitHash}>{project.hash}</code>
+            <span
+              className={`${styles.status} ${getStatusClass(project.status)}`}
+            >
+              {project.status === "wip" ? "WIP" : project.status}
+            </span>
+          </div>
 
-        <div className={styles.cardGlare} data-hovering={isHovering} />
-      </div>
-    </article>
+          <h3 className={styles.projectTitle}>{project.title}</h3>
+
+          <p className={styles.projectDescription}>{project.description}</p>
+
+          <div className={styles.tags}>
+            {project.tags.map((tag) => (
+              <span key={tag} className={styles.tag}>
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div className={styles.cardFooter}>
+            <time className={styles.date} dateTime={project.date}>
+              <svg
+                className={styles.dateIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              {formatDate(project.date)}
+            </time>
+
+            <div className={styles.cardActions}>
+              {project.demoUrl && (
+                <button
+                  className={styles.demoButton}
+                  onClick={handleOpenDemo}
+                  aria-label={`Play ${project.title} demo`}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                </button>
+              )}
+
+              {project.link && (
+                <a
+                  href={project.link}
+                  className={styles.projectLink}
+                  aria-label={`View ${project.title}`}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                  </svg>
+                </a>
+              )}
+            </div>
+          </div>
+
+          <div className={styles.cardGlare} data-hovering={isHovering} />
+        </div>
+      </article>
+    </div>
   );
 });
 
