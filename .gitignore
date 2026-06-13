@@ -3,6 +3,7 @@ node_modules/
 test/integration/screenshots-current/
 _site/
 .DS_Store
+.env
 dist/*
 .pnpm-store/*
 dist/index.html
