@@ -36,6 +36,20 @@ Manually refresh the access token:
 bun scripts/strava/oauth.ts refresh
 ```
 
+### Revoke Token
+
+Revoke a refresh token using Strava's current revoke endpoint:
+
+```bash
+bun scripts/strava/oauth.ts revoke
+```
+
+Or revoke a specific access token:
+
+```bash
+bun scripts/strava/oauth.ts revoke access_token_value access_token
+```
+
 ### Fetch Data (Build-time)
 
 Fetch Strava data and save to `public/data/strava.json`:
@@ -69,8 +83,10 @@ Deploy to CDN (static files)
 - No server costs
 - Fast page loads (static JSON)
 - No client-side API calls
+- Strava API requests use `https://www.api-v3.strava.com`
+- Access tokens are sent with `Authorization: Bearer`, not request parameters
 - Tokens stored securely in GitHub Secrets
-- Graceful fallback when API unavailable
+- Graceful legacy API fallback until the June 1, 2027 cutoff
 
 ## Usage in Components
 

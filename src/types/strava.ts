@@ -92,7 +92,7 @@ export interface StravaStatsDisplay {
   recentRuns: number;
 }
 
-export const STRAVA_API_BASE = 'https://www.strava.com/api/v3';
+export const STRAVA_API_BASE = 'https://www.api-v3.strava.com';
 export const STRAVA_OAUTH_BASE = 'https://www.strava.com/oauth';
 
 export const STRAVA_SCOPES = {

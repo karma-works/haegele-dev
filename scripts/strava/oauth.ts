@@ -1,8 +1,10 @@
 import type { StravaTokenResponse, StravaCredentials, StravaAthleteStats, StravaActivity, StoredStravaData, StravaStatsDisplay } from './types.js';
-import { STRAVA_SCOPES } from './types.js';
+import { STRAVA_API_BASE, STRAVA_OAUTH_BASE, STRAVA_SCOPES } from './types.js';
 
-const STRAVA_OAUTH_BASE = 'https://www.strava.com/oauth';
-const STRAVA_API_BASE = 'https://www.strava.com/api/v3';
+type StravaRevocationTokenType = 'access_token' | 'refresh_token';
+
+const LEGACY_STRAVA_API_BASE = 'https://www.strava.com/api/v3';
+const STRAVA_API_CUTOFF_MS = Date.UTC(2027, 5, 1);
 
 function getCredentials(): StravaCredentials {
   const clientId = process.env.STRAVA_CLIENT_ID;
@@ -14,6 +16,44 @@ function getCredentials(): StravaCredentials {
   }
 
   return { clientId, clientSecret, refreshToken };
+}
+
+function getStravaApiBases(): string[] {
+  if (process.env.STRAVA_API_BASE) {
+    return [process.env.STRAVA_API_BASE];
+  }
+
+  const bases = [STRAVA_API_BASE];
+
+  if (Date.now() < STRAVA_API_CUTOFF_MS) {
+    bases.push(LEGACY_STRAVA_API_BASE);
+  }
+
+  return bases;
+}
+
+async function fetchStravaApi(path: string, accessToken: string): Promise<Response> {
+  let lastError: unknown;
+
+  for (const baseUrl of getStravaApiBases()) {
+    try {
+      const response = await fetch(`${baseUrl}${path}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.ok || baseUrl === LEGACY_STRAVA_API_BASE) {
+        return response;
+      }
+
+      lastError = new Error(`Strava API returned ${response.status} from ${baseUrl}`);
+    } catch (err) {
+      lastError = err;
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error('Failed to reach Strava API');
 }
 
 export function generateOAuthUrl(
@@ -87,12 +127,34 @@ export async function refreshAccessToken(refreshToken?: string): Promise<StravaT
   return response.json();
 }
 
-export async function fetchAthleteStats(accessToken: string, athleteId: number): Promise<StravaAthleteStats> {
-  const response = await fetch(`${STRAVA_API_BASE}/athletes/${athleteId}/stats`, {
+export async function revokeToken(token?: string, tokenTypeHint: StravaRevocationTokenType = 'refresh_token'): Promise<void> {
+  const { clientId, clientSecret, refreshToken } = getCredentials();
+  const tokenToRevoke = token || refreshToken;
+
+  if (!tokenToRevoke) {
+    throw new Error('A token must be provided or STRAVA_REFRESH_TOKEN must be set');
+  }
+
+  const response = await fetch(`${STRAVA_OAUTH_BASE}/revoke`, {
+    method: 'POST',
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
+    body: new URLSearchParams({
+      token: tokenToRevoke,
+      token_type_hint: tokenTypeHint,
+    }).toString(),
   });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Failed to revoke token: ${response.status} - ${error}`);
+  }
+}
+
+export async function fetchAthleteStats(accessToken: string, athleteId: number): Promise<StravaAthleteStats> {
+  const response = await fetchStravaApi(`/athletes/${athleteId}/stats`, accessToken);
 
   if (!response.ok) {
     const error = await response.text();
@@ -103,11 +165,7 @@ export async function fetchAthleteStats(accessToken: string, athleteId: number):
 }
 
 export async function fetchRecentActivities(accessToken: string, perPage: number = 10): Promise<StravaActivity[]> {
-  const response = await fetch(`${STRAVA_API_BASE}/athlete/activities?per_page=${perPage}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const response = await fetchStravaApi(`/athlete/activities?per_page=${perPage}`, accessToken);
 
   if (!response.ok) {
     const error = await response.text();
@@ -118,11 +176,7 @@ export async function fetchRecentActivities(accessToken: string, perPage: number
 }
 
 export async function fetchCurrentAthlete(accessToken: string): Promise<{ id: number }> {
-  const response = await fetch(`${STRAVA_API_BASE}/athlete`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const response = await fetchStravaApi('/athlete', accessToken);
 
   if (!response.ok) {
     const error = await response.text();
@@ -269,6 +323,19 @@ if (import.meta.main) {
         console.error('Token refresh failed:', err);
         process.exit(1);
       });
+  } else if (command === 'revoke') {
+    const token = process.argv[3];
+    const tokenTypeHint = (process.argv[4] || 'refresh_token') as StravaRevocationTokenType;
+
+    revokeToken(token, tokenTypeHint)
+      .then(() => {
+        console.log('Token revoked successfully');
+        process.exit(0);
+      })
+      .catch((err) => {
+        console.error('Token revocation failed:', err);
+        process.exit(1);
+      });
   } else if (command === 'fetch') {
     const outputPath = process.argv[3] || 'public/data/strava.json';
     fetchAndStoreData(outputPath)
@@ -286,6 +353,7 @@ if (import.meta.main) {
     console.log('Commands:');
     console.log('  oauth    - Run manual OAuth flow');
     console.log('  refresh  - Refresh access token');
+    console.log('  revoke   - Revoke an access or refresh token');
     console.log('  fetch    - Fetch and store Strava data');
   }
 }

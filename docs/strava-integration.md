@@ -100,20 +100,20 @@ POST https://www.strava.com/oauth/token
 | Endpoint | Use Case |
 |----------|----------|
 | `GET /athlete` | Get athlete profile |
-| `GET /athlete/stats` | Get lifetime/recent stats |
+| `GET /athletes/{id}/stats` | Get lifetime/recent stats |
 | `GET /athlete/activities?per_page=10` | Get recent activities |
 
 ### Sample Requests
 
 **Get Recent Activities:**
 ```bash
-curl -X GET "https://www.strava.com/api/v3/athlete/activities?per_page=5" \
+curl -X GET "https://www.api-v3.strava.com/athlete/activities?per_page=5" \
   -H "Authorization: Bearer {access_token}"
 ```
 
 **Get Athlete Stats:**
 ```bash
-curl -X GET "https://www.strava.com/api/v3/athletes/{athlete_id}/stats" \
+curl -X GET "https://www.api-v3.strava.com/athletes/{athlete_id}/stats" \
   -H "Authorization: Bearer {access_token}"
 ```
 
