@@ -184,14 +184,13 @@ const ProjectCard = memo(function ProjectCard({
       ref={cardRef}
       className={`${styles.projectCard} ${isVisible ? styles.visible : ""} ${side === "right" ? styles.cardRight : styles.cardLeft}`}
       style={{
-        ...tiltStyle,
         transitionDelay: `${index * 150}ms`,
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
     >
-      <div className={styles.cardInner}>
+      <div className={styles.cardInner} style={tiltStyle}>
         <div className={styles.cardImageWrapper}>
           <img
             src={project.image}
