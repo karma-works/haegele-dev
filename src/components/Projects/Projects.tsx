@@ -100,7 +100,7 @@ const projects: Project[] = [
     date: "2026-06",
     link: "https://github.com/karma-works/voice-assist",
     status: "active",
-    image: "/assets/projects/voice-assist.webp",
+    image: "/assets/projects/voice-assist.svg",
   },
   {
     id: "proj-11",
@@ -112,7 +112,7 @@ const projects: Project[] = [
     date: "2026-06",
     link: "https://github.com/karma-works/vert-finder",
     status: "active",
-    image: "/assets/projects/vert-finder.webp",
+    image: "/assets/projects/vert-finder.png",
   },
   {
     id: "proj-5",
