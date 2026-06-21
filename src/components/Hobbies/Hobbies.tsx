@@ -1,6 +1,5 @@
 import { memo } from "react";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
-import { useMagneticHover } from "../../hooks/useMagneticHover";
 import { StravaCard } from "../Strava";
 import { MidiPlayButton } from "./MidiPlayButton";
 import styles from "./Hobbies.module.css";
@@ -36,17 +35,12 @@ const HobbyCard = memo(function HobbyCard({
   children,
   className,
 }: HobbyCardProps) {
-  const { ref, style, handlers } = useMagneticHover({ strength: 0.2 });
-
   return (
     <div
-      ref={ref}
       className={`${styles.card} ${isVisible ? styles.visible : ""} ${className || ""}`}
       style={{
-        ...style,
         transitionDelay: `${index * 100}ms`,
       }}
-      {...handlers}
       role="article"
       aria-label={`${title} hobby`}
     >
