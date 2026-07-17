@@ -1,6 +1,5 @@
 import { memo } from "react";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
-import { useMagneticHover } from "../../hooks/useMagneticHover";
 import styles from "./Skills.module.css";
 
 interface Skill {
@@ -164,17 +163,12 @@ const SkillCard = memo(function SkillCard({
   index,
   isVisible,
 }: SkillCardProps) {
-  const { ref, style, handlers } = useMagneticHover({ strength: 0.2 });
-
   return (
     <div
-      ref={ref}
       className={`${styles.card} ${isVisible ? styles.visible : ""}`}
       style={{
-        ...style,
         transitionDelay: `${index * 100}ms`,
       }}
-      {...handlers}
       role="article"
       aria-label={`${category.title} skills`}
     >
