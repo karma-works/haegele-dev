@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export interface StravaActivity {
-  id: number;
+  id: string | number;
   name: string;
   type: string;
   distance: number;
@@ -52,8 +52,8 @@ const DEFAULT_STATS: StravaStats = {
   recentRuns: 0,
 };
 
-const CACHE_KEY = "strava_stats_cache";
-const FALLBACK_DATA_URL = "/data/strava.json";
+const CACHE_KEY = "running_stats_cache";
+const FALLBACK_DATA_URL = "/data/running.json";
 
 function loadCachedData(): CachedData | null {
   try {
@@ -110,7 +110,7 @@ export function useStravaData(): StravaDataState {
   useEffect(() => {
     let mounted = true;
 
-    async function loadStravaData() {
+    async function loadRunningData() {
       try {
         const response = await fetch(FALLBACK_DATA_URL);
 
@@ -186,7 +186,7 @@ export function useStravaData(): StravaDataState {
       }
     }
 
-    loadStravaData();
+    loadRunningData();
 
     return () => {
       mounted = false;

@@ -60,7 +60,7 @@ describe('useStravaData', () => {
     ];
 
     localStorageMock.setItem(
-      'strava_stats_cache',
+      'running_stats_cache',
       JSON.stringify({
         data: { stats: cachedStats, activities: cachedActivities },
         timestamp: Date.now(),
@@ -91,7 +91,7 @@ describe('useStravaData', () => {
     expect(result.current.isAvailable).toBe(true);
   });
 
-  it('handles unavailable Strava API', async () => {
+  it('handles unavailable running data', async () => {
     vi.spyOn(global, 'fetch').mockResolvedValueOnce({
       ok: false,
       status: 404,

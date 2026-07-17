@@ -179,7 +179,7 @@ function StravaCardBase({ className }: StravaCardProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       role="region"
-      aria-label="Running Statistics from Strava"
+      aria-label="Running Statistics from Garmin"
       aria-busy={isLoading}
     >
       {isLoading ? (

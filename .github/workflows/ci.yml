@@ -63,8 +63,8 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-  strava-fetch:
-    name: Fetch Strava Data
+  running-fetch:
+    name: Fetch Running Data
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -75,32 +75,31 @@ jobs:
         with:
           bun-version: latest
       
-      - name: Fetch Strava data
+      - name: Fetch running data
         env:
-          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
-        run: bun scripts/strava/oauth.ts fetch public/data/strava.json
+          INTERVALS_ICU_API_KEY: ${{ secrets.INTERVALS_ICU_API_KEY }}
+          INTERVALS_ICU_ATHLETE_ID: ${{ vars.INTERVALS_ICU_ATHLETE_ID }}
+        run: bun scripts/intervals/fetch.ts public/data/running.json
       
-      - name: Upload Strava data
+      - name: Upload running data
         uses: actions/upload-artifact@v4
         with:
-          name: strava-data
-          path: public/data/strava.json
+          name: running-data
+          path: public/data/running.json
           retention-days: 1
 
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint-and-typecheck, test, strava-fetch]
+    needs: [lint-and-typecheck, test, running-fetch]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Strava data
+      - name: Download running data
         uses: actions/download-artifact@v4
         with:
-          name: strava-data
+          name: running-data
           path: public/data
 
       - name: Setup pnpm
