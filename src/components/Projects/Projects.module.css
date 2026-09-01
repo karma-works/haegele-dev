@@ -490,3 +490,14 @@
     padding: 0.125rem 0.5rem;
   }
 }
+
+/* Evidence panels share the hero's precise system language. */
+.section { background: #07100d; }
+.header { text-align: left; }
+.title { font-family: var(--font-sans); font-size: clamp(2.25rem, 5vw, 4.5rem); font-weight: 600; letter-spacing: -0.065em; }
+.subtitle { font-size: 1.08rem; margin: 0; }
+.cardInner { background: rgba(13, 26, 20, 0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: 0; border-left: 2px solid var(--color-accent-mint); }
+.cardImageWrapper, .commitHash, .tag, .endText { border-radius: 0; }
+.commitHash { background: rgba(163, 255, 104, 0.09); }
+.tag { background: rgba(163, 255, 104, 0.04); }
+.demoButton { background: rgba(163, 255, 104, 0.1); border-color: rgba(163, 255, 104, 0.3); }

@@ -378,3 +378,16 @@
     font-size: 0.875rem;
   }
 }
+
+/* Experiments are an archive of learning, not a separate neon theme. */
+.section { background: #0d1a14; }
+.header { text-align: left; }
+.title { font-family: var(--font-sans); font-size: clamp(2.25rem, 5vw, 4.5rem); font-weight: 600; letter-spacing: -0.065em; }
+.titleAccent { color: var(--color-accent-mint); }
+.subtitle { margin: 0; }
+.stone { background: rgba(7, 16, 13, 0.82); border-radius: 0; border: 1px solid rgba(218, 243, 221, 0.14); border-top: 2px solid rgba(163, 255, 104, 0.55); }
+.stone::after { background: var(--color-accent-mint); }
+.cross { color: var(--color-accent-mint); text-shadow: none; }
+.repoLink { color: var(--color-accent-mint); border-radius: 0; border-color: rgba(163, 255, 104, 0.3); }
+.repoLink:hover { color: var(--color-bg); border-color: var(--color-accent-mint); background: var(--color-accent-mint); box-shadow: none; }
+.glowEffect { background: radial-gradient(ellipse at center, rgba(163, 255, 104, 0.1) 0%, transparent 70%); }

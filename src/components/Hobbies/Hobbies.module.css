@@ -370,3 +370,11 @@
     font-size: 0.8125rem;
   }
 }
+
+/* Personal inputs remain part of the same material system. */
+.section { background: #07100d; }
+.title { font-weight: 600; letter-spacing: -0.05em; }
+.card { background: rgba(13, 26, 20, 0.78); backdrop-filter: blur(8px); border-radius: 0; border-top: 2px solid rgba(163, 255, 104, 0.5); }
+.iconWrapper { background: rgba(163, 255, 104, 0.11); border: 1px solid rgba(163, 255, 104, 0.45); border-radius: 0; }
+.icon { color: var(--color-accent-mint); }
+.languageProgress { background: var(--color-accent-mint); }

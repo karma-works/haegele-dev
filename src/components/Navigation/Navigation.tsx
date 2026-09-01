@@ -76,6 +76,9 @@ function NavigationComponent({ activeSection = 'hero' }: NavigationProps) {
 
   return (
     <nav className={styles.container} ref={navRef} aria-label="Main navigation">
+      <a className={styles.brand} href="#hero" aria-label="Christian Hägele home">
+        C.H<span>_</span>
+      </a>
       <button
         ref={mobileToggleRef}
         className={styles.mobileToggle}

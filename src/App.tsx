@@ -1,5 +1,4 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { PulseBackground } from "./components/PulseBackground";
 import { Navigation } from "./components/Navigation";
 import { Hero } from "./components/Hero";
 
@@ -73,7 +72,6 @@ function App() {
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
-      <PulseBackground />
       <Navigation activeSection={activeSection} />
       <main id="main-content" role="main">
         <Hero />

@@ -97,7 +97,7 @@ export const Hobbies = memo(function Hobbies() {
         className={`${styles.container} ${isVisible ? styles.visible : ""}`}
       >
         <h2 className={styles.title}>
-          <span className={styles.titleAccent}>//</span> Hobbies
+          <span className={styles.titleAccent}>05 /</span> Inputs beyond the screen
         </h2>
 
         <div className={styles.grid}>

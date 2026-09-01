@@ -9,19 +9,19 @@ import styles from "./About.module.css";
 type CodeBlockState = "open" | "minimized" | "closed";
 
 const aboutContent = {
-  title: "About Me",
+  title: "The operating model",
   paragraphs: [
     {
-      text: "I'm a passionate developer with a love for creating elegant solutions to complex problems.",
-      highlight: "passionate developer",
+      text: "I work where product ambiguity meets technical ambition: turning rough opportunities into systems people can actually use.",
+      highlight: "systems people can actually use",
     },
     {
-      text: "With expertise in modern web technologies and a background in software architecture, I build scalable applications that deliver exceptional user experiences.",
-      highlight: "modern web technologies",
+      text: "AI is part of the build loop—not a substitute for judgment. I use agents, skills, and fast feedback to explore more options while keeping architecture, quality, and accountability human-led.",
+      highlight: "AI is part of the build loop",
     },
     {
-      text: "When I'm not coding, you'll find me exploring new technologies, contributing to open source, or playing the piano.",
-      highlight: "playing the piano",
+      text: "The result is pragmatic: clearer decisions, stronger delivery momentum, and experiences that feel considered from the first interaction to production.",
+      highlight: "stronger delivery momentum",
     },
   ],
 };
@@ -130,11 +130,9 @@ export const About = memo(function About() {
                     {`const developer = {
   name: "Christian Hägele",
   location: "Switzerland, Office and Home Office",
-  skills: ["Java", 
-           "React", 
-           "Go"],
-  passion: "Building things",
-  coffee: Infinity
+  approach: "agentic, human-directed",
+  stack: ["AI systems", "product engineering", "experience design"],
+  outcome: "shipping high-leverage work"
 };`}
                   </pre>
                 )}

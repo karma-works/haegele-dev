@@ -17,11 +17,11 @@ export const Graveyard = memo(function Graveyard() {
       >
         <header className={styles.header}>
           <h2 className={styles.title}>
-            <span className={styles.titleAccent}>$</span> git reflog
+            <span className={styles.titleAccent}>04 /</span> Learning archive
           </h2>
           <p className={styles.subtitle}>
-            Where ideas go to rest in peace. Failed experiments, abandoned
-            dreams, and lessons learned the hard way.
+            Experiments that did not ship as planned, but sharpened the
+            judgment behind the next build.
           </p>
         </header>
 

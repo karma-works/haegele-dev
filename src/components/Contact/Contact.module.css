@@ -401,3 +401,14 @@ textarea.input {
     height: 18px;
   }
 }
+
+/* Contact is the final system handoff: direct, quiet, and high contrast. */
+.section { background: #0d1a14; }
+.title { font-weight: 600; letter-spacing: -0.05em; }
+.input { background: rgba(7, 16, 13, 0.74); border-radius: 0; }
+.input:focus, .input.focused { background: rgba(163, 255, 104, 0.06); box-shadow: 0 0 0 3px rgba(163, 255, 104, 0.1); }
+.submitButton { background: var(--color-accent-mint); border-radius: 0; }
+.submitButton::before { background: var(--color-text); }
+.successMessage { border-radius: 0; border-top: 2px solid var(--color-accent-mint); }
+.successIcon { background: var(--color-accent-mint); }
+.resetButton { border-radius: 0; }

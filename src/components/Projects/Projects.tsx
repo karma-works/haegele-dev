@@ -18,6 +18,30 @@ interface Project {
 
 const projects: Project[] = [
   {
+    id: "proj-waterpark",
+    hash: "w8trprk",
+    title: "Azure Cascade",
+    description:
+      "A cinematic Three.js waterpark resort simulator—an interactive world-building experiment with atmosphere, systems, and playful detail.",
+    tags: ["TypeScript", "Three.js", "WebGL"],
+    date: "2026-08",
+    link: "https://github.com/karma-works/waterpark",
+    demoUrl: "https://karma-works.github.io/waterpark/",
+    status: "active",
+    image: "/assets/projects/waterpark.png",
+  },
+  {
+    id: "proj-career-desk",
+    hash: "crr-dsk",
+    title: "Career Desk",
+    description:
+      "A private, agent-assisted career strategy workspace that turns research, positioning, and applications into a clear operating system.",
+    tags: ["TypeScript", "AI agents", "Product systems"],
+    date: "2026-09",
+    status: "active",
+    image: "/assets/projects/career-desk.png",
+  },
+  {
     id: "proj-9",
     hash: "g4phnt",
     title: "GapHunter",

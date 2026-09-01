@@ -42,7 +42,7 @@ describe("Contact", () => {
   it("renders section title", () => {
     renderWithProviders(<Contact />);
 
-    const title = screen.getByText(/get in touch/i);
+    const title = screen.getByText(/start with the problem/i);
     expect(title).toBeDefined();
   });
 

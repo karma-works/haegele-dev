@@ -195,3 +195,8 @@
     transition: none;
   }
 }
+
+/* Close on the same deep field and square utility controls. */
+.footer { background: #07100d; border-top: 1px solid rgba(218, 243, 221, 0.14); }
+.socialLink { border-radius: 0; }
+.socialLink:hover { background: rgba(163, 255, 104, 0.1); }

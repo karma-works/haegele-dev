@@ -374,12 +374,11 @@ export const Contact = memo(function Contact() {
         className={`${styles.container} ${isVisible ? styles.visible : ""}`}
       >
         <h2 className={styles.title}>
-          <span className={styles.titleAccent}>//</span> Get In Touch
+          <span className={styles.titleAccent}>06 /</span> Start with the problem
         </h2>
 
         <p className={styles.subtitle}>
-          Have a project in mind or just want to chat? I'd love to hear from
-          you.
+          Tell me where the work is stuck, ambitious, or ready to move.
         </p>
 
         {isSuccess ? (

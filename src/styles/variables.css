@@ -1,15 +1,15 @@
 :root {
   --animation-duration-multiplier: 1;
 
-  --color-bg: #0a0a0f;
-  --color-bg-secondary: #12121a;
-  --color-text: #e4e4e7;
-  --color-text-muted: #9ca3af;
-  --color-accent-mint: #34d399;
-  --color-accent-pink: #f472b6;
-  --color-accent-blue: #60a5fa;
-  --color-focus: #fbbf24;
-  --color-focus-ring: rgba(251, 191, 36, 0.4);
+  --color-bg: #07100d;
+  --color-bg-secondary: #0d1a14;
+  --color-text: #edf4ed;
+  --color-text-muted: #a8bbb0;
+  --color-accent-mint: #a3ff68;
+  --color-accent-pink: #f3b3d0;
+  --color-accent-blue: #7dc6ff;
+  --color-focus: #d8ffbd;
+  --color-focus-ring: rgba(216, 255, 189, 0.4);
   --wave-color-start: #10b981;
   --wave-color-end:   #ec4899;
 

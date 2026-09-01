@@ -18,7 +18,7 @@ interface SkillCategory {
 const skillCategories: SkillCategory[] = [
   {
     id: "frontend",
-    title: "Frontend",
+    title: "Experience systems",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -32,14 +32,14 @@ const skillCategories: SkillCategory[] = [
       </svg>
     ),
     skills: [
-      { name: "React", level: 80 },
-      { name: "TypeScript", level: 75 },
-      { name: "JSF", level: 60 },
+      { name: "React", level: 90 },
+      { name: "TypeScript", level: 90 },
+      { name: "Interactive UI", level: 85 },
     ],
   },
   {
     id: "backend",
-    title: "Backend",
+    title: "Production engineering",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -61,7 +61,7 @@ const skillCategories: SkillCategory[] = [
   },
   {
     id: "devops",
-    title: "DevOps",
+    title: "Delivery infrastructure",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -83,7 +83,7 @@ const skillCategories: SkillCategory[] = [
   },
   {
     id: "tools",
-    title: "Tools",
+    title: "AI-accelerated practice",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -95,15 +95,15 @@ const skillCategories: SkillCategory[] = [
       </svg>
     ),
     skills: [
-      { name: "VSCode", level: 95 },
-      { name: "Langchain", level: 80 },
-      { name: "OpenCode", level: 70 },
+      { name: "Agent workflows", level: 90 },
+      { name: "LLM tools", level: 90 },
+      { name: "Context design", level: 85 },
       { name: "Linux", level: 85 },
     ],
   },
   {
     id: "languages",
-    title: "Languages",
+    title: "Technical range",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -124,7 +124,7 @@ const skillCategories: SkillCategory[] = [
   },
   {
     id: "soft",
-    title: "Soft Skills",
+    title: "Leadership",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -224,7 +224,7 @@ export const Skills = memo(function Skills() {
         className={`${styles.container} ${isVisible ? styles.visible : ""}`}
       >
         <h2 className={styles.title}>
-          <span className={styles.titleAccent}>//</span> Skills
+          <span className={styles.titleAccent}>//</span> Range, with intent
         </h2>
 
         <div className={styles.grid}>
