@@ -1,0 +1,1 @@
+export { registerWebMCPTools } from './registerTools';

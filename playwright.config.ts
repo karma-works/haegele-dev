@@ -22,7 +22,7 @@ export default defineConfig({
     }
   ],
   webServer: {
-    command: 'bun run dev',
+    command: 'pnpm dev --port 5173',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI
   }

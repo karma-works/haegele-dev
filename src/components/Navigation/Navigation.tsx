@@ -13,7 +13,7 @@ interface NavigationProps {
   activeSection?: string;
 }
 
-const navItems: NavKey[] = ['about', 'skills', 'projects', 'hobbies', 'contact'];
+const navItems: NavKey[] = ['about', 'skills', 'projects', 'hobbies', 'agents', 'contact'];
 
 function NavigationComponent({ activeSection = 'hero' }: NavigationProps) {
   const [hoveredKey, setHoveredKey] = useState<NavKey | null>(null);

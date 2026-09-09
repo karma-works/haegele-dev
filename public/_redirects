@@ -1,1 +1,2 @@
-/* /index.html 200
+# Cloudflare Pages provides SPA fallback automatically when no 404.html exists.
+# Do not add a catch-all proxy: it overrides static text, JSON and asset files.

@@ -27,6 +27,7 @@ export const translations = {
     fr: 'Loisirs',
     zh: '爱好',
   },
+  agents: { en: 'Agents', de: 'Agenten', es: 'Agentes', fr: 'Agents', zh: '智能体' },
   contact: {
     en: 'Contact',
     de: 'Kontakt',

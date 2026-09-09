@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import styles from "./Hero.module.css";
 
-const capabilities = ["Discover", "Design", "Build", "Ship"];
+import { profile } from "../../content/profile";
+import { contactChannels } from "../../content/contact";
 
 export function Hero() {
   const [pointer, setPointer] = useState({ x: 50, y: 46 });
@@ -33,22 +34,21 @@ export function Hero() {
       <div className={styles.grid} aria-hidden="true" />
 
       <div className={styles.topline}>
-        <span className={styles.availability}><i /> Available for ambitious builds</span>
-        <span>Zurich · Switzerland · Remote</span>
+        <span className={styles.availability}><i /> {profile.availability}</span>
+        <span>{profile.location}</span>
       </div>
 
       <div className={styles.copy}>
-        <p className={styles.eyebrow}>Christian Hägele / AI-enabled engineering</p>
+        <p className={styles.eyebrow}>{profile.name} / {profile.title}</p>
         <h1 id="hero-heading">
-          I turn complex ideas into <em>working systems.</em>
+          {profile.headline} <em>{profile.headlineEmphasis}</em>
         </h1>
         <p className={styles.intro}>
-          Technical lead and hands-on builder for products where agentic thinking,
-          strong engineering, and a sharp visual finish all matter.
+          {profile.positioning}
         </p>
         <div className={styles.actions}>
           <a className={styles.primaryAction} href="#projects">Explore selected work <span>↘</span></a>
-          <a className={styles.secondaryAction} href="https://www.linkedin.com/in/christian-haegele-3403aaa/" target="_blank" rel="noreferrer">Connect on LinkedIn <span>↗</span></a>
+          <a className={styles.secondaryAction} href={contactChannels.linkedin} target="_blank" rel="noreferrer">Connect on LinkedIn <span>↗</span></a>
         </div>
       </div>
 
@@ -76,7 +76,7 @@ export function Hero() {
       </div>
 
       <div className={styles.capabilityRail} aria-label="Core capabilities">
-        {capabilities.map((capability, index) => (
+        {profile.capabilities.map((capability, index) => (
           <span key={capability}><b>0{index + 1}</b> {capability}</span>
         ))}
       </div>

@@ -1,0 +1,195 @@
+# Christian Hägele
+
+AI-enabled engineering · Zurich · Switzerland · Remote
+
+I turn complex ideas into working systems.
+
+Technical lead and hands-on builder for products where agentic thinking, strong engineering, and a sharp visual finish all matter.
+
+Available for ambitious builds
+
+Capabilities: Discover, Design, Build, Ship.
+
+# Projects
+
+## Azure Cascade
+
+A cinematic Three.js waterpark resort simulator—an interactive world-building experiment with atmosphere, systems, and playful detail.
+
+ID: proj-waterpark · 2026-08 · active
+
+Tags: TypeScript, Three.js, WebGL
+
+[Project link](https://github.com/karma-works/waterpark)
+
+[Demo](https://karma-works.github.io/waterpark/)
+
+## Career Desk
+
+A private, agent-assisted career strategy workspace that turns research, positioning, and applications into a clear operating system.
+
+ID: proj-career-desk · 2026-09 · active
+
+Tags: TypeScript, AI agents, Product systems
+
+## GapHunter
+
+AI-assisted market gap research for founder idea generation. Analyzes markets, identifies underserved niches, and surfaces opportunities using multi-agent pipelines.
+
+ID: proj-9 · 2026-05 · active
+
+Tags: Python, AI Agents, Docker
+
+[Project link](https://github.com/karma-works/gaphunter)
+
+## Moatshift
+
+Three AI agents — Claude, Gemini, and OpenAI — each manage a $100K virtual portfolio in a live trading competition. Autonomous daily decisions, shared tools, and a SvelteKit leaderboard at moatshift.com.
+
+ID: proj-8 · 2026-03 · active
+
+Tags: TypeScript, SvelteKit, AI Agents
+
+[Project link](https://moatshift.com)
+
+## Agentic Tasks
+
+A persistent task management system designed for AI agents. Enables reliable task tracking across sessions.
+
+ID: proj-1 · 2026-02 · active
+
+Tags: JavaScript, TypeScript, Shell
+
+[Project link](https://github.com/karma-works/agentic-tasks)
+
+## Papercraft Web
+
+Web-based tool to unwrap 3D models into printable papercraft patterns. Client/server app with Rust backend and React frontend.
+
+ID: proj-2 · 2026-01 · active
+
+Tags: Rust, TypeScript, HTML
+
+[Project link](https://github.com/karma-works/papercraft-web)
+
+## Claudine Skills
+
+Permissively-licensed reimplementations of proprietary Anthropic Claude skills for the open-source community.
+
+ID: proj-3 · 2026-02 · active
+
+Tags: Python
+
+[Project link](https://github.com/karma-works/claudine-skills)
+
+## Esprit Racer
+
+Retro arcade racing game inspired by Lotus Challenge III and Outrun. Features pseudo-3D graphics, 2-player split-screen, and dynamic music system.
+
+ID: proj-6 · 2026-02 · active
+
+Tags: TypeScript, Canvas 2D, Game Dev
+
+[Project link](https://github.com/karma-works/esprit-racer)
+
+[Demo](https://karma-works.github.io/esprit-racer/)
+
+## Voice Assist
+
+Voice-based meeting scheduler — book meetings with Google Calendar through natural conversation with a low-latency AI voice agent built on Gemini Live.
+
+ID: proj-10 · 2026-06 · active
+
+Tags: Python, FastAPI, Gemini Live
+
+[Project link](https://github.com/karma-works/voice-assist)
+
+## Vert Finder
+
+Trail discovery tool that helps find and combine nearby hiking segments based on elevation gain. Search any location and build custom multi-segment routes with elevation metrics.
+
+ID: proj-11 · 2026-06 · active
+
+Tags: React, TypeScript, Tailwind CSS
+
+[Project link](https://github.com/karma-works/vert-finder)
+
+## SC2K City Viewer
+
+Attempted open-source SimCity 2000 viewer using AI-generated tilemaps. Learned: AI struggles with systematic asset libraries requiring stylistic consistency.
+
+ID: proj-5 · 2026-02 · archived
+
+Tags: TypeScript, Python, Vite
+
+[Project link](https://github.com/karma-works/sc2k-city-viewer)
+
+# Project graveyard
+
+## Descend Into Darkness
+
+Built blind-first from the wrong direction: a sighted platformer with sounds bolted on, not a game designed from audio principles up. WCAG AAA turned out to be the wrong compass — built for static pages, not real-time spatial navigation under pressure. Stereo wasn't enough for spatial understanding, AI wasn't a real sparring partner for blind UX, and Rex is still down there waiting for the real users who never came.
+
+2026-05 – 2026-05 · TypeScript, HTML
+
+[Repository](https://github.com/karma-works/descend-into-darkness)
+
+## SC2K City Viewer
+
+Killed by AI's inability to maintain stylistic consistency across 200+ pixel art tiles. The dream was noble, the execution... inconsistent.
+
+2026-02 – 2026-02 · TypeScript, Python, Vite
+
+[Repository](https://github.com/karma-works/sc2k-city-viewer)
+
+# Skills
+
+Self-assessed levels on a 0–100 scale.
+
+## Experience systems
+
+- React: 90/100
+- TypeScript: 90/100
+- Interactive UI: 85/100
+
+## Production engineering
+
+- Quarkus: 90/100
+- Go: 85/100
+- Wildfly: 75/100
+- ChromaDB: 85/100
+
+## Delivery infrastructure
+
+- Docker: 90/100
+- CI/CD: 75/100
+- Kubernetes: 75/100
+- Azure: 70/100
+
+## AI-accelerated practice
+
+- Agent workflows: 90/100
+- LLM tools: 90/100
+- Context design: 85/100
+- Linux: 85/100
+
+## Technical range
+
+- Java: 100/100
+- Kotlin: 90/100
+- Typescript: 90/100
+- Go: 85/100
+
+## Leadership
+
+- Leadership: 85/100
+- Communication: 90/100
+- Problem Solving: 80/100
+
+# Contact channels
+
+- [github](https://github.com/karma-works/)
+- [linkedin](https://www.linkedin.com/in/christian-haegele-3403aaa/)
+- [x](https://x.com/moatshift)
+- [huggingface](https://huggingface.co/karma-works)
+- [form](https://haegele.dev/#contact)

@@ -1,0 +1,32 @@
+# Christian Hägele
+
+AI-enabled engineering · Zurich · Switzerland · Remote
+
+I turn complex ideas into working systems.
+
+Technical lead and hands-on builder for products where agentic thinking, strong engineering, and a sharp visual finish all matter.
+
+Available for ambitious builds
+
+Capabilities: Discover, Design, Build, Ship.
+
+## Explore
+
+- [about](https://haegele.dev/#about)
+- [skills](https://haegele.dev/#skills)
+- [projects](https://haegele.dev/#projects)
+- [graveyard](https://haegele.dev/#graveyard)
+- [hobbies](https://haegele.dev/#hobbies)
+- [agents](https://haegele.dev/#agents)
+- [contact](https://haegele.dev/#contact)
+- [Full content](https://haegele.dev/llms-full.txt)
+- [Projects JSON](https://haegele.dev/data/projects.json)
+- [Profile JSON](https://haegele.dev/data/profile.json)
+
+## Contact channels
+
+- [github](https://github.com/karma-works/)
+- [linkedin](https://www.linkedin.com/in/christian-haegele-3403aaa/)
+- [x](https://x.com/moatshift)
+- [huggingface](https://huggingface.co/karma-works)
+- [form](https://haegele.dev/#contact)

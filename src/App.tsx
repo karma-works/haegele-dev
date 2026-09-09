@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { Navigation } from "./components/Navigation";
 import { Hero } from "./components/Hero";
 
+const AgentInterface = lazy(() => import("./components/AgentInterface"));
 const About = lazy(() => import("./components/About"));
 const Skills = lazy(() => import("./components/Skills"));
 const Projects = lazy(() => import("./components/Projects"));
@@ -38,6 +39,22 @@ function App() {
   const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
+    const controller = new AbortController();
+    const register = () => {
+      void import("./webmcp").then(({ registerWebMCPTools }) =>
+        registerWebMCPTools(controller.signal)
+      ).catch(() => { /* Optional browser integration must not disrupt the page. */ });
+    };
+    const idle = typeof window.requestIdleCallback === "function";
+    const handle = idle ? window.requestIdleCallback(register, { timeout: 2000 }) : window.setTimeout(register, 0);
+    return () => {
+      controller.abort();
+      if (idle) window.cancelIdleCallback(handle);
+      else window.clearTimeout(handle);
+    };
+  }, []);
+
+  useEffect(() => {
     const sections = [
       "hero",
       "about",
@@ -46,6 +63,7 @@ function App() {
       "graveyard",
       "hobbies",
       "contact",
+      "agents",
     ];
 
     const observer = new IntersectionObserver(
@@ -59,12 +77,18 @@ function App() {
       { threshold: 0.3 },
     );
 
-    sections.forEach((id) => {
+    const observed = new Set<Element>();
+    const observeSections = () => sections.forEach((id) => {
       const element = document.getElementById(id);
-      if (element) observer.observe(element);
+      if (element && !observed.has(element)) {
+        observer.observe(element);
+        observed.add(element);
+      }
     });
-
-    return () => observer.disconnect();
+    observeSections();
+    const mutations = new MutationObserver(observeSections);
+    mutations.observe(document.getElementById("main-content")!, { childList: true, subtree: true });
+    return () => { observer.disconnect(); mutations.disconnect(); };
   }, []);
 
   return (
@@ -92,6 +116,9 @@ function App() {
         </LazySection>
         <LazySection>
           <AIFeed />
+        </LazySection>
+        <LazySection>
+          <AgentInterface />
         </LazySection>
         <LazySection>
           <Contact />

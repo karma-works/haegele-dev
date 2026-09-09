@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
+import { agentDataPlugin } from './scripts/generate-agent-data'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), agentDataPlugin()],
   build: {
     target: 'esnext',
     rollupOptions: {

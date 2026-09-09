@@ -1,3 +1,4 @@
+import { contactChannels } from "../../content/contact";
 import { memo, useState, useCallback, useRef, useEffect } from "react";
 import { Piano } from "../Piano";
 import { useResponsivePianoKeys } from "../../hooks/useResponsivePianoKeys";
@@ -234,7 +235,7 @@ export const Footer = memo(function Footer() {
         <div className={styles.content}>
           <div className={styles.socialLinks}>
             <a
-              href="https://github.com/karma-works/"
+              href={contactChannels.github}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialLink}
@@ -245,7 +246,7 @@ export const Footer = memo(function Footer() {
               </svg>
             </a>
             <a
-              href="https://www.linkedin.com/in/christian-haegele-3403aaa/"
+              href={contactChannels.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialLink}
@@ -256,7 +257,7 @@ export const Footer = memo(function Footer() {
               </svg>
             </a>
             <a
-              href="https://x.com/moatshift"
+              href={contactChannels.x}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialLink}
@@ -267,7 +268,7 @@ export const Footer = memo(function Footer() {
               </svg>
             </a>
             <a
-              href="https://huggingface.co/karma-works"
+              href={contactChannels.huggingface}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialLink}
