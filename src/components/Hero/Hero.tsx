@@ -14,7 +14,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section
+    <section data-color-scheme="dark"
       className={`${styles.container} ${isReady ? styles.ready : ""}`}
       id="hero"
       aria-labelledby="hero-heading"

@@ -99,12 +99,12 @@
   transform: translateX(-50%);
   font-family: var(--font-mono);
   font-size: 0.625rem;
-  color: #666;
+  color: #444;
   pointer-events: none;
 }
 
 .blackKey .keyLabel {
-  color: #888;
+  color: #bbb;
   font-size: 0.5rem;
 }
 

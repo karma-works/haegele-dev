@@ -10,7 +10,7 @@ export const Graveyard = memo(function Graveyard() {
   });
 
   return (
-    <section id="graveyard" className={styles.section}>
+    <section data-color-scheme="dark" id="graveyard" className={styles.section}>
       <div
         ref={containerRef}
         className={`${styles.container} ${isVisible ? styles.visible : ""}`}

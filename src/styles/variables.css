@@ -1,18 +1,6 @@
 :root {
   --animation-duration-multiplier: 1;
 
-  --color-bg: #07100d;
-  --color-bg-secondary: #0d1a14;
-  --color-text: #edf4ed;
-  --color-text-muted: #a8bbb0;
-  --color-accent-mint: #a3ff68;
-  --color-accent-pink: #f3b3d0;
-  --color-accent-blue: #7dc6ff;
-  --color-focus: #d8ffbd;
-  --color-focus-ring: rgba(216, 255, 189, 0.4);
-  --wave-color-start: #10b981;
-  --wave-color-end:   #ec4899;
-
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
@@ -46,6 +34,27 @@
   --transition-slow: 500ms ease;
 }
 
+/* Dark surfaces retain a complete, matching palette in either system theme. */
+:root,
+[data-color-scheme='dark'] {
+  --color-bg: #07100d;
+  --color-bg-secondary: #0d1a14;
+  --color-text: #edf4ed;
+  --color-text-muted: #a8bbb0;
+  --color-accent-mint: #a3ff68;
+  --color-accent-pink: #f3b3d0;
+  --color-accent-blue: #7dc6ff;
+  --color-error: #ff8f8f;
+  --color-focus: #d8ffbd;
+  --color-focus-ring: rgba(216, 255, 189, 0.4);
+  --wave-color-start: #10b981;
+  --wave-color-end:   #ec4899;
+
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  color-scheme: dark;
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --animation-duration-multiplier: 0;
@@ -54,6 +63,7 @@
 
 @media (prefers-color-scheme: light) {
   :root {
+    color-scheme: light;
     --color-bg:            #f8f7f4;
     --color-bg-secondary:  #eeecea;
     --color-text:          #1a1a1f;
@@ -61,6 +71,7 @@
     --color-accent-mint:   #065f46;
     --color-accent-pink:   #831843;
     --color-accent-blue:   #1e3a8a;
+    --color-error:         #b91c1c;
     --color-focus:         #78350f;
     --color-focus-ring:    rgba(120, 53, 15, 0.35);
     --glass-bg:            rgba(0, 0, 0, 0.03);

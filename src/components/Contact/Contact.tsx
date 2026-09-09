@@ -368,7 +368,7 @@ export const Contact = memo(function Contact() {
   }, []);
 
   return (
-    <section id="contact" className={styles.section}>
+    <section data-color-scheme="dark" id="contact" className={styles.section}>
       <div
         ref={containerRef}
         className={`${styles.container} ${isVisible ? styles.visible : ""}`}

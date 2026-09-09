@@ -214,7 +214,7 @@ export const Projects = memo(function Projects() {
   }, []);
 
   return (
-    <section id="projects" className={styles.section}>
+    <section data-color-scheme="dark" id="projects" className={styles.section}>
       <div
         ref={containerRef}
         className={`${styles.container} ${isVisible ? styles.visible : ""}`}

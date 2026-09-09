@@ -78,7 +78,7 @@ export const Skills = memo(function Skills() {
   });
 
   return (
-    <section id="skills" className={styles.section}>
+    <section data-color-scheme="dark" id="skills" className={styles.section}>
       <div
         ref={containerRef}
         className={`${styles.container} ${isVisible ? styles.visible : ""}`}

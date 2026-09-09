@@ -63,7 +63,7 @@ export const About = memo(function About() {
   }, []);
 
   return (
-    <section id="about" className={styles.section} ref={containerRef}>
+    <section data-color-scheme="dark" id="about" className={styles.section} ref={containerRef}>
       <div
         className={styles.parallaxBg}
         ref={parallaxRef}

@@ -214,7 +214,7 @@ export const Footer = memo(function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className={styles.footer}>
+    <footer data-color-scheme="dark" className={styles.footer}>
       <div
         className={styles.footerGlow}
         style={
