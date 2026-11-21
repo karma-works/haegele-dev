@@ -5,6 +5,10 @@ import styles from "./Projects.module.css";
 
 import { projects, type Project } from "../../content/projects";
 
+const visibleProjects = projects.filter((project) => project.status !== "archived");
+const featuredProject = visibleProjects.find((project) => project.featured);
+const timelineProjects = visibleProjects.filter((project) => project !== featuredProject);
+
 interface ProjectCardProps {
   project: Project;
   index: number;
@@ -230,30 +234,40 @@ export const Projects = memo(function Projects() {
           </p>
         </header>
 
+        {featuredProject && (
+          <div className={styles.featuredProject}>
+            <ProjectCard
+              project={featuredProject}
+              index={0}
+              isVisible={isVisible}
+              side="left"
+              onOpenDemo={handleOpenDemo}
+            />
+          </div>
+        )}
+
         <div className={styles.timeline}>
           <div className={styles.timelineLine} data-visible={isVisible} />
 
-          {projects
-            .filter((p) => p.status !== "archived")
-            .map((project, index) => {
-              const side = index % 2 === 0 ? "left" : "right";
-              return (
-                <div key={project.id} className={styles.timelineItem}>
-                  <TimelineNode index={index} isVisible={isVisible} />
-                  <div
-                    className={`${styles.cardWrapper} ${side === "right" ? styles.wrapperRight : styles.wrapperLeft}`}
-                  >
-                    <ProjectCard
-                      project={project}
-                      index={index}
-                      isVisible={isVisible}
-                      side={side}
-                      onOpenDemo={handleOpenDemo}
-                    />
-                  </div>
+          {timelineProjects.map((project, index) => {
+            const side = index % 2 === 0 ? "left" : "right";
+            return (
+              <div key={project.id} className={styles.timelineItem}>
+                <TimelineNode index={index} isVisible={isVisible} />
+                <div
+                  className={`${styles.cardWrapper} ${side === "right" ? styles.wrapperRight : styles.wrapperLeft}`}
+                >
+                  <ProjectCard
+                    project={project}
+                    index={index}
+                    isVisible={isVisible}
+                    side={side}
+                    onOpenDemo={handleOpenDemo}
+                  />
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
 
           <div className={styles.timelineEnd}>
             <div

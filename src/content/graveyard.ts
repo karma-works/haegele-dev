@@ -1,3 +1,5 @@
+import { projects } from "./projects";
+
 export interface GraveyardProject {
   id: string;
   title: string;
@@ -9,6 +11,17 @@ export interface GraveyardProject {
 }
 
 export const graveyardProjects: GraveyardProject[] = [
+  ...projects
+    .filter((project) => project.id === "proj-10" || project.id === "proj-11")
+    .map((project) => ({
+      id: project.id,
+      title: project.title,
+      epitaph: project.description,
+      bornDate: project.date,
+      deathDate: "2026-11-21",
+      techStack: project.tags,
+      link: project.link,
+    })),
   {
     id: "grave-2",
     title: "Descend Into Darkness",
