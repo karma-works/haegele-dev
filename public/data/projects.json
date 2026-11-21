@@ -1,5 +1,39 @@
 [
   {
+    "id": "proj-arztagent",
+    "hash": "4rzt4gt",
+    "title": "ArztAgent",
+    "description": "My most ambitious project to date, built with my brother. We’re building a phone agent for complex gastroenterology bookings and a shared practice inbox that automates routine requests across calls, email, and the patient portal. The codebase includes roughly 500,000 lines of Python as well as Rust components.",
+    "tags": [
+      "Python",
+      "Rust",
+      "Voice AI",
+      "Healthcare"
+    ],
+    "date": "2026-07",
+    "link": "https://arztagent.app/",
+    "status": "active",
+    "image": "/assets/projects/arztagent.webp",
+    "featured": true
+  },
+  {
+    "id": "proj-live-notes",
+    "hash": "l1v3nts",
+    "title": "Live Notes",
+    "description": "An open-source native macOS app that transcribes conversations locally with Whisper, captures Markdown notes, and lets you search and ask questions about your local files. You can also dictate rough ideas and turn them into a structured document.",
+    "tags": [
+      "Rust",
+      "macOS",
+      "Whisper",
+      "SQLite"
+    ],
+    "date": "2026-10",
+    "link": "https://github.com/karma-works/live-notes",
+    "demoUrl": "https://karma-works.github.io/live-notes/",
+    "status": "active",
+    "image": "/assets/projects/live-notes.webp"
+  },
+  {
     "id": "proj-waterpark",
     "hash": "w8trprk",
     "title": "Azure Cascade",
@@ -122,7 +156,7 @@
     "id": "proj-10",
     "hash": "v01c34st",
     "title": "Voice Assist",
-    "description": "Voice-based meeting scheduler — book meetings with Google Calendar through natural conversation with a low-latency AI voice agent built on Gemini Live.",
+    "description": "A voice-scheduling prototype for Google Calendar built with Gemini Live. General-purpose voice agents already handle personal bookings, leaving little room for a standalone product. The prototype was valuable for testing real-time voice, and OpenAI’s realtime models felt more responsive than Gemini Live in our experiments.",
     "tags": [
       "Python",
       "FastAPI",
@@ -130,14 +164,14 @@
     ],
     "date": "2026-06",
     "link": "https://github.com/karma-works/voice-assist",
-    "status": "active",
+    "status": "archived",
     "image": "/assets/projects/voice-assist.svg"
   },
   {
     "id": "proj-11",
     "hash": "v3rt-fn",
     "title": "Vert Finder",
-    "description": "Trail discovery tool that helps find and combine nearby hiking segments based on elevation gain. Search any location and build custom multi-segment routes with elevation metrics.",
+    "description": "A trail discovery tool for combining hiking segments by elevation gain. The prototype came together quickly, but the use case did not show enough demand to sustain a public project.",
     "tags": [
       "React",
       "TypeScript",
@@ -145,7 +179,7 @@
     ],
     "date": "2026-06",
     "link": "https://github.com/karma-works/vert-finder",
-    "status": "active",
+    "status": "archived",
     "image": "/assets/projects/vert-finder.png"
   },
   {

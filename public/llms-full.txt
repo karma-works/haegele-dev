@@ -12,6 +12,28 @@ Capabilities: Discover, Design, Build, Ship.
 
 # Projects
 
+## ArztAgent
+
+My most ambitious project to date, built with my brother. We’re building a phone agent for complex gastroenterology bookings and a shared practice inbox that automates routine requests across calls, email, and the patient portal. The codebase includes roughly 500,000 lines of Python as well as Rust components.
+
+ID: proj-arztagent · 2026-07 · active
+
+Tags: Python, Rust, Voice AI, Healthcare
+
+[Project link](https://arztagent.app/)
+
+## Live Notes
+
+An open-source native macOS app that transcribes conversations locally with Whisper, captures Markdown notes, and lets you search and ask questions about your local files. You can also dictate rough ideas and turn them into a structured document.
+
+ID: proj-live-notes · 2026-10 · active
+
+Tags: Rust, macOS, Whisper, SQLite
+
+[Project link](https://github.com/karma-works/live-notes)
+
+[Demo](https://karma-works.github.io/live-notes/)
+
 ## Azure Cascade
 
 A cinematic Three.js waterpark resort simulator—an interactive world-building experiment with atmosphere, systems, and playful detail.
@@ -96,9 +118,9 @@ Tags: TypeScript, Canvas 2D, Game Dev
 
 ## Voice Assist
 
-Voice-based meeting scheduler — book meetings with Google Calendar through natural conversation with a low-latency AI voice agent built on Gemini Live.
+A voice-scheduling prototype for Google Calendar built with Gemini Live. General-purpose voice agents already handle personal bookings, leaving little room for a standalone product. The prototype was valuable for testing real-time voice, and OpenAI’s realtime models felt more responsive than Gemini Live in our experiments.
 
-ID: proj-10 · 2026-06 · active
+ID: proj-10 · 2026-06 · archived
 
 Tags: Python, FastAPI, Gemini Live
 
@@ -106,9 +128,9 @@ Tags: Python, FastAPI, Gemini Live
 
 ## Vert Finder
 
-Trail discovery tool that helps find and combine nearby hiking segments based on elevation gain. Search any location and build custom multi-segment routes with elevation metrics.
+A trail discovery tool for combining hiking segments by elevation gain. The prototype came together quickly, but the use case did not show enough demand to sustain a public project.
 
-ID: proj-11 · 2026-06 · active
+ID: proj-11 · 2026-06 · archived
 
 Tags: React, TypeScript, Tailwind CSS
 
@@ -125,6 +147,22 @@ Tags: TypeScript, Python, Vite
 [Project link](https://github.com/karma-works/sc2k-city-viewer)
 
 # Project graveyard
+
+## Voice Assist
+
+A voice-scheduling prototype for Google Calendar built with Gemini Live. General-purpose voice agents already handle personal bookings, leaving little room for a standalone product. The prototype was valuable for testing real-time voice, and OpenAI’s realtime models felt more responsive than Gemini Live in our experiments.
+
+2026-06 – 2026-11-21 · Python, FastAPI, Gemini Live
+
+[Repository](https://github.com/karma-works/voice-assist)
+
+## Vert Finder
+
+A trail discovery tool for combining hiking segments by elevation gain. The prototype came together quickly, but the use case did not show enough demand to sustain a public project.
+
+2026-06 – 2026-11-21 · React, TypeScript, Tailwind CSS
+
+[Repository](https://github.com/karma-works/vert-finder)
 
 ## Descend Into Darkness
 
